@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# scraped raw cache (not for redistribution)
+/.cache/
+
+# local Claude Code session state (not shared)
+/.claude/settings.local.json
+/.claude/scheduled_tasks.lock
