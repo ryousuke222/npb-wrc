@@ -13,10 +13,18 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// 実際のデプロイ先ドメインで環境変数を設定すること（未設定時のプレースホルダーのままでは
+// OG画像等の絶対URLが正しくならない。app/sitemap.tsのSITE_URLと同じ変数）
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "NPB最強打者ランキング(wRC+)",
   description:
     "wRC+をもとにしたNPB(日本プロ野球)の年度別・最強打者ランキング。データはNPB公式サイトの公開成績を元に独自算出しています。",
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({
@@ -29,7 +37,7 @@ export default function RootLayout({
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-zinc-50 text-zinc-900">
+      <body className="min-h-full flex flex-col overflow-x-hidden bg-zinc-50 text-zinc-900">
         <header className="border-b border-zinc-200 bg-white/80 backdrop-blur sticky top-0 z-10">
           <div className="mx-auto flex max-w-5xl flex-col gap-1.5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-6">
             <Link href="/" className="flex min-w-0 items-baseline gap-1.5">
@@ -51,10 +59,10 @@ export default function RootLayout({
                 歴代ランキング
               </Link>
               <Link
-                href="/park-factors"
+                href="/team-wrc"
                 className="text-zinc-600 hover:text-zinc-900"
               >
-                パークファクター
+                チームwRC+
               </Link>
               <Link
                 href="/search"

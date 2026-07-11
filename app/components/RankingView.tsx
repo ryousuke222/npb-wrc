@@ -2,28 +2,52 @@
 
 import { useMemo, useState } from "react";
 import type { BatterRanking } from "@/lib/types";
-import { ALL_TEAM_IDS, TEAM_ID_DEFAULT_NAME, type TeamId } from "@/lib/teams";
+import {
+  ALL_TEAM_IDS,
+  HISTORICAL_ONLY_TEAM_IDS,
+  TEAM_ID_DEFAULT_NAME,
+  type TeamId,
+} from "@/lib/teams";
 import RankingList from "./RankingList";
 
-type Scope = "all" | "central" | "pacific" | `team:${TeamId}`;
+export type Scope = "all" | "central" | "pacific" | `team:${TeamId}`;
 
 const LEAGUE_TEAMS: { league: "central" | "pacific"; label: string }[] = [
   { league: "central", label: "セ・リーグ" },
   { league: "pacific", label: "パ・リーグ" },
 ];
 
+const TEAM_ID_DISPLAY_ORDER: TeamId[] = [...ALL_TEAM_IDS, ...HISTORICAL_ONLY_TEAM_IDS];
+
 const ROUND_PRESETS = [300, 200, 100, 50, 0];
 
 export default function RankingView({
   batters,
   regulationPaThreshold,
+  initialScope = "all",
+  initialMinPa = regulationPaThreshold,
+  hideScopeFilter = false,
+  playerBackQuery,
 }: {
   batters: BatterRanking[];
   regulationPaThreshold: number;
+  initialScope?: Scope;
+  initialMinPa?: number;
+  /** 既にチーム等で絞り込んだ打者一覧を渡す場合、冗長なリーグ/球団セレクタを隠す */
+  hideScopeFilter?: boolean;
+  /** 選手詳細ページの「戻る」リンクを遷移元に向けるためのクエリ文字列（例: "from=team&teamId=G"） */
+  playerBackQuery?: string;
 }) {
-  const [scope, setScope] = useState<Scope>("all");
-  const [minPa, setMinPa] = useState(regulationPaThreshold);
-  const [minPaInput, setMinPaInput] = useState(String(regulationPaThreshold));
+  const [scope, setScope] = useState<Scope>(initialScope);
+  const [minPa, setMinPa] = useState(initialMinPa);
+  const [minPaInput, setMinPaInput] = useState(String(initialMinPa));
+
+  // その年度に実際に在籍データがある球団のみをセレクタに出す
+  // （楽天のように後年発足した球団を過去の年度に表示しない等）
+  const teamsInScope = useMemo(() => {
+    const present = new Set(batters.map((b) => b.teamId));
+    return TEAM_ID_DISPLAY_ORDER.filter((id) => present.has(id));
+  }, [batters]);
 
   const presets = useMemo(() => {
     const values = [regulationPaThreshold, ...ROUND_PRESETS].filter(
@@ -59,27 +83,29 @@ export default function RankingView({
   return (
     <div>
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <select
-          value={scope}
-          onChange={(e) => setScope(e.target.value as Scope)}
-          className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
-        >
-          <option value="all">総合</option>
-          <optgroup label="リーグ">
-            {LEAGUE_TEAMS.map((l) => (
-              <option key={l.league} value={l.league}>
-                {l.label}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="球団">
-            {ALL_TEAM_IDS.map((id) => (
-              <option key={id} value={`team:${id}`}>
-                {TEAM_ID_DEFAULT_NAME[id]}
-              </option>
-            ))}
-          </optgroup>
-        </select>
+        {!hideScopeFilter && (
+          <select
+            value={scope}
+            onChange={(e) => setScope(e.target.value as Scope)}
+            className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+          >
+            <option value="all">総合</option>
+            <optgroup label="リーグ">
+              {LEAGUE_TEAMS.map((l) => (
+                <option key={l.league} value={l.league}>
+                  {l.label}
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label="球団">
+              {teamsInScope.map((id) => (
+                <option key={id} value={`team:${id}`}>
+                  {TEAM_ID_DEFAULT_NAME[id]}
+                </option>
+              ))}
+            </optgroup>
+          </select>
+        )}
 
         <input
           id="min-pa"
@@ -114,7 +140,7 @@ export default function RankingView({
 
       <p className="mb-3 text-xs text-zinc-400">{filtered.length}名を表示中</p>
 
-      <RankingList batters={filtered} />
+      <RankingList batters={filtered} backQuery={playerBackQuery} />
     </div>
   );
 }

@@ -19,10 +19,13 @@ function wrcColor(v: number): string {
 export default function RankingList({
   batters,
   showYear = false,
+  backQuery,
 }: {
   batters: BatterRanking[];
   /** 年度をまたぐ一覧（歴代ランキング等）で、各行に年度を表示する */
   showYear?: boolean;
+  /** 選手詳細ページの「戻る」リンクを遷移元に向けるためのクエリ文字列（例: "from=all-time"） */
+  backQuery?: string;
 }) {
   if (batters.length === 0) {
     return (
@@ -42,7 +45,7 @@ export default function RankingList({
         return (
           <li key={`${b.year}-${b.league}-${b.name}-${b.teamId}-${b.rank}`}>
             <Link
-              href={`/year/${b.year}/${b.rank}`}
+              href={`/year/${b.year}/${b.rank}${backQuery ? `?${backQuery}` : ""}`}
               style={{
                 borderLeftColor: color.bg,
                 backgroundColor: withAlpha(color.bg, 0.07),

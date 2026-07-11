@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { getAllBatters, getAvailableYears, getLatestYear } from "@/lib/data";
+import {
+  getActiveRosterNames,
+  getAllBatters,
+  getAvailableYears,
+  getLatestYear,
+} from "@/lib/data";
 import AllTimeView from "@/app/components/AllTimeView";
 
 export const metadata = {
@@ -9,10 +14,11 @@ export const metadata = {
 };
 
 export default async function AllTimePage() {
-  const [batters, years, latestYear] = await Promise.all([
+  const [batters, years, latestYear, activeRosterNames] = await Promise.all([
     getAllBatters(),
     getAvailableYears(),
     getLatestYear(),
+    getActiveRosterNames(),
   ]);
 
   const oldestYear = years[years.length - 1];
@@ -35,7 +41,7 @@ export default async function AllTimePage() {
         </p>
       </div>
 
-      <AllTimeView batters={batters} />
+      <AllTimeView batters={batters} activeRosterNames={activeRosterNames} />
     </div>
   );
 }
