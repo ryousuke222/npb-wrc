@@ -53,6 +53,12 @@ export interface BatterRanking extends BatterRow {
   parkFactor: number | null;
   /** その年度・その球団の規定打席（チーム試合数×3.1）に到達しているか */
   qualified: boolean;
+  /**
+   * 同姓同名の別人が存在する選手のみ設定される、npb.jp選手個別IDベースの内部識別キー。
+   * 表示名（name）は変えず、年度別成績の推移（getPlayerHistory）等の名寄せ判定にのみ使う。
+   * 未設定の場合はnameで名寄せする（従来通りの簡易的な名前ベース判定）。
+   */
+  nameKey?: string;
 }
 
 export interface LeagueContext {

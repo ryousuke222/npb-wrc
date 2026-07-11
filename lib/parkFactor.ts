@@ -117,23 +117,73 @@ export interface ParkFactor {
 const MIN_GAMES = 40;
 
 /**
- * 球場改修・本拠地移転などで环境が非連続に変化した球団。変化があった年度以降は、
- * 変化前のデータを混ぜると歪むため、変化年を起点とする前方窓（改修年を最大重みとし、
- * 未来方向にのみ重みを減衰させる）に切り替える。
+ * 球場改修・本拠地移転・ラッキーゾーンの設置/撤去などで環境が非連続に変化した球団の
+ * 変化年（1球団が複数回変化している場合は昇順の配列）。対象年度を挟む「直前の変化年」
+ * 〜「直後の変化年の前年」までを1つの環境（era）とみなし、そのera内でのみ年度をプール
+ * する（変化前後のデータが混ざらないようにする）。2689web.comの試合結果（本拠地球場名）
+ * から実際に検出した本拠地移転年に加え、公開資料で確認できたラッキーゾーンの設置/撤去年
+ * も含む（2005年以降分はNPB公式サイトの情報と合わせている）。
+ * - 読売: 1988年 後楽園球場→東京ドーム
+ * - 中日: 1997年 ナゴヤ球場→ナゴヤドーム
+ * - 阪神: 1992年 甲子園のラッキーゾーン撤去（1947年設置・1991年限りで撤去）
+ * - ヤクルト（国鉄・サンケイ・アトムズ）: 1962年 神宮にラッキーゾーン設置、
+ *   1967年 グラウンド改修に伴い撤去
+ * - 阪急/オリックス: 1960年 西宮球場にラッキーゾーン設置、1991年 西宮球場→グリーン
+ *   スタジアム神戸（西宮のラッキーゾーン自体は移転後の1992年頃撤去だが、その時点で
+ *   既に神戸に移転済みのため当球団のPFには影響しない）
+ * - 南海/ダイエー/ソフトバンク: 1993年 大阪球場→福岡ドーム、2015年 テラス席設置
+ * - 日本ハム: 1988年 後楽園球場→東京ドーム（巨人とダブルフランチャイズ）、
+ *   2004年 札幌ドームへ移転、2023年 エスコンフィールドへ移転
+ * - 西鉄/太平洋クラブ/クラウンライター/西武: 1967年 平和台にラッキーゾーン設置、
+ *   1979年 平和台球場（福岡）→西武ライオンズ球場（所沢）、1998年 同球場に屋根設置
+ *   （西武ドーム化）
+ * - ロッテ: 1992年 川崎球場→千葉マリンスタジアム
  * - 広島東洋: 2009年 マツダスタジアムへ本拠地移転
- * - 福岡ソフトバンク: 2015年 ヤフオクドームにテラス席設置
- * - 北海道日本ハム: 2023年 エスコンフィールドへ本拠地移転
+ *
+ * 参考: 甲子園・神宮・西宮・平和台のラッキーゾーン設置/撤去年は、当サイトの試合結果
+ * データ自体からは検出できない（球場名は変わらないため）。日本野球機構・各球場の
+ * 公式サイトや報道等の公開情報をもとに手動で反映している。
  */
-export const PARK_RENOVATION_YEARS: Partial<Record<TeamId, number>> = {
-  C: 2009,
-  H: 2015,
-  F: 2023,
+export const PARK_RENOVATION_YEARS: Partial<Record<TeamId, number[]>> = {
+  G: [1988],
+  D: [1997],
+  T: [1992],
+  S: [1962, 1967],
+  Bs: [1960, 1991],
+  H: [1993, 2015],
+  F: [1988, 2004, 2023],
+  L: [1967, 1979, 1998],
+  M: [1992],
+  C: [2009],
 };
 
-/** 前方窓（改修年基準）の重み。offset 0(改修年)〜4年後 */
+/** 前方窓（改修年基準）の重み。offset 0(改修年)〜4年後。 era内の年数が少ない場合のフォールバック用 */
 const FORWARD_WEIGHTS = [5, 4, 3, 2, 1];
-/** 中心加重窓（改修なし球団）で、対象年度に近い順（最大5年）に割り当てる重み */
+/** 中心加重窓で、対象年度に近い順（最大5年）に割り当てる重み */
 const CENTER_RANK_WEIGHTS = [5, 4, 4, 3, 3];
+
+/**
+ * 対象年度が属する「環境（era）」の年度範囲を返す（下限は含む、上限は含まない）。
+ * 該当球団の変化年履歴がない場合は両方null。
+ */
+function getEraBounds(
+  team: TeamId,
+  year: number
+): { lowerBound: number | null; upperBoundExclusive: number | null } {
+  const renovations = PARK_RENOVATION_YEARS[team];
+  let lowerBound: number | null = null;
+  let upperBoundExclusive: number | null = null;
+  if (renovations) {
+    for (const r of [...renovations].sort((a, b) => a - b)) {
+      if (r <= year) lowerBound = r;
+      else {
+        upperBoundExclusive = r;
+        break;
+      }
+    }
+  }
+  return { lowerBound, upperBoundExclusive };
+}
 
 const CONFIDENCE_BY_SAMPLE_YEARS: Record<number, number> = {
   1: 0.5,
@@ -146,27 +196,23 @@ const CONFIDENCE_BY_SAMPLE_YEARS: Record<number, number> = {
 /**
  * 対象年度・球団についてパークファクター算出に使う年度と重みの一覧を求める。
  *
- * 改修等で本拠地環境が変わった球団（PARK_RENOVATION_YEARS）は、変化年以降は
- * 変化年を起点とする前方窓（未来方向のみ、最大5年）を使う。
- * それ以外の球団は対象年度を中心とした最大5年窓を使うが、データ範囲の端
- * （2005年付近・最新年度付近）では片側にしかデータがないため、
- * 「対象年度に近い順」に最大5年を選び、近さの順位（0,1,1,2,2番目）に応じた
- * 重み[5,4,4,3,3]を割り当てる（片側しかない場合は自動的にその方向へ延長される）。
+ * 対象年度を中心とした最大5年窓を使うが、変化年履歴がある球団（PARK_RENOVATION_YEARS）
+ * は対象年度が属するera（直前の変化年〜直後の変化年の前年）の範囲内でのみプールし、
+ * 変化前後のデータが混ざらないようにする。データ範囲・era範囲の端で片側にしか
+ * データがない場合は「対象年度に近い順」に最大5年を選び、近さの順位（0,1,1,2,2番目）
+ * に応じた重み[5,4,4,3,3]を割り当てる（片側しかなければ自動的にその方向へ延長される）。
+ * era境界のすぐ後ろ等でこの窓が空になった場合のみ、eraの下限を起点とする前方窓に
+ * フォールバックする。
  */
 export function getPoolYears(
   team: TeamId,
   year: number,
   hasData: (y: number) => boolean
 ): { year: number; weight: number }[] {
-  const renovation = PARK_RENOVATION_YEARS[team];
-  if (renovation !== undefined && year >= renovation) {
-    const pool: { year: number; weight: number }[] = [];
-    for (let i = 0; i < FORWARD_WEIGHTS.length; i++) {
-      const y = renovation + i;
-      if (hasData(y)) pool.push({ year: y, weight: FORWARD_WEIGHTS[i] });
-    }
-    return pool;
-  }
+  const { lowerBound, upperBoundExclusive } = getEraBounds(team, year);
+  const inEra = (y: number) =>
+    (lowerBound === null || y >= lowerBound) &&
+    (upperBoundExclusive === null || y < upperBoundExclusive);
 
   const candidateYears = new Set<number>([year]);
   for (let offset = 1; offset <= 4; offset++) {
@@ -174,10 +220,20 @@ export function getPoolYears(
     candidateYears.add(year + offset);
   }
   const sorted = [...candidateYears]
-    .filter(hasData)
+    .filter((y) => inEra(y) && hasData(y))
     .sort((a, b) => Math.abs(a - year) - Math.abs(b - year) || a - b)
     .slice(0, 5);
-  return sorted.map((y, i) => ({ year: y, weight: CENTER_RANK_WEIGHTS[i] }));
+  if (sorted.length > 0) {
+    return sorted.map((y, i) => ({ year: y, weight: CENTER_RANK_WEIGHTS[i] }));
+  }
+
+  if (lowerBound === null) return [];
+  const pool: { year: number; weight: number }[] = [];
+  for (let i = 0; i < FORWARD_WEIGHTS.length; i++) {
+    const y = lowerBound + i;
+    if (inEra(y) && hasData(y)) pool.push({ year: y, weight: FORWARD_WEIGHTS[i] });
+  }
+  return pool;
 }
 
 /**

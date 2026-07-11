@@ -1,7 +1,12 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { BatterRanking, TeamParkFactorInfo, YearData } from "./types";
-import type { TeamId } from "./teams";
+import {
+  ALL_TEAM_IDS,
+  HISTORICAL_ONLY_TEAM_IDS,
+  type TeamId,
+} from "./teams";
+import { calcTeamWrc, type TeamWrc } from "./wrc";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
@@ -72,34 +77,80 @@ export async function getAllParkFactors(): Promise<ParkFactorMatrixEntry[]> {
   return entries;
 }
 
-/** 選手名をキーにした全打者エントリの索引。初回アクセス時に一度だけ構築する */
-let nameIndexPromise: Promise<Map<string, BatterRanking[]>> | null = null;
+export interface TeamWrcEntry extends TeamWrc {
+  year: number;
+}
 
-async function getNameIndex(): Promise<Map<string, BatterRanking[]>> {
-  if (!nameIndexPromise) {
-    nameIndexPromise = (async () => {
+/** 全年度・全球団分のチームwRC+を年度昇順で返す（チームwRC+一覧ページで使用） */
+export async function getAllTeamWrc(): Promise<TeamWrcEntry[]> {
+  const years = await getAvailableYears();
+  const allData = await Promise.all(years.map((y) => getYearData(y)));
+  const targetTeamIds: TeamId[] = [...ALL_TEAM_IDS, ...HISTORICAL_ONLY_TEAM_IDS];
+  const entries: TeamWrcEntry[] = [];
+  for (const data of allData) {
+    if (!data) continue;
+    for (const teamId of targetTeamIds) {
+      const t = calcTeamWrc(data, teamId);
+      if (t) entries.push({ year: data.year, ...t });
+    }
+  }
+  entries.sort((a, b) => a.year - b.year);
+  return entries;
+}
+
+let activeRosterNamesCache: string[] | null = null;
+
+/**
+ * 現在いずれかのNPB球団に登録されている選手名の一覧（scripts/build-active-roster.ts が
+ * NPB公式の支配下選手一覧から生成）。MLB移籍等でNPB球団の登録から外れた選手は
+ * 含まれないため、歴代ランキングの「現役選手のみ」フィルターでは別途手動リストと併用する。
+ */
+export async function getActiveRosterNames(): Promise<string[]> {
+  if (activeRosterNamesCache) return activeRosterNamesCache;
+  try {
+    const raw = await readFile(path.join(DATA_DIR, "active-players.json"), "utf-8");
+    activeRosterNamesCache = JSON.parse(raw) as string[];
+  } catch {
+    activeRosterNamesCache = [];
+  }
+  return activeRosterNamesCache;
+}
+
+/**
+ * 選手の識別キー（nameKeyがあればそれを、なければ名前をそのまま）をキーにした
+ * 全打者エントリの索引。初回アクセス時に一度だけ構築する。
+ * nameKeyは同姓同名の別人が存在する選手のみ、npb.jpの選手個別IDベースで
+ * scripts/fix-japanese-namesakes.ts が付与する（表示名は変えず内部識別のみに使う）。
+ */
+let identityIndexPromise: Promise<Map<string, BatterRanking[]>> | null = null;
+
+async function getIdentityIndex(): Promise<Map<string, BatterRanking[]>> {
+  if (!identityIndexPromise) {
+    identityIndexPromise = (async () => {
       const all = await getAllBatters();
       const index = new Map<string, BatterRanking[]>();
       for (const b of all) {
-        const list = index.get(b.name);
+        const key = b.nameKey ?? b.name;
+        const list = index.get(key);
         if (list) list.push(b);
-        else index.set(b.name, [b]);
+        else index.set(key, [b]);
       }
       return index;
     })();
   }
-  return nameIndexPromise;
+  return identityIndexPromise;
 }
 
 /**
- * 同姓同名の選手名で全年度分のデータを横断検索する（簡易的な名前一致判定）。
+ * 選手名（同姓同名の別人が存在する場合はnameKeyも）で全年度分のデータを横断検索する。
  * 複数球団に在籍したシーズン（トレード等）はそれぞれ別エントリとして返る。
  */
 export async function getPlayerHistory(
-  name: string
+  name: string,
+  nameKey?: string
 ): Promise<BatterRanking[]> {
-  const index = await getNameIndex();
-  const history = [...(index.get(name) ?? [])];
+  const index = await getIdentityIndex();
+  const history = [...(index.get(nameKey ?? name) ?? [])];
   history.sort((a, b) => a.year - b.year || a.teamId.localeCompare(b.teamId));
   return history;
 }

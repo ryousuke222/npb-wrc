@@ -459,7 +459,8 @@ async function buildYear(year: number): Promise<YearData | null> {
           row,
           lgWoba,
           lgRunsPerPa,
-          effectiveParkFactor ?? 1
+          effectiveParkFactor ?? 1,
+          year
         );
         allBatters.push({
           ...row,

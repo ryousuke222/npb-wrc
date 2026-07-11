@@ -74,6 +74,46 @@ export function extractCandidateYears(yearsText: string): Set<number> {
   return years;
 }
 
+/**
+ * 在籍年テキスト（例:「11,12中日,13,14DeNA」「20～24途DeNA（育）,24途～25DeNA」
+ * 「18途～19巨人」のように開始年と終了年の間に「途」「開幕」等の注記が挟まるものも含む）を、
+ * 年度のまとまりごとにチーム名テキストへ対応付けてパースする。
+ * 「年」トークン（2桁、または2桁+任意の注記文字+「～」+2桁の範囲）と「非年」トークン
+ * （チーム名＋育成/開幕～途中等の注記）が交互に現れる構造を利用し、非年トークンが
+ * 現れた時点でそれ以前に溜めた年をまとめてそのチーム名テキストに割り当てる。
+ * チーム名テキストへの注記混入はteamIdFromGameName側の部分一致で吸収されるため、
+ * 多少ノイズが混じっても実用上問題ない（同一選手内で同じ球団の年度がテキストの
+ * 区切り方次第で複数ブロックに分かれることがあるが、それも実害はない）。
+ */
+export function parseYearsTeamText(
+  yearsText: string
+): { years: number[]; teamText: string }[] {
+  const pairs: { years: number[]; teamText: string }[] = [];
+  const tokenRe = /(\d{2}(?:[^\d,]*?[～~]\d{2})?)|([^\d,]+)/g;
+  let currentYears: number[] = [];
+  let m: RegExpExecArray | null;
+
+  while ((m = tokenRe.exec(yearsText))) {
+    if (m[1]) {
+      const rangeMatch = m[1].match(/^(\d{2}).*?[～~](\d{2})$/);
+      if (rangeMatch) {
+        const lo = twoDigitToYear(Number(rangeMatch[1]));
+        const hi = twoDigitToYear(Number(rangeMatch[2]));
+        for (let y = Math.min(lo, hi); y <= Math.max(lo, hi); y++) {
+          currentYears.push(y);
+        }
+      } else {
+        currentYears.push(twoDigitToYear(Number(m[1])));
+      }
+    } else if (m[2] && currentYears.length > 0) {
+      pairs.push({ years: currentYears, teamText: m[2] });
+      currentYears = [];
+    }
+  }
+
+  return pairs;
+}
+
 export interface HistoricalBattingRow extends CountingStats {
   year: number;
   teamName: string;

@@ -24,6 +24,7 @@ import {
   calcWeightedParkFactor,
   filterGamesForParkFactor,
   getPoolYears,
+  type ParkFactor,
   type TeamSplit,
 } from "../lib/parkFactor";
 import type { GameResult } from "../lib/npbGames";
@@ -176,7 +177,7 @@ async function main() {
       console.log(`  ${y}年: ${games.length}試合取得`);
     }
 
-    const parkFactorByTeam: Partial<Record<TeamId, { adjusted: number; raw: number }>> = {};
+    const parkFactorByTeam: Partial<Record<TeamId, ParkFactor>> = {};
     for (const team of TARGET_TEAM_IDS) {
       const teamSplitsByYear = new Map<number, TeamSplit>();
       for (const y of neededYears) {
@@ -198,7 +199,7 @@ async function main() {
     const newParkFactors: YearData["parkFactors"] = {};
     for (const [teamId, pf] of Object.entries(parkFactorByTeam) as [
       TeamId,
-      { adjusted: number; raw: number },
+      ParkFactor,
     ][]) {
       if (!teamsInYear.has(teamId)) continue;
       const existingTeamName = yearData.batters.find((b) => b.teamId === teamId)?.teamName;
@@ -206,10 +207,10 @@ async function main() {
         teamName: existingTeamName ?? teamId,
         raw: pf.raw,
         adjusted: pf.adjusted,
-        homeGames: 0,
-        awayGames: 0,
-        sampleYears: 0,
-        confidence: 0,
+        homeGames: pf.homeGames,
+        awayGames: pf.awayGames,
+        sampleYears: pf.sampleYears,
+        confidence: pf.confidence,
       };
     }
     yearData.parkFactors = newParkFactors;
@@ -219,7 +220,7 @@ async function main() {
       const pf = parkFactorByTeam[b.teamId];
       const parkFactor = pf ? pf.adjusted : null;
       const lg = yearData.leagueContext[b.league as LeagueKey];
-      const wrcPlus = calcWrcPlus(b, lg.lgWoba, lg.lgRunsPerPa, parkFactor ?? 1);
+      const wrcPlus = calcWrcPlus(b, lg.lgWoba, lg.lgRunsPerPa, parkFactor ?? 1, b.year);
       return { ...b, parkFactor, wrcPlus };
     });
 

@@ -13,9 +13,10 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import * as cheerio from "cheerio";
 import { parseGameDates } from "../lib/npbGames";
-import { WOBA_SCALE, WOBA_WEIGHTS } from "../lib/wrc";
+import { WOBA_WEIGHTS, wobaScaleForYear } from "../lib/wrc";
 
 const YEAR = 2025;
+const WOBA_SCALE = wobaScaleForYear(YEAR);
 const CACHE_DIR = path.join(process.cwd(), ".cache", "raw");
 const REQUEST_DELAY_MS = 150;
 const SEASON_MONTHS = [3, 4, 5, 6, 7, 8, 9, 10, 11];

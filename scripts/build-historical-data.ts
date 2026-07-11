@@ -12,6 +12,11 @@
  *   規定打席算出用の試合数を取得
  *
  * 実行: BUILD_START_YEAR=1995 BUILD_END_YEAR=2004 npx tsx scripts/build-historical-data.ts
+ *
+ * 注意: このスクリプトは対象年度の打者データを外国人選手名の頭文字disambiguation前の
+ * 生の状態（姓のみ等）で書き出す。実行後は必ず
+ * `npx tsx scripts/fix-ambiguous-batter-names.ts && npx tsx scripts/build-search-index.ts`
+ * を実行して同姓の別人（例: Ｅ．ソト / Ｎ．ソト）の表記を復元すること。
  */
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -224,7 +229,7 @@ async function main() {
       const lgWoba = lgWobaByLeague[league];
       const lgRunsPerPa = lgRunsPerPaByLeague[league];
       const woba = calcWoba(row);
-      const wrcPlus = calcWrcPlus(row, lgWoba, lgRunsPerPa, 1);
+      const wrcPlus = calcWrcPlus(row, lgWoba, lgRunsPerPa, 1, year);
       const avg = row.ab > 0 ? row.hits / row.ab : 0;
       const slg = row.ab > 0 ? row.totalBases / row.ab : 0;
       const obpDenom = row.ab + row.bb + row.hbp + row.sf;

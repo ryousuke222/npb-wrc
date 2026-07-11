@@ -1,4 +1,5 @@
-import type { CountingStats } from "./types";
+import type { CountingStats, YearData } from "./types";
+import type { TeamId } from "./teams";
 
 /**
  * wOBA線形加重係数（NPB版）。
@@ -18,16 +19,32 @@ export const WOBA_WEIGHTS = {
 };
 
 /**
- * wOBAスケール定数。
+ * wOBAスケール定数（時代区分別）。
  *
  * MLBで一般的に使われる1.15をそのまま使うと、NPBの方が得点環境が低いため
  * （投手の打席が多い、本塁打が出にくい等）wRC+の振れ幅が実態より過大になってしまう。
- * そこで、2005年以降の全球団・全年度（264チームシーズン）の「チームwOBAとリーグ平均との差」
- * が「チームの実得点/打席とリーグ平均との差」をどれだけ説明するかを回帰分析し、
- * 実データから経験的に導出した値を使用している（上記のNPB版係数に対してR^2=0.8605、
- * 算出スクリプトは scripts/derive-woba-scale.ts）。
+ * そこで「チームwOBAとリーグ平均との差」が「チームの実得点/打席とリーグ平均との差」を
+ * どれだけ説明するかを回帰分析し、実データから経験的に導出した値を使用している
+ * （上記のNPB版係数に対して算出。算出スクリプトは scripts/derive-woba-scale.ts、
+ * 時代区分ごとの再検証は各data/{year}.jsonのbattersを集計して回帰）。
+ *
+ * 得点環境は時代によって大きく異なるため（例: 1985年 得点/打席 約0.13、2025年 約0.09）、
+ * 単一の固定値ではなく時代区分ごとの値を使う。1995-2004年はデータの断層により
+ * 前後の区分よりやや低いスケール（＝wOBA差の割に得点差が小さい）が観測されている。
  */
-export const WOBA_SCALE = 1.372;
+const WOBA_SCALE_BY_ERA: { maxYear: number; scale: number }[] = [
+  { maxYear: 1974, scale: 1.4608 },
+  { maxYear: 1994, scale: 1.4391 },
+  { maxYear: 2004, scale: 1.3578 },
+  { maxYear: Infinity, scale: 1.3734 },
+];
+
+export function wobaScaleForYear(year: number): number {
+  for (const era of WOBA_SCALE_BY_ERA) {
+    if (year <= era.maxYear) return era.scale;
+  }
+  return WOBA_SCALE_BY_ERA[WOBA_SCALE_BY_ERA.length - 1].scale;
+}
 
 export function wobaNumerator(s: CountingStats): number {
   const uBB = s.bb - s.ibb;
@@ -64,17 +81,97 @@ export function calcWrcPlus(
   batter: CountingStats,
   lgWoba: number,
   lgRunsPerPa: number,
-  parkFactor: number = 1
+  parkFactor: number = 1,
+  year: number = 2005
 ): number {
   if (batter.pa === 0 || lgRunsPerPa === 0) return 100;
   const batterWoba = calcWoba(batter);
-  const wraa = ((batterWoba - lgWoba) / WOBA_SCALE) * batter.pa;
+  const wraa = ((batterWoba - lgWoba) / wobaScaleForYear(year)) * batter.pa;
   const wraaPerPa = wraa / batter.pa;
   return 100 * (wraaPerPa / lgRunsPerPa + 2 - parkFactor);
 }
 
 export function calcOps(obp: number, slg: number): number {
   return obp + slg;
+}
+
+export function emptyCountingStats(): CountingStats {
+  return {
+    games: 0,
+    pa: 0,
+    ab: 0,
+    runs: 0,
+    hits: 0,
+    doubles: 0,
+    triples: 0,
+    hr: 0,
+    totalBases: 0,
+    rbi: 0,
+    sb: 0,
+    cs: 0,
+    sh: 0,
+    sf: 0,
+    bb: 0,
+    ibb: 0,
+    hbp: 0,
+    so: 0,
+    gdp: 0,
+  };
+}
+
+export function addCountingStats(a: CountingStats, b: CountingStats): void {
+  a.games += b.games;
+  a.pa += b.pa;
+  a.ab += b.ab;
+  a.runs += b.runs;
+  a.hits += b.hits;
+  a.doubles += b.doubles;
+  a.triples += b.triples;
+  a.hr += b.hr;
+  a.totalBases += b.totalBases;
+  a.rbi += b.rbi;
+  a.sb += b.sb;
+  a.cs += b.cs;
+  a.sh += b.sh;
+  a.sf += b.sf;
+  a.bb += b.bb;
+  a.ibb += b.ibb;
+  a.hbp += b.hbp;
+  a.so += b.so;
+  a.gdp += b.gdp;
+}
+
+export interface TeamWrc {
+  teamId: TeamId;
+  teamName: string;
+  league: "central" | "pacific";
+  wrcPlus: number;
+  pa: number;
+  woba: number;
+}
+
+/**
+ * チームwRC+を算出する。そのチーム・年度の全打者（投手の代打成績も含む、個人ページの
+ * wRC+算出と同じ母集団）を合算し、個人と同じ式でリーグ平均・そのチームの本拠地
+ * パークファクターと比較する。打席で加重した個人wRC+の平均と（PA重み付けなら）
+ * 数学的にほぼ一致するが、チーム集計値から直接算出する方が頑健。
+ */
+export function calcTeamWrc(data: YearData, teamId: TeamId): TeamWrc | null {
+  const teamBatters = data.batters.filter((b) => b.teamId === teamId);
+  if (teamBatters.length === 0) return null;
+
+  const totals = emptyCountingStats();
+  for (const b of teamBatters) addCountingStats(totals, b);
+  if (totals.pa === 0) return null;
+
+  const league = teamBatters[0].league;
+  const teamName = teamBatters[0].teamName;
+  const { lgWoba, lgRunsPerPa } = data.leagueContext[league];
+  const parkFactor = data.parkFactors[teamId]?.adjusted ?? 1;
+  const wrcPlus = calcWrcPlus(totals, lgWoba, lgRunsPerPa, parkFactor, data.year);
+  const woba = calcWoba(totals);
+
+  return { teamId, teamName, league, wrcPlus, pa: totals.pa, woba };
 }
 
 /** wRC+の表示用フォーマット（整数表示。DELTA社等の一般的な表示に合わせる） */
