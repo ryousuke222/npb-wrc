@@ -17,31 +17,12 @@ export default function AboutPage() {
           Plus）を独自に算出し、年度別のランキングとして表示する個人プロジェクトです。
           初期表示は規定打席（チーム試合数×3.1、端数四捨五入）に到達した打者のみですが、
           最低打席数の条件は画面上で自由に変更でき、規定打席未満の打者も表示できます。
-          選手個別のページでは、同姓同名判定（名前の完全一致）による年度別成績の推移も確認できます。
-        </p>
-      </section>
-
-      <section className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
-        <h2 className="text-sm font-bold text-amber-900">
-          ご注意：DELTA社等の公表値とは一致しません
-        </h2>
-        <p className="mt-2 text-sm leading-relaxed text-amber-900">
-          当サイトのwRC+は、DELTA社「1.02 Essence of
-          Baseball」やその他のサイトが公表しているwRC+とは<strong>完全には一致しません</strong>
-          （2025年での検証では平均で数点程度の差）。これはバグではなく、以下の理由による仕様上の違いです。
-        </p>
-        <ul className="mt-2 list-inside list-disc space-y-1 text-sm leading-relaxed text-amber-900">
-          <li>
-            wOBAの線形加重係数はNPB向けの近似値（下記参照）を採用していますが、DELTA社等が算出している年度別の厳密な係数とは異なります。特に「失策出塁」の項は現状のデータでは反映できていません。
-          </li>
-          <li>
-            パークファクターも、DELTA社は複数年平均・詳細な補正を行っているとみられますが、当サイトは3年プールの簡易計算です。
-          </li>
-        </ul>
-        <p className="mt-2 text-sm leading-relaxed text-amber-900">
-          そのため当サイトのwRC+は「公式・正確な値」ではなく、
-          <strong>同一年度・同一リーグ内での相対的な打者評価の目安</strong>
-          としてご利用ください。詳しい算出方法は下記をご覧ください。
+          選手個別のページでは、年度別成績の推移も確認できます。同姓同名の別人選手がいる場合
+          （外国人選手の姓のみ表記、日本人選手のフルネーム一致のいずれも）は、npb.jpの選手個別ID
+          をもとに極力正しい選手同士のみをつなげるようにしていますが、名簿側のテキストが
+          解釈しづらいごく一部のケースでは名前の完全一致による簡易判定にフォールバックします。
+          なお、DELTA社「1.02 Essence of
+          Baseball」など他サイトが公表しているwRC+とは、算出方法の違いにより完全には一致しません（詳細は下記）。
         </p>
       </section>
 
@@ -80,24 +61,22 @@ export default function AboutPage() {
           </li>
           <li>
             wOBAスケール定数は、上記の係数で算出したチームwOBAとリーグ平均との差が、
-            チームの実際の得点/打席とリーグ平均との差をどれだけ説明するかを、2005年以降の全球団・全年度
-            （264チームシーズン分）で回帰分析し、経験的に導出した値（1.372、決定係数R²=0.8605）を使用しています。
-            算出スクリプトは
-            <code className="rounded bg-zinc-100 px-1 py-0.5 text-xs">
-              scripts/derive-woba-scale.ts
-            </code>
-            です。
+            チームの実際の得点/打席とリーグ平均との差をどれだけ説明するかを回帰分析し、経験的に導出しています。
+            得点環境は時代によって大きく異なる（例: 得点/打席は1985年頃の約0.13から2025年頃の約0.09まで変動）ため、
+            単一の固定値ではなく<strong>時代区分ごとの値</strong>を使用しています
+            （1955〜1974年: 1.4608 / 1975〜1994年: 1.4391 / 1995〜2004年: 1.3578 / 2005年以降: 1.3734。
+            いずれも決定係数R²は0.84〜0.90）。
           </li>
           <li>
             リーグ平均（wRC+の分母）は、<strong>投手の打席を除いた</strong>
             規定打席未満の選手も含む全打者の成績を合算して算出しています。
             セ・リーグはDH制がなく投手も打席に立ちますが、打撃力の低い投手の打席を含めるとリーグ平均が実態より低く出て、
-            結果として全打者のwRC+が過大に出てしまう問題があったため、各球団の投手成績ページ（idp1_xx.html）から投手名の一覧を取得し、
+            結果として全打者のwRC+が過大に出てしまう問題があったため、各球団の投手成績ページから投手名の一覧を取得し、
             リーグ平均の算出対象から除外しています（選手個人の代打成績等の表示自体は従来通り行います）。
           </li>
         </ul>
         <p className="text-sm leading-relaxed text-zinc-700">
-          年度間・NPBとMLB間の厳密な比較には適さない点にもご注意ください（DELTA社等との差異については上記の注意書きを参照）。
+          年度間・NPBとMLB間の厳密な比較には適さない点にもご注意ください。
         </p>
       </section>
 
@@ -205,9 +184,11 @@ export default function AboutPage() {
         </p>
         <ul className="list-inside list-disc space-y-2 text-sm leading-relaxed text-zinc-700">
           <li>
-            <strong>1995〜2004年はパークファクターを算出しています。</strong>
+            <strong>1955〜2004年もパークファクターを算出しています。</strong>
             npb.jp公式サイトには試合単位データがないため、個人運営の記録サイト「2689web.com」（1936年以降の公式戦全試合ボックススコアを収録）から球場・本拠地/ビジター・スコアを取得し、2005年以降と同じ5年窓＋信頼度回帰の手法で算出しています。
-            <strong>1994年以前はまだこのデータ収集が完了しておらず、PF=1（補正なし）のままです。</strong>
+            本拠地移転・改修年（例: 1988年巨人の東京ドーム移転、1993年南海→ダイエーの福岡ドーム移転等）は試合データ（本拠地球場名の変化）から検出していますが、
+            <strong>球場名が変わらないラッキーゾーンの設置・撤去（例: 1947〜1991年の甲子園、1962〜1967年の神宮、1960年〜の西宮）は試合データからは検出できないため、公開資料をもとに手動で反映しています。</strong>
+            いずれも変化前後のデータが混ざらないよう年度プールを区切っています。
           </li>
           <li>
             <strong>敬遠（IBB）は常に0として扱っています。</strong>
@@ -223,7 +204,16 @@ export default function AboutPage() {
       </section>
 
       <section className="mt-8 space-y-3">
-        <h2 className="text-lg font-semibold">歴代ランキング・選手検索</h2>
+        <h2 className="text-lg font-semibold">
+          チームwRC+・歴代ランキング・選手検索
+        </h2>
+        <p className="text-sm leading-relaxed text-zinc-700">
+          <a href="/team-wrc" className="underline underline-offset-2">
+            チームwRC+
+          </a>
+          では、個人のwRC+と同じ算出式を、球団の打者全員（投手の代打成績も含む）の合算成績に適用し、
+          年度・球団ごとのランキングとして表示しています。各行から、その年その球団に在籍した打者の一覧にも移動できます。
+        </p>
         <p className="text-sm leading-relaxed text-zinc-700">
           <a href="/all-time" className="underline underline-offset-2">
             歴代ランキング

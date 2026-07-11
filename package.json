@@ -7,8 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "build-data": "tsx scripts/build-data.ts && tsx scripts/build-search-index.ts",
-    "build-search-index": "tsx scripts/build-search-index.ts"
+    "build-data": "tsx scripts/build-data.ts && tsx scripts/fix-ambiguous-batter-names.ts && tsx scripts/build-search-index.ts && tsx scripts/build-active-roster.ts",
+    "build-search-index": "tsx scripts/build-search-index.ts",
+    "build-active-roster": "tsx scripts/build-active-roster.ts",
+    "fix-ambiguous-names": "tsx scripts/fix-ambiguous-batter-names.ts",
+    "build-og-font": "tsx scripts/build-og-font.ts"
   },
   "dependencies": {
     "cheerio": "^1.2.0",
@@ -23,6 +26,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
+    "subset-font": "^2.5.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.0",
     "typescript": "^5"

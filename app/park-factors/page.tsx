@@ -1,6 +1,14 @@
 import { getAllParkFactors, getAvailableYears } from "@/lib/data";
-import { ALL_TEAM_IDS, TEAM_ID_DEFAULT_NAME, type TeamId } from "@/lib/teams";
+import {
+  ALL_TEAM_IDS,
+  HISTORICAL_ONLY_TEAM_IDS,
+  TEAM_ID_DEFAULT_NAME,
+  type TeamId,
+} from "@/lib/teams";
 import { teamColor } from "@/lib/teamColors";
+
+// 現行12球団に加え、近鉄・大映のように現在は消滅している歴史上のみの球団も表示する
+const DISPLAY_TEAM_IDS: TeamId[] = [...ALL_TEAM_IDS, ...HISTORICAL_ONLY_TEAM_IDS];
 
 export const metadata = {
   title: "パークファクター一覧（診断用） | NPB最強打者ランキング",
@@ -31,7 +39,7 @@ export default async function ParkFactorsPage() {
 
   // 球団ごとの平均raw値（自チームの過去平均から大きく外れる年度を検出するため）
   const teamAverages = new Map<TeamId, number>();
-  for (const teamId of ALL_TEAM_IDS) {
+  for (const teamId of DISPLAY_TEAM_IDS) {
     const vals = entries.filter((e) => e.teamId === teamId).map((e) => e.raw);
     if (vals.length > 0) {
       teamAverages.set(teamId, vals.reduce((s, v) => s + v, 0) / vals.length);
@@ -60,7 +68,7 @@ export default async function ParkFactorsPage() {
               <th className="sticky left-0 z-10 bg-zinc-50 px-3 py-2 text-left font-bold text-zinc-500">
                 年度
               </th>
-              {ALL_TEAM_IDS.map((teamId) => {
+              {DISPLAY_TEAM_IDS.map((teamId) => {
                 const color = teamColor(teamId);
                 return (
                   <th
@@ -80,7 +88,7 @@ export default async function ParkFactorsPage() {
                 <td className="sticky left-0 z-10 bg-white px-3 py-1.5 font-bold text-zinc-700">
                   {year}
                 </td>
-                {ALL_TEAM_IDS.map((teamId) => {
+                {DISPLAY_TEAM_IDS.map((teamId) => {
                   const e = byYearTeam.get(`${year}-${teamId}`);
                   if (!e) {
                     return (
@@ -119,7 +127,7 @@ export default async function ParkFactorsPage() {
 
       <div className="mt-4 text-xs text-zinc-400">
         球団ごとの全年度平均:{" "}
-        {ALL_TEAM_IDS.map((teamId) => (
+        {DISPLAY_TEAM_IDS.map((teamId) => (
           <span key={teamId} className="mr-3 inline-block whitespace-nowrap">
             {TEAM_ID_DEFAULT_NAME[teamId]}=
             {(teamAverages.get(teamId) ?? 0).toFixed(3)}
