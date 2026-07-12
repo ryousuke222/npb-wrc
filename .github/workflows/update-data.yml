@@ -1,0 +1,62 @@
+name: Update NPB Data
+
+# 1日おき(日本時間6:00頃)に自動でシーズン中の成績データを更新し、
+# 変更があればコミット・pushする。pushされるとVercelが自動で再デプロイする。
+#
+# 過去年度(完成済みシーズン)のスクレイピング結果は .cache/raw に永続キャッシュし、
+# 実行のたびに全年度を再取得しないようにしている。当年分のキャッシュだけ実行前に
+# 破棄することで、シーズン中の最新試合結果だけを毎回取得し直す。
+
+on:
+  schedule:
+    - cron: "0 21 */2 * *" # UTC 21:00 = JST 6:00、隔日
+  workflow_dispatch: {} # 手動実行用（GitHubのActionsタブから「Run workflow」で実行可能）
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Restore scrape cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/raw
+          key: npb-scrape-cache-${{ github.run_id }}
+          restore-keys: |
+            npb-scrape-cache-
+
+      - name: Invalidate current-year cache (force refetch of in-progress season)
+        run: |
+          YEAR=$(TZ=Asia/Tokyo date +%Y)
+          rm -f ".cache/raw/${YEAR}-"*.html
+          echo "Cleared cached pages for ${YEAR}"
+
+      - run: npm ci
+
+      - run: npm run build-data
+
+      - name: Save scrape cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/raw
+          key: npb-scrape-cache-${{ github.run_id }}
+
+      - name: Commit and push if data changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ public/search-index.json
+          if git diff --staged --quiet; then
+            echo "No data changes"
+          else
+            git commit -m "chore: NPBデータを自動更新 ($(TZ=Asia/Tokyo date +%Y-%m-%d))"
+            git push
+          fi

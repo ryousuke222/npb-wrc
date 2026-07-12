@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "build-data": "tsx scripts/build-data.ts && tsx scripts/fix-ambiguous-batter-names.ts && tsx scripts/build-search-index.ts && tsx scripts/build-active-roster.ts",
+    "build-data": "tsx scripts/build-data.ts && tsx scripts/fix-ambiguous-batter-names.ts && tsx scripts/fix-japanese-namesakes.ts && tsx scripts/build-search-index.ts && tsx scripts/build-active-roster.ts",
     "build-search-index": "tsx scripts/build-search-index.ts",
     "build-active-roster": "tsx scripts/build-active-roster.ts",
     "fix-ambiguous-names": "tsx scripts/fix-ambiguous-batter-names.ts",
