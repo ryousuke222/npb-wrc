@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
   parsePitcherNames,
@@ -82,6 +82,9 @@ const START_YEAR = 2005;
 const CACHE_DIR = path.join(process.cwd(), ".cache", "raw");
 const DATA_DIR = path.join(process.cwd(), "data");
 const REQUEST_DELAY_MS = 200;
+// シーズン進行中の年度の集計ページ（チーム打撃成績・個人打撃成績・投手一覧）は
+// 試合のたびに更新されるため、無期限キャッシュにせず短いTTLで再取得を強制する。
+const CURRENT_YEAR_CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000; // 6時間
 const SEASON_MONTHS = [3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 const LEAGUE_PATH: Record<LeagueKey, "c" | "p"> = {
@@ -93,15 +96,25 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * @param maxAgeMs 指定した場合、キャッシュがこの期間より古ければ無視して再取得する。
+ *   シーズン進行中の年度の「チーム打撃成績」「個人打撃成績」ページは日々更新されるため、
+ *   過去の完了済み年度（無期限キャッシュ）と違い短いTTLを指定する必要がある。
+ */
 async function fetchCached(
   url: string,
-  cacheKey: string
+  cacheKey: string,
+  maxAgeMs?: number
 ): Promise<string | null> {
   const cachePath = path.join(CACHE_DIR, cacheKey);
   try {
+    if (maxAgeMs !== undefined) {
+      const stats = await stat(cachePath);
+      if (Date.now() - stats.mtimeMs > maxAgeMs) throw new Error("stale");
+    }
     return await readFile(cachePath, "utf-8");
   } catch {
-    // キャッシュなし、取得する
+    // キャッシュなし、または期限切れ。取得する
   }
 
   const res = await fetch(url, {
@@ -370,13 +383,17 @@ async function buildYear(year: number): Promise<YearData | null> {
   }
   const personalPfMap = await computePersonalParkFactors(year, rawPfByTeam);
 
+  const isCurrentYear = year === new Date().getFullYear();
+  const statsMaxAgeMs = isCurrentYear ? CURRENT_YEAR_CACHE_MAX_AGE_MS : undefined;
+
   for (const league of leagues) {
     const lp = LEAGUE_PATH[league];
     const base = `https://npb.jp/bis/${year}/stats`;
 
     const tmbHtml = await fetchCached(
       `${base}/tmb_${lp}.html`,
-      `${year}-tmb-${lp}.html`
+      `${year}-tmb-${lp}.html`,
+      statsMaxAgeMs
     );
     if (!tmbHtml) {
       console.warn(`[skip] ${year} ${league}: tmb fetch failed`);
@@ -404,7 +421,8 @@ async function buildYear(year: number): Promise<YearData | null> {
 
       const rosterHtml = await fetchCached(
         `${base}/idb1_${team.code}.html`,
-        `${year}-idb1-${team.code}.html`
+        `${year}-idb1-${team.code}.html`,
+        statsMaxAgeMs
       );
       if (!rosterHtml) {
         console.warn(`[skip] ${year} ${team.teamId}: roster fetch failed`);
@@ -415,7 +433,8 @@ async function buildYear(year: number): Promise<YearData | null> {
 
       const pitcherHtml = await fetchCached(
         `${base}/idp1_${team.code}.html`,
-        `${year}-idp1-${team.code}.html`
+        `${year}-idp1-${team.code}.html`,
+        statsMaxAgeMs
       );
       const pitcherNames = pitcherHtml ? parsePitcherNames(pitcherHtml) : new Set<string>();
 
