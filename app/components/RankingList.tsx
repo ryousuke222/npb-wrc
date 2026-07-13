@@ -35,12 +35,15 @@ export default function RankingList({
     );
   }
 
+  const maxWrcPlus = Math.max(...batters.map((b) => b.wrcPlus), 100);
+
   return (
     <ol className="flex flex-col gap-2.5">
       {batters.map((b, i) => {
         const displayPos = i + 1;
         const color = teamColor(b.teamId);
         const ring = MEDAL_RING[displayPos] ?? "";
+        const barPct = Math.max(4, Math.min(100, (b.wrcPlus / maxWrcPlus) * 100));
 
         return (
           <li key={`${b.year}-${b.league}-${b.name}-${b.teamId}-${b.rank}`}>
@@ -59,7 +62,7 @@ export default function RankingList({
                 {displayPos}
               </span>
 
-              <span className="min-w-0 flex-1">
+              <span className="min-w-0 flex-1 lg:max-w-xs lg:flex-none">
                 <span className="block truncate text-lg font-bold tracking-tight sm:text-xl">
                   {b.name}
                 </span>
@@ -86,6 +89,15 @@ export default function RankingList({
                       規定未満
                     </span>
                   )}
+                </span>
+              </span>
+
+              <span className="hidden min-w-0 flex-1 items-center lg:flex">
+                <span className="h-2 w-full overflow-hidden rounded-full bg-zinc-100">
+                  <span
+                    style={{ width: `${barPct}%`, backgroundColor: color.bg }}
+                    className="block h-full rounded-full"
+                  />
                 </span>
               </span>
 

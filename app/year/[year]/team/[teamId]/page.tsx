@@ -61,7 +61,7 @@ export default async function YearTeamPage({
   const teamName = teamBatters[0].teamName;
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-5xl">
       <Suspense fallback={<span className="text-sm text-zinc-400">&nbsp;</span>}>
         <TeamBackLink />
       </Suspense>
