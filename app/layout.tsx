@@ -65,6 +65,12 @@ export default function RootLayout({
                 チームwRC+
               </Link>
               <Link
+                href="/titles"
+                className="text-zinc-600 hover:text-zinc-900"
+              >
+                打撃タイトル
+              </Link>
+              <Link
                 href="/search"
                 className="text-zinc-600 hover:text-zinc-900"
               >

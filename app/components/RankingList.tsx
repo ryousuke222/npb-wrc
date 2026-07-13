@@ -20,12 +20,30 @@ export default function RankingList({
   batters,
   showYear = false,
   backQuery,
+  valueLabel = "wRC+",
+  getValue = (b) => b.wrcPlus,
+  formatValue = fmtWrcPlus,
+  getValueColor = wrcColor,
+  showTitles = true,
 }: {
   batters: BatterRanking[];
   /** 年度をまたぐ一覧（歴代ランキング等）で、各行に年度を表示する */
   showYear?: boolean;
   /** 選手詳細ページの「戻る」リンクを遷移元に向けるためのクエリ文字列（例: "from=all-time"） */
   backQuery?: string;
+  /** 右側に表示する数値のラベル（デフォルトはwRC+） */
+  valueLabel?: string;
+  /** 右側に表示する数値を取り出す関数（デフォルトはwRC+） */
+  getValue?: (b: BatterRanking) => number;
+  /** 右側の数値のフォーマット関数（デフォルトはwRC+の書式） */
+  formatValue?: (n: number) => string;
+  /** 右側の数値の色分け関数（デフォルトはwRC+のしきい値による色分け） */
+  getValueColor?: (n: number) => string;
+  /**
+   * 打撃タイトルバッジを幅広画面の空白部分に表示するか。
+   * 3列グリッド等、カード自体の実幅が狭い文脈ではfalseにして崩れを防ぐ
+   */
+  showTitles?: boolean;
 }) {
   if (batters.length === 0) {
     return (
@@ -68,7 +86,7 @@ export default function RankingList({
                     </span>
                   )}
                 </span>
-                <span className="mt-1 flex items-center gap-1.5">
+                <span className="mt-1 flex flex-wrap items-center gap-1.5">
                   {showYear && (
                     <span className="text-[11px] font-bold text-zinc-500">
                       {b.year}
@@ -96,17 +114,27 @@ export default function RankingList({
                       規定未満
                     </span>
                   )}
+                  {showTitles &&
+                    b.titles?.map((title) => (
+                      <span
+                        key={title}
+                        style={{ color: color.bg }}
+                        className="text-[11px] font-bold whitespace-nowrap"
+                      >
+                        {title}
+                      </span>
+                    ))}
                 </span>
               </span>
 
               <span className="shrink-0 text-right">
                 <span
-                  className={`block text-2xl font-extrabold tabular-nums sm:text-3xl ${wrcColor(b.wrcPlus)}`}
+                  className={`block text-2xl font-extrabold tabular-nums sm:text-3xl ${getValueColor(getValue(b))}`}
                 >
-                  {fmtWrcPlus(b.wrcPlus)}
+                  {formatValue(getValue(b))}
                 </span>
                 <span className="block text-[10px] font-medium tracking-wide text-zinc-400">
-                  wRC+
+                  {valueLabel}
                 </span>
               </span>
             </Link>

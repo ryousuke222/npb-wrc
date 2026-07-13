@@ -25,7 +25,7 @@ export default async function AllTimePage() {
   const newestYear = years[0];
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-5xl">
+    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-3xl">
       <div className="mb-6">
         <Link
           href={`/year/${latestYear}`}

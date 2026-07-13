@@ -63,6 +63,8 @@ export interface BatterRanking extends BatterRow {
   age?: number;
   /** 打席（右打ち/左打ち/両打ち）。取得できない場合は未設定 */
   bats?: string;
+  /** その年度・リーグでのタイトル（首位打者・本塁打王・打点王・盗塁王）。該当なしの場合は未設定 */
+  titles?: string[];
 }
 
 export interface LeagueContext {
