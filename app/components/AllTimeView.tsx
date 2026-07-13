@@ -6,6 +6,7 @@ import { ALL_TEAM_IDS, TEAM_ID_DEFAULT_NAME, type TeamId } from "@/lib/teams";
 import RankingList from "./RankingList";
 
 type Scope = "all" | "central" | "pacific" | `team:${TeamId}`;
+type AgeMode = "eq" | "gte" | "lte";
 
 const LEAGUE_TEAMS: { league: "central" | "pacific"; label: string }[] = [
   { league: "central", label: "セ・リーグ" },
@@ -39,14 +40,6 @@ export default function AllTimeView({
   const oldestYear = years[0];
   const newestYear = years[years.length - 1];
 
-  const availableAges = useMemo(() => {
-    const ages = new Set<number>();
-    for (const b of batters) {
-      if (b.age !== undefined) ages.add(b.age);
-    }
-    return [...ages].sort((a, b) => a - b);
-  }, [batters]);
-
   // NPB公式の支配下選手一覧（1軍/2軍・育成選手問わず現在登録されている選手）に
   // MLB在籍中の手動リストを足したものを「現役」とみなす（名前で判定するため、
   // 同姓同名選手が別にいる場合は誤って現役扱いになりうるが、既存の選手個人ページと
@@ -64,6 +57,8 @@ export default function AllTimeView({
   const [fromYear, setFromYear] = useState(oldestYear);
   const [toYear, setToYear] = useState(newestYear);
   const [ageFilterInput, setAgeFilterInput] = useState("");
+  const [ageMode, setAgeMode] = useState<AgeMode>("eq");
+  const [batsFilter, setBatsFilter] = useState("");
 
   const ageFilter = ageFilterInput === "" ? null : Number(ageFilterInput);
 
@@ -78,9 +73,25 @@ export default function AllTimeView({
     }
     list = list.filter((b) => b.year >= fromYear && b.year <= toYear);
     if (activeOnly) list = list.filter((b) => activeNames.has(b.name));
-    if (ageFilter !== null) list = list.filter((b) => b.age === ageFilter);
+    if (ageFilter !== null) {
+      if (ageMode === "eq") list = list.filter((b) => b.age === ageFilter);
+      else if (ageMode === "gte") list = list.filter((b) => b.age !== undefined && b.age >= ageFilter);
+      else list = list.filter((b) => b.age !== undefined && b.age <= ageFilter);
+    }
+    if (batsFilter) list = list.filter((b) => b.bats === batsFilter);
     return [...list].sort((a, b) => b.wrcPlus - a.wrcPlus);
-  }, [batters, scope, includeUnqualified, fromYear, toYear, activeOnly, activeNames, ageFilter]);
+  }, [
+    batters,
+    scope,
+    includeUnqualified,
+    fromYear,
+    toYear,
+    activeOnly,
+    activeNames,
+    ageFilter,
+    ageMode,
+    batsFilter,
+  ]);
 
   const visible = scoped.slice(0, visibleCount);
 
@@ -161,20 +172,45 @@ export default function AllTimeView({
           )}
         </div>
 
+        <div className="flex items-center gap-1.5 text-sm">
+          <span className="text-zinc-400">年齢</span>
+          <input
+            type="number"
+            min={0}
+            value={ageFilterInput}
+            onChange={(e) => {
+              setAgeFilterInput(e.target.value);
+              setVisibleCount(PAGE_SIZE);
+            }}
+            placeholder="指定なし"
+            className="w-20 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-right tabular-nums"
+          />
+          <select
+            value={ageMode}
+            onChange={(e) => {
+              setAgeMode(e.target.value as AgeMode);
+              setVisibleCount(PAGE_SIZE);
+            }}
+            className="rounded-md border border-zinc-300 bg-white px-2 py-1.5 font-medium"
+          >
+            <option value="eq">のみ</option>
+            <option value="gte">以上</option>
+            <option value="lte">以下</option>
+          </select>
+        </div>
+
         <select
-          value={ageFilterInput}
+          value={batsFilter}
           onChange={(e) => {
-            setAgeFilterInput(e.target.value);
+            setBatsFilter(e.target.value);
             setVisibleCount(PAGE_SIZE);
           }}
           className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
         >
-          <option value="">年齢: 指定なし</option>
-          {availableAges.map((age) => (
-            <option key={age} value={age}>
-              {age}歳
-            </option>
-          ))}
+          <option value="">打: 指定なし</option>
+          <option value="右">右打ち</option>
+          <option value="左">左打ち</option>
+          <option value="両">両打ち</option>
         </select>
 
         <label className="flex items-center gap-1.5 text-sm text-zinc-600">
