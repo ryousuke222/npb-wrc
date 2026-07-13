@@ -59,6 +59,10 @@ export interface BatterRanking extends BatterRow {
    * 未設定の場合はnameで名寄せする（従来通りの簡易的な名前ベース判定）。
    */
   nameKey?: string;
+  /** その年度時点の満年齢（6/30時点、野球の年齢集計の一般的な基準）。取得できない場合は未設定 */
+  age?: number;
+  /** 打席（右打ち/左打ち/両打ち）。取得できない場合は未設定 */
+  bats?: string;
 }
 
 export interface LeagueContext {
