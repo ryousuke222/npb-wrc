@@ -217,15 +217,16 @@ async function main() {
       }
 
       if (!playerId) {
-        // 検索フォールバック（現役選手検索）。表示名がノイズマッチしないよう
-        // 候補の表示名に検索語が部分文字列として含まれるものだけを採用する
+        // 検索フォールバック（現役・OB問わず全選手検索）。部分一致だと
+        // 「銀次」で無関係な「長谷部　銀次」がヒットする等の誤爆が起きるため、
+        // 登録名簿と同じ正規化（頭文字除去）をした上で完全一致のみ採用する
         const keyword = b.name.replace(/\s+/g, "");
         const searchHtml = await fetchCached(
-          `https://npb.jp/bis/players/search/result?search_keyword=${encodeURIComponent(keyword)}&active_flg=Y`,
-          `search_active_${keyword}.html`
+          `https://npb.jp/bis/players/search/result?search_keyword=${encodeURIComponent(keyword)}&active_flg=`,
+          `search_all_${keyword}.html`
         );
-        const candidates = parseSearchResults(searchHtml).filter((c) =>
-          c.name.replace(/[\s　]/g, "").includes(keyword)
+        const candidates = parseSearchResults(searchHtml).filter(
+          (c) => normalizeForMatch(c.name) === key
         );
         if (candidates.length === 1) {
           playerId = candidates[0].id;
