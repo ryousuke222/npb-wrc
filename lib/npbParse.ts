@@ -245,6 +245,41 @@ export function parsePitcherNames(html: string): Set<string> {
   return names;
 }
 
+const LIVE_FIELDING_POSITIONS = ["一塁手", "二塁手", "三塁手", "遊撃手", "外野手", "捕手", "投手"] as const;
+export type LiveFieldingPosition = (typeof LIVE_FIELDING_POSITIONS)[number];
+
+/**
+ * 進行中シーズンの個人守備成績ページ（idf1_{team}.html）をパースする。
+ * 完了済みシーズンのアーカイブページ（表形式・colspan構成）とは異なり、
+ * <h5>ポジション名</h5>の直後に<table class="tablefix2">が続く、見出し単位の構成。
+ * 各ポジション見出しごとに、選手名と試合数（先頭2列）だけを取り出す。
+ */
+export function parseLiveFieldingPage(
+  html: string
+): { name: string; position: LiveFieldingPosition; games: number }[] {
+  const $ = cheerio.load(html);
+  const rows: { name: string; position: LiveFieldingPosition; games: number }[] = [];
+
+  $("h5").each((_, h5el) => {
+    const label = $(h5el).text().trim();
+    if (!(LIVE_FIELDING_POSITIONS as readonly string[]).includes(label)) return;
+    const position = label as LiveFieldingPosition;
+
+    const table = $(h5el).nextAll("table.tablefix2").first();
+    table.find("tbody tr").each((_, tr) => {
+      const tds = $(tr).find("td");
+      if (tds.length < 2) return;
+      const name = $(tds.get(0)).text().trim();
+      const games = Number($(tds.get(1)).text().trim());
+      if (name && Number.isFinite(games) && games > 0) {
+        rows.push({ name, position, games });
+      }
+    });
+  });
+
+  return rows;
+}
+
 export function toBatterRow(
   raw: RawBatterRow,
   team: TeamBattingRow,
