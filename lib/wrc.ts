@@ -148,6 +148,13 @@ export interface TeamWrc {
   wrcPlus: number;
   pa: number;
   woba: number;
+  hr: number;
+  avg: number;
+  obp: number;
+  slg: number;
+  ops: number;
+  rbi: number;
+  sb: number;
 }
 
 /**
@@ -171,7 +178,27 @@ export function calcTeamWrc(data: YearData, teamId: TeamId): TeamWrc | null {
   const wrcPlus = calcWrcPlus(totals, lgWoba, lgRunsPerPa, parkFactor, data.year);
   const woba = calcWoba(totals);
 
-  return { teamId, teamName, league, wrcPlus, pa: totals.pa, woba };
+  const avg = totals.ab > 0 ? totals.hits / totals.ab : 0;
+  const slg = totals.ab > 0 ? totals.totalBases / totals.ab : 0;
+  const obpDenom = totals.ab + totals.bb + totals.hbp + totals.sf;
+  const obp = obpDenom > 0 ? (totals.hits + totals.bb + totals.hbp) / obpDenom : 0;
+  const ops = calcOps(obp, slg);
+
+  return {
+    teamId,
+    teamName,
+    league,
+    wrcPlus,
+    pa: totals.pa,
+    woba,
+    hr: totals.hr,
+    avg,
+    obp,
+    slg,
+    ops,
+    rbi: totals.rbi,
+    sb: totals.sb,
+  };
 }
 
 /** wRC+の表示用フォーマット（整数表示。DELTA社等の一般的な表示に合わせる） */

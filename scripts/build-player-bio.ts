@@ -69,17 +69,26 @@ interface Bio {
   birthMonth: number;
   birthDay: number;
   bats: string; // "右" | "左" | "両" | ""
+  position: string; // npb.jpの大まかな分類（投手/捕手/内野手/外野手）。未設定の場合は""
+}
+
+/** npb.jpの「内野手/外野手」表記を、2689web.com側の細かい表記に寄せる（投手/捕手はそのまま） */
+function normalizePosition(raw: string): string {
+  if (raw === "内野手" || raw === "外野手" || raw === "投手" || raw === "捕手") return raw;
+  return "";
 }
 
 function parseProfile(html: string): Bio | null {
   const $ = cheerio.load(html);
   let birthText = "";
   let batsText = "";
+  let positionText = "";
   $("#pc_bio th").each((_, el) => {
     const label = $(el).text().trim();
     const value = $(el).next("td").text().trim();
     if (label === "生年月日") birthText = value;
     if (label === "投打") batsText = value;
+    if (label === "ポジション") positionText = value;
   });
   const m = birthText.match(/(\d+)年(\d+)月(\d+)日/);
   if (!m) return null;
@@ -89,6 +98,7 @@ function parseProfile(html: string): Bio | null {
     birthMonth: Number(m[2]),
     birthDay: Number(m[3]),
     bats: batsMatch ? batsMatch[1] : "",
+    position: normalizePosition(positionText),
   };
 }
 
@@ -247,6 +257,9 @@ async function main() {
 
       b.age = ageAsOf(b.year, bio.birthYear, bio.birthMonth, bio.birthDay);
       if (bio.bats) b.bats = bio.bats;
+      // 2689web.comの守備成績（より詳細・全期間対応）を優先し、
+      // それで埋まらなかった行だけnpb.jp側の大まかな分類で補う
+      if (!b.position && bio.position) b.position = bio.position;
 
       if ((i + 1) % 50 === 0) console.log(`  ${i + 1}/${yearData.batters.length}`);
     }

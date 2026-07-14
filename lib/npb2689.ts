@@ -118,3 +118,103 @@ export function parseGameScorePage(html: string): GameScoreResult | null {
 
   return { venue, awayTeamName, homeTeamName, awayScore, homeScore };
 }
+
+/** 個人選手ページ一覧（例: ind/batter1.html）の1エントリ */
+export interface Batter2689Entry {
+  /** 選手ページファイル名。例: "1959014.html"（ind/配下） */
+  file: string;
+  name: string;
+  debutYear: number;
+  lastYear: number;
+  team: string;
+}
+
+/**
+ * 打者選手一覧ページ（ind/batter1.html〜batter5.html, batterp.html）から
+ * 選手名・個人ページファイル名・在籍年（デビュー〜引退）を取得する。
+ */
+export function parseBatterIndex(html: string): Batter2689Entry[] {
+  const entries: Batter2689Entry[] = [];
+  // 現役継続中の選手は終了年が空欄（例:「2021-」）になるため、末尾の年を省略可能にする。
+  // その場合は「今シーズンも現役」とみなし、判定用の在籍年上限として今年を採用する。
+  const currentYear = new Date().getFullYear();
+  const rowRe =
+    /<tr><td class='name11'><a href='([^']+)'[^>]*>([^<]+)<\/a><\/td><td class='migi'>[^<]*<\/td><td class='name12'>(\d+)-(\d+)?<\/td><td>([^<]*)<\/td><\/tr>/g;
+  for (const m of html.matchAll(rowRe)) {
+    entries.push({
+      file: m[1],
+      name: m[2].trim(),
+      debutYear: Number(m[3]),
+      lastYear: m[4] ? Number(m[4]) : currentYear,
+      team: m[5].trim(),
+    });
+  }
+  return entries;
+}
+
+export const FIELDING_POSITIONS = [
+  "投手",
+  "捕手",
+  "一塁手",
+  "二塁手",
+  "三塁手",
+  "遊撃手",
+  "外野手",
+] as const;
+export type FieldingPosition = (typeof FIELDING_POSITIONS)[number];
+
+/** 位置ごとの列数（先頭が試合数）。捕手のみ捕逸列が余分にあるため7列 */
+const POSITION_COL_SPANS: Record<FieldingPosition, number> = {
+  投手: 6,
+  捕手: 7,
+  一塁手: 6,
+  二塁手: 6,
+  三塁手: 6,
+  遊撃手: 6,
+  外野手: 6,
+};
+
+export interface FieldingYearRow {
+  year: number;
+  teamText: string;
+  /** そのシーズンに出場したポジションごとの試合数（0試合のポジションは含まない） */
+  games: Partial<Record<FieldingPosition, number>>;
+}
+
+/**
+ * 個人選手ページ（ind/{file}）の「守備成績」表を年度別にパースする。
+ * 表は 年(2列)・球団・背番号 の後に、投手(6列)→捕手(7列)→一塁手〜外野手(各6列)の
+ * 順で列が並び、各ブロックの先頭列が試合数（それ以外は刺殺・補殺・失策等）。
+ */
+export function parseFieldingHistory(html: string): FieldingYearRow[] {
+  const captionIdx = html.indexOf("<caption>守備成績</caption>");
+  if (captionIdx === -1) return [];
+  const tableEnd = html.indexOf("</table>", captionIdx);
+  const section = tableEnd === -1 ? html.slice(captionIdx) : html.slice(captionIdx, tableEnd);
+
+  const rows: FieldingYearRow[] = [];
+  const rowRe = /<tr>(?!\s*<td[^>]*>年<\/td>)([\s\S]*?)<\/tr>/g;
+  for (const rowMatch of section.matchAll(rowRe)) {
+    const rowHtml = rowMatch[1];
+    if (rowHtml.includes("class='title'")) continue;
+    const cells = [...rowHtml.matchAll(/<td[^>]*>(.*?)<\/td>/g)].map((m) => m[1].trim());
+    if (cells.length < 4) continue;
+    const year = Number(cells[0]);
+    if (!Number.isInteger(year) || year < 1936) continue;
+    const teamText = (cells[2] ?? "").replace(/<[^>]+>/g, "").trim();
+
+    let offset = 4;
+    const games: Partial<Record<FieldingPosition, number>> = {};
+    for (const pos of FIELDING_POSITIONS) {
+      const span = POSITION_COL_SPANS[pos];
+      const gamesText = cells[offset];
+      const n = Number(gamesText);
+      if (gamesText && Number.isFinite(n) && n > 0) {
+        games[pos] = n;
+      }
+      offset += span;
+    }
+    rows.push({ year, teamText, games });
+  }
+  return rows;
+}

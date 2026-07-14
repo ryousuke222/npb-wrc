@@ -109,6 +109,11 @@ export default function RankingList({
                       {b.bats}打
                     </span>
                   )}
+                  {b.position && (
+                    <span className="text-[11px] font-medium text-zinc-400">
+                      {b.position}
+                    </span>
+                  )}
                   {!b.qualified && (
                     <span className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-400">
                       規定未満

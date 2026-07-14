@@ -1,52 +1,53 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { BatterRanking } from "@/lib/types";
-import { fmtWrcPlus } from "@/lib/wrc";
+import type { BatterRanking, LeagueKey } from "@/lib/types";
 import RankingList from "./RankingList";
 
 function fmtRate(n: number): string {
   return n.toFixed(3).replace(/^0\./, ".");
 }
 
-type ColumnKey = "avg" | "wrcPlus" | "hr";
+type StatKey = "avg" | "hr" | "rbi";
 
 const flatColor = () => "text-zinc-900";
 
-const COLUMNS: {
-  key: ColumnKey;
+const STATS: {
+  key: StatKey;
   label: string;
   requireQualified: boolean;
   getValue: (b: BatterRanking) => number;
   formatValue: (n: number) => string;
-  getValueColor?: (n: number) => string;
 }[] = [
   {
     key: "avg",
-    label: "打率ランキング",
+    label: "打率",
     requireQualified: true,
     getValue: (b) => b.avg,
     formatValue: fmtRate,
-    getValueColor: flatColor,
-  },
-  {
-    key: "wrcPlus",
-    label: "wRC+ランキング",
-    requireQualified: true,
-    getValue: (b) => b.wrcPlus,
-    formatValue: fmtWrcPlus,
   },
   {
     key: "hr",
-    label: "本塁打ランキング",
+    label: "本塁打",
     requireQualified: false,
     getValue: (b) => b.hr,
     formatValue: (n) => String(n),
-    getValueColor: flatColor,
+  },
+  {
+    key: "rbi",
+    label: "打点",
+    requireQualified: false,
+    getValue: (b) => b.rbi,
+    formatValue: (n) => String(n),
   },
 ];
 
-const LIST_SIZE = 10;
+const LEAGUES: { key: LeagueKey; label: string }[] = [
+  { key: "central", label: "セ・リーグ" },
+  { key: "pacific", label: "パ・リーグ" },
+];
+
+const LIST_SIZE = 5;
 
 export default function TitleRankingView({
   batters,
@@ -61,14 +62,20 @@ export default function TitleRankingView({
 
   const yearBatters = useMemo(() => batters.filter((b) => b.year === year), [batters, year]);
 
-  const columns = useMemo(
+  const leagues = useMemo(
     () =>
-      COLUMNS.map((col) => {
-        const pool = col.requireQualified
-          ? yearBatters.filter((b) => b.qualified)
-          : yearBatters;
-        const ranked = [...pool].sort((a, b) => col.getValue(b) - col.getValue(a)).slice(0, LIST_SIZE);
-        return { ...col, ranked };
+      LEAGUES.map((league) => {
+        const leagueBatters = yearBatters.filter((b) => b.league === league.key);
+        const stats = STATS.map((stat) => {
+          const pool = stat.requireQualified
+            ? leagueBatters.filter((b) => b.qualified)
+            : leagueBatters;
+          const ranked = [...pool]
+            .sort((a, b) => stat.getValue(b) - stat.getValue(a))
+            .slice(0, LIST_SIZE);
+          return { ...stat, ranked };
+        });
+        return { ...league, stats };
       }),
     [yearBatters]
   );
@@ -89,22 +96,27 @@ export default function TitleRankingView({
         </select>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {columns.map((col) => (
-          <div key={col.key}>
-            <h2 className="mb-2 text-sm font-bold text-zinc-700">{col.label}</h2>
-            <RankingList
-              batters={col.ranked}
-              backQuery="from=all-time"
-              valueLabel={col.label.replace("ランキング", "")}
-              getValue={col.getValue}
-              formatValue={col.formatValue}
-              showTitles={false}
-              {...(col.getValueColor ? { getValueColor: col.getValueColor } : {})}
-            />
+      {leagues.map((league) => (
+        <div key={league.key} className="mb-8">
+          <h2 className="mb-3 text-base font-bold tracking-tight">{league.label}</h2>
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            {league.stats.map((stat) => (
+              <div key={stat.key}>
+                <h3 className="mb-2 text-sm font-bold text-zinc-700">{stat.label}</h3>
+                <RankingList
+                  batters={stat.ranked}
+                  backQuery="from=all-time"
+                  valueLabel={stat.label}
+                  getValue={stat.getValue}
+                  formatValue={stat.formatValue}
+                  showTitles={false}
+                  getValueColor={flatColor}
+                />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }

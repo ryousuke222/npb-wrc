@@ -65,6 +65,11 @@ export interface BatterRanking extends BatterRow {
   bats?: string;
   /** その年度・リーグでのタイトル（首位打者・本塁打王・打点王・盗塁王）。該当なしの場合は未設定 */
   titles?: string[];
+  /**
+   * その年度に最も多く守備出場したポジション（投手/捕手/一塁手/二塁手/三塁手/遊撃手/外野手）。
+   * 2689web.comの守備成績データが取得できた選手のみ設定される
+   */
+  position?: string;
 }
 
 export interface LeagueContext {

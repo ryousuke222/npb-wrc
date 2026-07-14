@@ -12,7 +12,7 @@ export default async function TeamWrcPage() {
   const entries = await getAllTeamWrc();
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-3xl">
       <h1 className="text-2xl font-bold tracking-tight">チームwRC+一覧</h1>
       <p className="mt-1 text-sm text-zinc-500">
         年度・球団ごとのチームwRC+（そのチームの全打者＝投手の代打成績も含む、を合算した

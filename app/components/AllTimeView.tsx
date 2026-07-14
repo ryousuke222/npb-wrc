@@ -3,7 +3,9 @@
 import { useMemo, useState } from "react";
 import type { BatterRanking } from "@/lib/types";
 import { ALL_TEAM_IDS, TEAM_ID_DEFAULT_NAME, type TeamId } from "@/lib/teams";
+import { STAT_OPTIONS, getStatOption, type StatKey } from "@/lib/statOptions";
 import RankingList from "./RankingList";
+import YearRangeSlider from "./YearRangeSlider";
 
 type Scope = "all" | "central" | "pacific" | `team:${TeamId}`;
 type AgeMode = "eq" | "gte" | "lte";
@@ -14,6 +16,8 @@ const LEAGUE_TEAMS: { league: "central" | "pacific"; label: string }[] = [
 ];
 
 const PAGE_SIZE = 100;
+
+const POSITION_ORDER = ["投手", "捕手", "一塁手", "二塁手", "三塁手", "遊撃手", "内野手", "外野手"];
 
 // NPBを離れてMLBに在籍中の選手は当然NPBの支配下選手一覧には載らない。
 // 手動で維持するリスト（要ソース確認・定期更新。削除ではなく引退確認まで残す）
@@ -59,8 +63,16 @@ export default function AllTimeView({
   const [ageFilterInput, setAgeFilterInput] = useState("");
   const [ageMode, setAgeMode] = useState<AgeMode>("eq");
   const [batsFilter, setBatsFilter] = useState("");
+  const [statKey, setStatKey] = useState<StatKey>("wrcPlus");
+  const stat = getStatOption(statKey);
+  const [positionFilter, setPositionFilter] = useState("");
 
   const ageFilter = ageFilterInput === "" ? null : Number(ageFilterInput);
+
+  const positionsInScope = useMemo(() => {
+    const present = new Set(batters.map((b) => b.position).filter((p): p is string => !!p));
+    return POSITION_ORDER.filter((p) => present.has(p));
+  }, [batters]);
 
   const scoped = useMemo(() => {
     let list = batters;
@@ -79,7 +91,8 @@ export default function AllTimeView({
       else list = list.filter((b) => b.age !== undefined && b.age <= ageFilter);
     }
     if (batsFilter) list = list.filter((b) => b.bats === batsFilter);
-    return [...list].sort((a, b) => b.wrcPlus - a.wrcPlus);
+    if (positionFilter) list = list.filter((b) => b.position === positionFilter);
+    return [...list].sort((a, b) => stat.getValue(b) - stat.getValue(a));
   }, [
     batters,
     scope,
@@ -91,160 +104,191 @@ export default function AllTimeView({
     ageFilter,
     ageMode,
     batsFilter,
+    positionFilter,
+    stat,
   ]);
 
   const visible = scoped.slice(0, visibleCount);
 
   return (
     <div>
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        <select
-          value={scope}
-          onChange={(e) => {
-            setScope(e.target.value as Scope);
-            setVisibleCount(PAGE_SIZE);
-          }}
-          className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
-        >
-          <option value="all">総合</option>
-          <optgroup label="リーグ">
-            {LEAGUE_TEAMS.map((l) => (
-              <option key={l.league} value={l.league}>
-                {l.label}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="球団">
-            {ALL_TEAM_IDS.map((id) => (
-              <option key={id} value={`team:${id}`}>
-                {TEAM_ID_DEFAULT_NAME[id]}
-              </option>
-            ))}
-          </optgroup>
-        </select>
-
-        <div className="flex items-center gap-1.5 text-sm">
-          <select
-            value={fromYear}
-            onChange={(e) => {
-              const y = Number(e.target.value);
-              setFromYear(y);
-              if (y > toYear) setToYear(y);
-              setVisibleCount(PAGE_SIZE);
-            }}
-            className="rounded-md border border-zinc-300 bg-white px-2 py-1.5 font-medium"
-          >
-            {years.map((y) => (
-              <option key={y} value={y}>
-                {y}年
-              </option>
-            ))}
-          </select>
-          <span className="text-zinc-400">〜</span>
-          <select
-            value={toYear}
-            onChange={(e) => {
-              const y = Number(e.target.value);
-              setToYear(y);
-              if (y < fromYear) setFromYear(y);
-              setVisibleCount(PAGE_SIZE);
-            }}
-            className="rounded-md border border-zinc-300 bg-white px-2 py-1.5 font-medium"
-          >
-            {years.map((y) => (
-              <option key={y} value={y}>
-                {y}年
-              </option>
-            ))}
-          </select>
-          {(fromYear !== oldestYear || toYear !== newestYear) && (
-            <button
-              type="button"
-              onClick={() => {
-                setFromYear(oldestYear);
-                setToYear(newestYear);
+      <div className="mb-4 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
+        <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
+          <div>
+            <label className="mb-1 block text-[11px] font-medium text-zinc-400">
+              絞り込み
+            </label>
+            <select
+              value={scope}
+              onChange={(e) => {
+                setScope(e.target.value as Scope);
                 setVisibleCount(PAGE_SIZE);
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-700"
+              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
             >
-              リセット
-            </button>
-          )}
+              <option value="all">総合</option>
+              <optgroup label="リーグ">
+                {LEAGUE_TEAMS.map((l) => (
+                  <option key={l.league} value={l.league}>
+                    {l.label}
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="球団">
+                {ALL_TEAM_IDS.map((id) => (
+                  <option key={id} value={`team:${id}`}>
+                    {TEAM_ID_DEFAULT_NAME[id]}
+                  </option>
+                ))}
+              </optgroup>
+            </select>
+          </div>
+
+          <div className="min-w-[240px] flex-1">
+            <label className="mb-1 block text-[11px] font-medium text-zinc-400">期間</label>
+            <YearRangeSlider
+              min={oldestYear}
+              max={newestYear}
+              fromYear={fromYear}
+              toYear={toYear}
+              onChange={(from, to) => {
+                setFromYear(from);
+                setToYear(to);
+                setVisibleCount(PAGE_SIZE);
+              }}
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-[11px] font-medium text-zinc-400">
+              並び替え
+            </label>
+            <select
+              value={statKey}
+              onChange={(e) => {
+                setStatKey(e.target.value as StatKey);
+                setVisibleCount(PAGE_SIZE);
+              }}
+              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+            >
+              {STAT_OPTIONS.map((s) => (
+                <option key={s.key} value={s.key}>
+                  {s.label}順
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-[11px] font-medium text-zinc-400">年齢</label>
+            <div className="flex items-center gap-1.5 text-sm">
+              <input
+                type="number"
+                min={0}
+                value={ageFilterInput}
+                onChange={(e) => {
+                  setAgeFilterInput(e.target.value);
+                  setVisibleCount(PAGE_SIZE);
+                }}
+                placeholder="指定なし"
+                className="w-20 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-right tabular-nums"
+              />
+              <select
+                value={ageMode}
+                onChange={(e) => {
+                  setAgeMode(e.target.value as AgeMode);
+                  setVisibleCount(PAGE_SIZE);
+                }}
+                className="rounded-md border border-zinc-300 bg-white px-2 py-1.5 font-medium"
+              >
+                <option value="eq">のみ</option>
+                <option value="gte">以上</option>
+                <option value="lte">以下</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-[11px] font-medium text-zinc-400">打</label>
+            <select
+              value={batsFilter}
+              onChange={(e) => {
+                setBatsFilter(e.target.value);
+                setVisibleCount(PAGE_SIZE);
+              }}
+              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+            >
+              <option value="">指定なし</option>
+              <option value="右">右打ち</option>
+              <option value="左">左打ち</option>
+              <option value="両">両打ち</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-[11px] font-medium text-zinc-400">
+              ポジション
+            </label>
+            <select
+              value={positionFilter}
+              onChange={(e) => {
+                setPositionFilter(e.target.value);
+                setVisibleCount(PAGE_SIZE);
+              }}
+              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+            >
+              <option value="">指定なし</option>
+              {positionsInScope.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        <div className="flex items-center gap-1.5 text-sm">
-          <span className="text-zinc-400">年齢</span>
-          <input
-            type="number"
-            min={0}
-            value={ageFilterInput}
-            onChange={(e) => {
-              setAgeFilterInput(e.target.value);
-              setVisibleCount(PAGE_SIZE);
-            }}
-            placeholder="指定なし"
-            className="w-20 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-right tabular-nums"
-          />
-          <select
-            value={ageMode}
-            onChange={(e) => {
-              setAgeMode(e.target.value as AgeMode);
-              setVisibleCount(PAGE_SIZE);
-            }}
-            className="rounded-md border border-zinc-300 bg-white px-2 py-1.5 font-medium"
-          >
-            <option value="eq">のみ</option>
-            <option value="gte">以上</option>
-            <option value="lte">以下</option>
-          </select>
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-zinc-100 pt-3">
+          <label className="flex items-center gap-1.5 text-sm text-zinc-600">
+            <input
+              type="checkbox"
+              checked={includeUnqualified}
+              onChange={(e) => {
+                setIncludeUnqualified(e.target.checked);
+                setVisibleCount(PAGE_SIZE);
+              }}
+              className="h-4 w-4 rounded border-zinc-300"
+            />
+            規定打席未満のシーズンも含める
+          </label>
+
+          <label className="flex items-center gap-1.5 text-sm text-zinc-600">
+            <input
+              type="checkbox"
+              checked={activeOnly}
+              onChange={(e) => {
+                setActiveOnly(e.target.checked);
+                setVisibleCount(PAGE_SIZE);
+              }}
+              className="h-4 w-4 rounded border-zinc-300"
+            />
+            現役選手のみ（NPB支配下選手・MLB在籍中含む）
+          </label>
         </div>
-
-        <select
-          value={batsFilter}
-          onChange={(e) => {
-            setBatsFilter(e.target.value);
-            setVisibleCount(PAGE_SIZE);
-          }}
-          className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
-        >
-          <option value="">打: 指定なし</option>
-          <option value="右">右打ち</option>
-          <option value="左">左打ち</option>
-          <option value="両">両打ち</option>
-        </select>
-
-        <label className="flex items-center gap-1.5 text-sm text-zinc-600">
-          <input
-            type="checkbox"
-            checked={includeUnqualified}
-            onChange={(e) => {
-              setIncludeUnqualified(e.target.checked);
-              setVisibleCount(PAGE_SIZE);
-            }}
-            className="h-4 w-4 rounded border-zinc-300"
-          />
-          規定打席未満のシーズンも含める
-        </label>
-
-        <label className="flex items-center gap-1.5 text-sm text-zinc-600">
-          <input
-            type="checkbox"
-            checked={activeOnly}
-            onChange={(e) => {
-              setActiveOnly(e.target.checked);
-              setVisibleCount(PAGE_SIZE);
-            }}
-            className="h-4 w-4 rounded border-zinc-300"
-          />
-          現役選手のみ（NPB支配下選手・MLB在籍中含む）
-        </label>
       </div>
 
       <p className="mb-3 text-xs text-zinc-400">
         {scoped.length}シーズン中 上位{visible.length}件を表示中
       </p>
 
-      <RankingList batters={visible} showYear backQuery="from=all-time" />
+      <RankingList
+        batters={visible}
+        showYear
+        backQuery="from=all-time"
+        valueLabel={stat.label}
+        getValue={stat.getValue}
+        formatValue={stat.formatValue}
+        {...(stat.flatColor ? { getValueColor: () => "text-zinc-900" } : {})}
+      />
 
       {visibleCount < scoped.length && (
         <div className="mt-6 flex justify-center">
