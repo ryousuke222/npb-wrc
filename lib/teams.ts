@@ -112,6 +112,40 @@ export function teamIdFromGameName(rawName: string): TeamId | null {
   return candidates.length > 0 ? TEAM_ID_BY_FULLNAME[candidates[0]] : null;
 }
 
+/**
+ * ベストナイン投票結果ページ（/award/{year}/voting_bt9.html）の球団列に現れる
+ * 「（略称）」表記（例:「（巨）」「（ディ）」）をチームIDに変換するための辞書。
+ * このページ固有の略称であり、他の球団名表記（teamIdFromGameName）とは体系が異なる
+ * （例:「近」＝大阪近鉄、2003-2004年限定/「ダ」＝ダイエー、2004年以前限定）。
+ */
+const TEAM_ID_BY_AWARD_ABBR: Record<string, TeamId> = {
+  巨: "G",
+  神: "T",
+  中: "D",
+  ヤ: "S",
+  広: "C",
+  横: "YB",
+  ディ: "YB",
+  ソ: "H",
+  ダ: "H",
+  日: "F",
+  西: "L",
+  ロ: "M",
+  オ: "Bs",
+  楽: "E",
+  近: "Kn",
+};
+
+/**
+ * ベストナイン投票結果ページの球団列テキスト（「（巨）」のような略称、または
+ * 2002年のみ見られる「読売」のような完全な球団名）をチームIDに変換する。
+ * 略称辞書で解決できない場合はteamIdFromGameNameにフォールバックする。
+ */
+export function teamIdFromAwardAbbr(rawText: string): TeamId | null {
+  const stripped = rawText.replace(/[（）()\s　]/g, "");
+  return TEAM_ID_BY_AWARD_ABBR[stripped] ?? teamIdFromGameName(stripped);
+}
+
 /** 表示用のフォールバック名（該当年度・球団のデータが見つからない場合に使用） */
 export const TEAM_ID_DEFAULT_NAME: Record<TeamId, string> = {
   G: "巨人",

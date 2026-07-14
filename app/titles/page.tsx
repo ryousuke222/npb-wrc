@@ -5,7 +5,7 @@ import TitleRankingView from "@/app/components/TitleRankingView";
 export const metadata = {
   title: "打撃タイトルランキング | NPB最強打者ランキング",
   description:
-    "セ・リーグ／パ・リーグ別に、打率・本塁打・打点の上位5人を年度ごとに確認できる打撃タイトルランキング。",
+    "セ・リーグ／パ・リーグ別に、打率・本塁打・打点・盗塁の上位5人とベストナイン受賞者を年度ごとに確認できる打撃タイトルランキング。",
 };
 
 export default async function TitlesPage() {
@@ -28,7 +28,7 @@ export default async function TitlesPage() {
           打撃タイトルランキング
         </h1>
         <p className="mt-1 text-sm text-zinc-500">
-          セ・リーグ／パ・リーグ別に、打率・本塁打・打点の上位5人を確認できます（年度を切り替えられます）
+          セ・リーグ／パ・リーグ別に、打率・本塁打・打点・盗塁の上位5人とベストナイン受賞者を確認できます（年度を切り替えられます）
         </p>
       </div>
 

@@ -40,7 +40,13 @@ async function main() {
     const filePath = path.join(DATA_DIR, file);
     const yearData: YearData = JSON.parse(await readFile(filePath, "utf-8"));
 
-    for (const b of yearData.batters) delete b.titles;
+    // ベストナイン（build-best-nine.tsが別途付与）は保持したまま、
+    // 本スクリプトが管理する成績ベースのタイトルだけをリセットする
+    for (const b of yearData.batters) {
+      const preserved = (b.titles ?? []).filter((t) => t === "ベストナイン");
+      if (preserved.length > 0) b.titles = preserved;
+      else delete b.titles;
+    }
 
     for (const league of LEAGUES) {
       const leagueBatters = yearData.batters.filter((b) => b.league === league);
