@@ -262,6 +262,10 @@ export default function CompareClient() {
         .filter((batter): batter is CompareBatter => batter !== undefined),
     [activeSelectedIds, batterById]
   );
+  const shareImageHref = useMemo(
+    () => `/compare/share-image?players=${encodeURIComponent(activeSelectedIds.join(","))}`,
+    [activeSelectedIds]
+  );
 
   const matches = useMemo(() => {
     const q = normalize(query);
@@ -486,6 +490,19 @@ export default function CompareClient() {
             <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-bold text-amber-800">
               色付き＝比較上有利な数値
             </span>
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 px-4 py-3 sm:px-5">
+            <p className="text-xs text-zinc-500">
+              選んだシーズンを、X投稿向けの横長画像として開けます。
+            </p>
+            <a
+              href={shareImageHref}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-lg bg-zinc-900 px-3 py-2 text-xs font-bold text-white hover:bg-zinc-700"
+            >
+              共有画像を開く
+            </a>
           </div>
           <div className="overflow-x-auto">
           <table className="w-full min-w-[680px] border-collapse text-sm">

@@ -58,7 +58,17 @@ export default async function YearPage({
             </p>
           )}
         </div>
-        <YearNav years={years} currentYear={year} />
+        <div className="flex items-center gap-3">
+          <a
+            href={`/year/${year}/share-image`}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-bold text-zinc-600 hover:border-zinc-300 hover:text-zinc-900"
+          >
+            投稿用画像
+          </a>
+          <YearNav years={years} currentYear={year} />
+        </div>
       </div>
       <RankingView
         batters={data.batters}
