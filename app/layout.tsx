@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import HeaderNav from "./components/HeaderNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +40,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col overflow-x-hidden bg-zinc-50 text-zinc-900">
         <header className="border-b border-zinc-200 bg-white/80 backdrop-blur sticky top-0 z-10">
-          <div className="mx-auto flex max-w-5xl flex-col gap-1.5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-6">
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
             <Link href="/" className="flex min-w-0 items-baseline gap-1.5">
               <span className="truncate text-base font-bold tracking-tight sm:text-lg">
                 NPB最強打者ランキング
@@ -48,47 +49,7 @@ export default function RootLayout({
                 wRC+
               </span>
             </Link>
-            <nav className="flex w-full shrink-0 items-center gap-3 overflow-x-auto pb-0.5 text-xs sm:w-auto sm:gap-4 sm:overflow-visible sm:pb-0 sm:text-sm">
-              <Link href="/" className="text-zinc-600 hover:text-zinc-900">
-                年度別ランキング
-              </Link>
-              <Link
-                href="/all-time"
-                className="text-zinc-600 hover:text-zinc-900"
-              >
-                歴代ランキング
-              </Link>
-              <Link
-                href="/team-wrc"
-                className="text-zinc-600 hover:text-zinc-900"
-              >
-                チームwRC+
-              </Link>
-              <Link
-                href="/titles"
-                className="text-zinc-600 hover:text-zinc-900"
-              >
-                打撃タイトル
-              </Link>
-              <Link
-                href="/search"
-                className="text-zinc-600 hover:text-zinc-900"
-              >
-                選手検索
-              </Link>
-              <Link
-                href="/compare"
-                className="whitespace-nowrap text-zinc-600 hover:text-zinc-900"
-              >
-                選手比較
-              </Link>
-              <Link
-                href="/about"
-                className="text-zinc-600 hover:text-zinc-900"
-              >
-                このサイトについて
-              </Link>
-            </nav>
+            <HeaderNav />
           </div>
         </header>
         <main className="flex-1">{children}</main>

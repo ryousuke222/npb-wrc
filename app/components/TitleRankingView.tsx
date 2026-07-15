@@ -10,7 +10,7 @@ function fmtRate(n: number): string {
   return n.toFixed(3).replace(/^0\./, ".");
 }
 
-type StatKey = "avg" | "hr" | "rbi" | "sb";
+type StatKey = "avg" | "hits" | "hr" | "rbi" | "obp" | "sb";
 
 const flatColor = () => "text-zinc-900";
 
@@ -23,28 +23,42 @@ const STATS: {
 }[] = [
   {
     key: "avg",
-    label: "打率",
+    label: "首位打者",
     requireQualified: true,
     getValue: (b) => b.avg,
     formatValue: fmtRate,
   },
   {
+    key: "hits",
+    label: "最多安打",
+    requireQualified: false,
+    getValue: (b) => b.hits,
+    formatValue: (n) => String(n),
+  },
+  {
     key: "hr",
-    label: "本塁打",
+    label: "最多本塁打",
     requireQualified: false,
     getValue: (b) => b.hr,
     formatValue: (n) => String(n),
   },
   {
     key: "rbi",
-    label: "打点",
+    label: "最多打点",
     requireQualified: false,
     getValue: (b) => b.rbi,
     formatValue: (n) => String(n),
   },
   {
+    key: "obp",
+    label: "最高出塁率",
+    requireQualified: true,
+    getValue: (b) => b.obp,
+    formatValue: fmtRate,
+  },
+  {
     key: "sb",
-    label: "盗塁",
+    label: "最多盗塁",
     requireQualified: false,
     getValue: (b) => b.sb,
     formatValue: (n) => String(n),
@@ -56,7 +70,7 @@ const LEAGUES: { key: LeagueKey; label: string }[] = [
   { key: "pacific", label: "パ・リーグ" },
 ];
 
-const LIST_SIZE = 5;
+const LIST_SIZE = 1;
 
 /** ベストナインの対象ポジション（投手部門は対象外） */
 const BEST_NINE_POSITIONS = ["捕手", "一塁手", "二塁手", "三塁手", "遊撃手", "外野手"];

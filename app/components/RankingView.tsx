@@ -51,7 +51,15 @@ export default function RankingView({
   const [ageMode, setAgeMode] = useState<AgeMode>("eq");
   const [batsFilter, setBatsFilter] = useState("");
   const [positionFilter, setPositionFilter] = useState("");
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const ageFilter = ageFilterInput === "" ? null : Number(ageFilterInput);
+  const hasCustomFilters =
+    scope !== initialScope ||
+    minPa !== initialMinPa ||
+    statKey !== "wrcPlus" ||
+    ageFilterInput !== "" ||
+    batsFilter !== "" ||
+    positionFilter !== "";
 
   // その年度に実際に在籍データがある球団のみをセレクタに出す
   // （楽天のように後年発足した球団を過去の年度に表示しない等）
@@ -101,6 +109,17 @@ export default function RankingView({
   const commitMinPa = () => {
     const n = Number(minPaInput);
     setMinPa(Number.isFinite(n) && n >= 0 ? n : 0);
+  };
+
+  const resetFilters = () => {
+    setScope(initialScope);
+    setMinPa(initialMinPa);
+    setMinPaInput(String(initialMinPa));
+    setStatKey("wrcPlus");
+    setAgeFilterInput("");
+    setAgeMode("eq");
+    setBatsFilter("");
+    setPositionFilter("");
   };
 
   return (
@@ -172,63 +191,87 @@ export default function RankingView({
             </div>
           </div>
 
-          <div>
-            <label className="mb-1 block text-[11px] font-medium text-zinc-400">年齢</label>
-            <div className="flex items-center gap-1.5">
-              <input
-                type="number"
-                min={0}
-                value={ageFilterInput}
-                onChange={(e) => setAgeFilterInput(e.target.value)}
-                placeholder="指定なし"
-                className="w-20 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-right text-sm tabular-nums"
-              />
-              <select
-                value={ageMode}
-                onChange={(e) => setAgeMode(e.target.value as AgeMode)}
-                className="rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-sm font-medium"
-              >
-                <option value="eq">のみ</option>
-                <option value="gte">以上</option>
-                <option value="lte">以下</option>
-              </select>
-            </div>
-          </div>
+          {showAdvanced && (
+            <>
+              <div>
+                <label className="mb-1 block text-[11px] font-medium text-zinc-400">年齢</label>
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="number"
+                    min={0}
+                    value={ageFilterInput}
+                    onChange={(e) => setAgeFilterInput(e.target.value)}
+                    placeholder="指定なし"
+                    className="w-20 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-right text-sm tabular-nums"
+                  />
+                  <select
+                    value={ageMode}
+                    onChange={(e) => setAgeMode(e.target.value as AgeMode)}
+                    className="rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-sm font-medium"
+                  >
+                    <option value="eq">のみ</option>
+                    <option value="gte">以上</option>
+                    <option value="lte">以下</option>
+                  </select>
+                </div>
+              </div>
 
-          <div>
-            <label className="mb-1 block text-[11px] font-medium text-zinc-400">打</label>
-            <select
-              value={batsFilter}
-              onChange={(e) => setBatsFilter(e.target.value)}
-              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
-            >
-              <option value="">指定なし</option>
-              <option value="右">右打ち</option>
-              <option value="左">左打ち</option>
-              <option value="両">両打ち</option>
-            </select>
-          </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-medium text-zinc-400">打</label>
+                <select
+                  value={batsFilter}
+                  onChange={(e) => setBatsFilter(e.target.value)}
+                  className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+                >
+                  <option value="">指定なし</option>
+                  <option value="右">右打ち</option>
+                  <option value="左">左打ち</option>
+                  <option value="両">両打ち</option>
+                </select>
+              </div>
 
-          <div>
-            <label className="mb-1 block text-[11px] font-medium text-zinc-400">
-              ポジション
-            </label>
-            <select
-              value={positionFilter}
-              onChange={(e) => setPositionFilter(e.target.value)}
-              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
-            >
-              <option value="">指定なし</option>
-              {positionsInScope.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
-          </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-medium text-zinc-400">
+                  ポジション
+                </label>
+                <select
+                  value={positionFilter}
+                  onChange={(e) => setPositionFilter(e.target.value)}
+                  className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+                >
+                  <option value="">指定なし</option>
+                  {positionsInScope.map((p) => (
+                    <option key={p} value={p}>
+                      {p}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </>
+          )}
         </div>
 
-        <div className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-zinc-100 pt-3">
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-zinc-100 pt-3">
+          <button
+            type="button"
+            onClick={() => setShowAdvanced((show) => !show)}
+            aria-expanded={showAdvanced}
+            className="rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-50"
+          >
+            {showAdvanced ? "詳細条件を閉じる" : "詳細条件"}
+          </button>
+          {hasCustomFilters && (
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="rounded-full px-2.5 py-1 text-xs font-medium text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
+            >
+              条件をリセット
+            </button>
+          )}
+        </div>
+
+        <div className="mt-2 flex flex-wrap items-center gap-1.5">
           {presets.map((p) => (
             <button
               key={p}
