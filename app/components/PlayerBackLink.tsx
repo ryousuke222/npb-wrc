@@ -1,47 +1,74 @@
 "use client";
 
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 /**
- * 選手個人ページの「戻る」リンク。歴代ランキング・チーム選手一覧のように
- * RankingListが ?from=... を付与してリンクしてきた場合はその遷移元へ、
- * それ以外（年度別ランキングからの遷移・直接アクセス等）は年度別ランキングへ戻す。
+ * 選手個人ページの「戻る」リンク。ランキング一覧からの遷移ではブラウザ履歴を
+ * 使うため、絞り込み状態とスクロール位置を保てる。直接アクセス時は年度別などの
+ * 安全な一覧ページへフォールバックする。
  * useSearchParamsはクライアントフックのため、ページ本体を静的生成したまま
  * ここだけSuspense境界でクライアントレンダリングする。
  */
-export default function PlayerBackLink({ year }: { year: number }) {
+export default function PlayerBackLink({ year, rank }: { year: number; rank: number }) {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const from = searchParams.get("from");
+  const returnKey = `player-return:${year}:${rank}`;
+  const isMounted = useRef(false);
+
+  // ブラウザの戻る操作で詳細ページを離れた場合も、次の直接アクセスに
+  // 過去の遷移情報が残らないようにする。開発時のReactの二重チェックでは
+  // 直後に再マウントされるため、次のイベントループで実際のアンマウントか確認する。
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+      window.setTimeout(() => {
+        if (!isMounted.current) {
+          window.sessionStorage.removeItem(returnKey);
+        }
+      }, 0);
+    };
+  }, [returnKey]);
+
+  let href = `/year/${year}`;
+  let label = `← ${year}年のランキングに戻る`;
 
   if (from === "all-time") {
-    return (
-      <Link href="/all-time" className="text-sm text-zinc-500 hover:text-zinc-800">
-        ← 歴代ランキングに戻る
-      </Link>
-    );
+    href = "/all-time";
+    label = "← 歴代ランキングに戻る";
   }
 
   if (from === "team") {
     const teamId = searchParams.get("teamId");
     if (teamId) {
-      return (
-        <Link
-          href={`/year/${year}/team/${teamId}`}
-          className="text-sm text-zinc-500 hover:text-zinc-800"
-        >
-          ← チームの選手一覧に戻る
-        </Link>
-      );
+      href = `/year/${year}/team/${teamId}`;
+      label = "← チームの選手一覧に戻る";
     }
   }
 
+  if (from === "titles") {
+    href = "/titles";
+    label = "← 打撃タイトルランキングに戻る";
+  }
+
+  const handleBack = () => {
+    if (window.sessionStorage.getItem(returnKey) === "history") {
+      window.sessionStorage.removeItem(returnKey);
+      router.back();
+      return;
+    }
+    router.push(href);
+  };
+
   return (
-    <Link
-      href={`/year/${year}`}
+    <button
+      type="button"
+      onClick={handleBack}
       className="text-sm text-zinc-500 hover:text-zinc-800"
     >
-      ← {year}年のランキングに戻る
-    </Link>
+      {label}
+    </button>
   );
 }

@@ -132,7 +132,7 @@ export default async function PlayerPage({
           </span>
         }
       >
-        <PlayerBackLink year={year} />
+        <PlayerBackLink year={year} rank={rank} />
       </Suspense>
 
       <div

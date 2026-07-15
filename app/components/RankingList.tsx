@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import type { BatterRanking } from "@/lib/types";
 import { teamColor, withAlpha } from "@/lib/teamColors";
@@ -19,7 +21,7 @@ function wrcColor(v: number): string {
 export default function RankingList({
   batters,
   showYear = false,
-  backQuery,
+  backQuery = "from=year",
   valueLabel = "wRC+",
   getValue = (b) => b.wrcPlus,
   formatValue = fmtWrcPlus,
@@ -29,7 +31,7 @@ export default function RankingList({
   batters: BatterRanking[];
   /** 年度をまたぐ一覧（歴代ランキング等）で、各行に年度を表示する */
   showYear?: boolean;
-  /** 選手詳細ページの「戻る」リンクを遷移元に向けるためのクエリ文字列（例: "from=all-time"） */
+  /** 選手詳細ページの直接アクセス時に使う戻り先を示すクエリ文字列（例: "from=all-time"） */
   backQuery?: string;
   /** 右側に表示する数値のラベル（デフォルトはwRC+） */
   valueLabel?: string;
@@ -64,6 +66,12 @@ export default function RankingList({
           <li key={`${b.year}-${b.league}-${b.name}-${b.teamId}-${b.rank}`}>
             <Link
               href={`/year/${b.year}/${b.rank}${backQuery ? `?${backQuery}` : ""}`}
+              onClick={() => {
+                // 詳細ページの「戻る」は履歴を使うことで、一覧の絞り込み状態と
+                // スクロール位置をブラウザに復元させる。直接アクセス時はマーカーが
+                // ないため、詳細ページ側で通常の一覧リンクへフォールバックする。
+                window.sessionStorage.setItem(`player-return:${b.year}:${b.rank}`, "history");
+              }}
               style={{
                 borderLeftColor: color.bg,
                 backgroundColor: withAlpha(color.bg, 0.07),

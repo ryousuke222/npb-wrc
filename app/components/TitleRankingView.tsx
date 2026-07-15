@@ -135,7 +135,7 @@ export default function TitleRankingView({
                 <h3 className="mb-2 text-sm font-bold text-zinc-700">{stat.label}</h3>
                 <RankingList
                   batters={stat.ranked}
-                  backQuery="from=all-time"
+                  backQuery="from=titles"
                   valueLabel={stat.label}
                   getValue={stat.getValue}
                   formatValue={stat.formatValue}
