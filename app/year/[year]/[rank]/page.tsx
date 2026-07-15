@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getAvailableYears, getPlayerHistory, getYearData } from "@/lib/data";
+import { formatGeneratedAtJa } from "@/lib/date";
 import { teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus } from "@/lib/wrc";
 import CareerHistory from "@/app/components/CareerHistory";
@@ -25,6 +27,23 @@ export async function generateStaticParams() {
 
 function fmtRate(n: number): string {
   return n.toFixed(3).replace(/^0\./, ".");
+}
+
+function fmtSignedRate(n: number): string {
+  const value = Math.abs(n).toFixed(3).replace(/^0\./, ".");
+  return `${n >= 0 ? "+" : "-"}${value}`;
+}
+
+function fmtSignedPercent(n: number): string {
+  const rounded = Math.round(n);
+  return `${rounded >= 0 ? "+" : ""}${rounded}%`;
+}
+
+function parkFactorNote(value: number | null): string {
+  if (value === null) return "補正データなし";
+  const difference = (value - 1) * 100;
+  if (Math.abs(difference) < 0.1) return "ほぼ中立の環境";
+  return `${difference > 0 ? "打者有利" : "投手有利"} ${Math.abs(difference).toFixed(1)}%`;
 }
 
 export async function generateMetadata({
@@ -63,6 +82,13 @@ export default async function PlayerPage({
 
   const color = teamColor(batter.teamId);
   const history = await getPlayerHistory(batter.name, batter.nameKey);
+  const qualifiedHistory = history.filter((season) => season.qualified);
+  const careerPool = qualifiedHistory.length > 0 ? qualifiedHistory : history;
+  const careerBest = careerPool.reduce((best, season) =>
+    season.wrcPlus > best.wrcPlus ? season : best
+  );
+  const generatedAt = formatGeneratedAtJa(data.generatedAt);
+  const lgWoba = data.leagueContext[batter.league].lgWoba;
 
   const lgTotals = data.leagueContext[batter.league].totals;
   const lgAvg = lgTotals.ab > 0 ? lgTotals.hits / lgTotals.ab : 0;
@@ -166,6 +192,12 @@ export default async function PlayerPage({
               規定打席未到達
             </span>
           )}
+          <Link
+            href={`/compare?players=${year}-${rank}`}
+            className="inline-block rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-sm font-bold text-zinc-600 hover:border-zinc-300 hover:text-zinc-900"
+          >
+            このシーズンを比較
+          </Link>
         </div>
 
         {/* wRC+ ヒーロー表示 */}
@@ -283,6 +315,81 @@ export default async function PlayerPage({
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="mt-7 border-t border-zinc-200 pt-6">
+          <h2 className="text-xs font-bold tracking-wide text-zinc-400">
+            補正・算出情報
+          </h2>
+          <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+            <div className="rounded-xl bg-zinc-50 px-3 py-3.5">
+              <div className="text-xl font-extrabold tabular-nums text-zinc-800">
+                {fmtRate(batter.woba)}
+              </div>
+              <div className="mt-0.5 text-[11px] font-bold text-zinc-500">wOBA</div>
+              <div className="mt-1 text-[10px] leading-relaxed text-zinc-400">
+                リーグ平均{fmtRate(lgWoba)}・差
+                {fmtSignedRate(batter.woba - lgWoba)}
+              </div>
+            </div>
+            <div className="rounded-xl bg-zinc-50 px-3 py-3.5">
+              <div className="text-xl font-extrabold tabular-nums text-zinc-800">
+                {batter.parkFactor === null ? "—" : batter.parkFactor.toFixed(3)}
+              </div>
+              <div className="mt-0.5 text-[11px] font-bold text-zinc-500">
+                実効パークファクター
+              </div>
+              <div className="mt-1 text-[10px] leading-relaxed text-zinc-400">
+                {parkFactorNote(batter.parkFactor)}
+              </div>
+            </div>
+            <div className="rounded-xl bg-zinc-50 px-3 py-3.5">
+              <div className="text-xl font-extrabold tabular-nums text-zinc-800">
+                {fmtSignedPercent(batter.wrcPlus - 100)}
+              </div>
+              <div className="mt-0.5 text-[11px] font-bold text-zinc-500">
+                リーグ平均との差
+              </div>
+              <div className="mt-1 text-[10px] leading-relaxed text-zinc-400">
+                wRC+のリーグ平均100を基準
+              </div>
+            </div>
+            <div className="rounded-xl bg-zinc-50 px-3 py-3.5">
+              <div className="text-xl font-extrabold tabular-nums text-zinc-800">
+                {fmtWrcPlus(careerBest.wrcPlus)}
+              </div>
+              <div className="mt-0.5 text-[11px] font-bold text-zinc-500">
+                キャリア最高wRC+
+              </div>
+              <div className="mt-1 text-[10px] leading-relaxed text-zinc-400">
+                {careerBest.year}年・
+                {qualifiedHistory.length > 0 ? "規定到達年で比較" : "参考記録"}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-xs text-zinc-500">
+            <span
+              className={`rounded-full px-2 py-0.5 font-bold ${
+                data.seasonComplete
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "bg-amber-50 text-amber-700"
+              }`}
+            >
+              {data.seasonComplete ? "シーズン確定値" : "シーズン途中の暫定値"}
+            </span>
+            {generatedAt && <span>最終更新：{generatedAt}（日本時間）</span>}
+          </div>
+          <p className="mt-2 text-[10px] leading-relaxed text-zinc-400">
+            実効パークファクターは、選手が実際に立った球場を打席数で加重した補正値です。詳しい算出方法は
+            <Link
+              href="/about#wrc-plus"
+              className="ml-0.5 underline decoration-zinc-300 underline-offset-2 hover:text-zinc-700"
+            >
+              このサイトについて
+            </Link>
+            で確認できます。
+          </p>
         </div>
 
       </div>

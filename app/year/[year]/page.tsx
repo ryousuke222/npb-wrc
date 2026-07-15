@@ -2,23 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAvailableYears, getYearData } from "@/lib/data";
+import { formatGeneratedAtJa } from "@/lib/date";
 import YearNav from "@/app/components/YearNav";
 import RankingView from "@/app/components/RankingView";
-
-function formatGeneratedAt(value: string): string | null {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-
-  return new Intl.DateTimeFormat("ja-JP", {
-    timeZone: "Asia/Tokyo",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).format(date);
-}
 
 export async function generateStaticParams() {
   const years = await getAvailableYears();
@@ -52,7 +38,7 @@ export default async function YearPage({
   ]);
 
   if (!data) notFound();
-  const generatedAt = formatGeneratedAt(data.generatedAt);
+  const generatedAt = formatGeneratedAtJa(data.generatedAt);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-3xl">

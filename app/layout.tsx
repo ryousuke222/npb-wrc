@@ -48,7 +48,7 @@ export default function RootLayout({
                 wRC+
               </span>
             </Link>
-            <nav className="flex shrink-0 items-center gap-3 text-xs sm:gap-4 sm:text-sm">
+            <nav className="flex w-full shrink-0 items-center gap-3 overflow-x-auto pb-0.5 text-xs sm:w-auto sm:gap-4 sm:overflow-visible sm:pb-0 sm:text-sm">
               <Link href="/" className="text-zinc-600 hover:text-zinc-900">
                 年度別ランキング
               </Link>
@@ -75,6 +75,12 @@ export default function RootLayout({
                 className="text-zinc-600 hover:text-zinc-900"
               >
                 選手検索
+              </Link>
+              <Link
+                href="/compare"
+                className="whitespace-nowrap text-zinc-600 hover:text-zinc-900"
+              >
+                選手比較
               </Link>
               <Link
                 href="/about"
