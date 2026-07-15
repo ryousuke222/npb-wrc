@@ -31,17 +31,19 @@ export default function CareerRankingList({ careers }: { careers: CareerBatter[]
     <ol className="flex flex-col gap-2.5">
       {careers.map((career, index) => {
         const displayPos = index + 1;
-        const color = teamColor(career.latestSeason.teamId);
         const best = career.bestQualifiedSeason;
-        const detailSeason = best ?? career.latestSeason;
+        // 通算の球団表記・チームカラーは、カードに表示するキャリアハイの年で統一する。
+        // 規定到達年がない場合だけ、最後の出場シーズンへフォールバックする。
+        const highlightSeason = best ?? career.latestSeason;
+        const color = teamColor(highlightSeason.teamId);
 
         return (
           <li key={career.id}>
             <Link
-              href={`/year/${detailSeason.year}/${detailSeason.rank}?from=all-time`}
+              href={`/year/${highlightSeason.year}/${highlightSeason.rank}?from=all-time`}
               onClick={() => {
                 window.sessionStorage.setItem(
-                  `player-return:${detailSeason.year}:${detailSeason.rank}`,
+                  `player-return:${highlightSeason.year}:${highlightSeason.rank}`,
                   "history"
                 );
               }}
@@ -63,6 +65,15 @@ export default function CareerRankingList({ careers }: { careers: CareerBatter[]
                   {career.name}
                 </span>
                 <span className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] font-medium text-zinc-400">
+                  <span
+                    style={{
+                      backgroundColor: withAlpha(color.bg, 0.16),
+                      color: color.bg,
+                    }}
+                    className="rounded-full px-2 py-0.5 font-bold"
+                  >
+                    {highlightSeason.teamName}
+                  </span>
                   <span>{career.firstYear}〜{career.lastYear}</span>
                   <span>{career.seasons}年</span>
                   <span>通算 {career.pa.toLocaleString()}打席</span>
