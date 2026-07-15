@@ -44,7 +44,6 @@ async function main() {
   ) as number[];
   const allBatters: BatterRanking[] = [];
   const rows: CompareBatterRow[] = [];
-  const yearMeta: CompareIndex["yearMeta"] = {};
 
   for (const year of years) {
     const raw = await readFile(path.join(DATA_DIR, `${year}.json`), "utf-8").catch(
@@ -52,10 +51,6 @@ async function main() {
     );
     if (!raw) continue;
     const data = JSON.parse(raw) as YearData;
-    yearMeta[String(year)] = {
-      generatedAt: data.generatedAt,
-      seasonComplete: data.seasonComplete,
-    };
 
     for (const batter of data.batters) {
       allBatters.push(batter);
@@ -93,7 +88,7 @@ async function main() {
     ]),
   ].filter((preset): preset is ComparePreset => preset !== null);
 
-  const index: CompareIndex = { rows, yearMeta, presets };
+  const index: CompareIndex = { rows, presets };
   await mkdir(path.dirname(OUT_PATH), { recursive: true });
   await writeFile(OUT_PATH, JSON.stringify(index), "utf-8");
   console.log(`wrote ${rows.length} player seasons to ${OUT_PATH}`);

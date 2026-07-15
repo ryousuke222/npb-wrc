@@ -1,11 +1,6 @@
 import type { TeamId } from "./teams";
 import type { LeagueKey } from "./types";
 
-export interface CompareYearMeta {
-  generatedAt: string;
-  seasonComplete: boolean;
-}
-
 export type CompareBatterRow = [
   year: number,
   rank: number,
@@ -34,6 +29,5 @@ export interface ComparePreset {
 
 export interface CompareIndex {
   rows: CompareBatterRow[];
-  yearMeta: Record<string, CompareYearMeta>;
   presets: ComparePreset[];
 }

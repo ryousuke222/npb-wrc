@@ -38,7 +38,8 @@ export default async function YearPage({
   ]);
 
   if (!data) notFound();
-  const generatedAt = formatGeneratedAtJa(data.generatedAt);
+  const isLatestYear = year === years[0];
+  const generatedAt = isLatestYear ? formatGeneratedAtJa(data.generatedAt) : null;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-3xl">
@@ -50,7 +51,7 @@ export default async function YearPage({
           <p className="mt-1 text-sm text-zinc-500">
             wRC+（簡易版）による打者ランキング（打席数の条件は変更できます）
           </p>
-          {(generatedAt || !data.seasonComplete) && (
+          {isLatestYear && (generatedAt || !data.seasonComplete) && (
             <p className="mt-1 text-xs font-medium text-zinc-400">
               {generatedAt && `最終更新：${generatedAt}（日本時間）`}
               {generatedAt && !data.seasonComplete && "・"}

@@ -6,9 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import type {
   CompareBatterRow,
   CompareIndex,
-  CompareYearMeta,
 } from "@/lib/compare";
-import { formatGeneratedAtJa } from "@/lib/date";
 import { teamColor, withAlpha } from "@/lib/teamColors";
 import type { TeamId } from "@/lib/teams";
 import type { LeagueKey } from "@/lib/types";
@@ -191,7 +189,6 @@ export default function CompareClient() {
     () => (index?.rows ?? []).map(expandRow),
     [index]
   );
-  const yearMeta: Record<string, CompareYearMeta> = index?.yearMeta ?? {};
   const presets = index?.presets ?? [];
   const batterById = useMemo(
     () => new Map(batters.map((batter) => [seasonId(batter), batter])),
@@ -378,8 +375,6 @@ export default function CompareClient() {
         {selected.map((batter) => {
           const id = seasonId(batter);
           const color = teamColor(batter.teamId);
-          const meta = yearMeta[String(batter.year)];
-          const generatedAt = meta ? formatGeneratedAtJa(meta.generatedAt) : null;
           return (
             <article
               key={id}
@@ -430,10 +425,6 @@ export default function CompareClient() {
                   {fmtSignedPercent(batter.wrcPlus - 100)}
                 </span>
               </p>
-              <p className="mt-4 border-t border-zinc-100 pt-3 text-[11px] leading-relaxed text-zinc-400">
-                {meta?.seasonComplete ? "確定値" : "シーズン途中の暫定値"}
-                {generatedAt && `・${generatedAt}更新`}
-              </p>
               <Link
                 href={`/year/${batter.year}/${batter.rank}?from=compare`}
                 onClick={() => {
@@ -442,7 +433,7 @@ export default function CompareClient() {
                     "history"
                   );
                 }}
-                className="mt-3 inline-block text-xs font-bold text-zinc-600 underline decoration-zinc-300 underline-offset-2 hover:text-zinc-950"
+                className="mt-4 inline-block text-xs font-bold text-zinc-600 underline decoration-zinc-300 underline-offset-2 hover:text-zinc-950"
               >
                 選手詳細を見る
               </Link>
