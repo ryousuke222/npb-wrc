@@ -20,6 +20,8 @@ export type CompareBatterRow = [
   hr: number,
   rbi: number,
   sb: number,
+  bb: number,
+  so: number,
 ];
 
 export interface ComparePreset {

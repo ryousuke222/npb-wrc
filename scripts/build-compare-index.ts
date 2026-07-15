@@ -73,6 +73,8 @@ async function main() {
         batter.hr,
         batter.rbi,
         batter.sb,
+        batter.bb,
+        batter.so,
       ]);
     }
   }

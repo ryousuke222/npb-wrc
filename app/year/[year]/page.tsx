@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAvailableYears, getYearData } from "@/lib/data";
 import { formatGeneratedAtJa } from "@/lib/date";
@@ -61,18 +60,6 @@ export default async function YearPage({
         </div>
         <YearNav years={years} currentYear={year} />
       </div>
-
-      <div className="mb-5 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm leading-relaxed text-zinc-600">
-        <span className="font-bold text-zinc-800">wRC+の見方：</span>
-        100がリーグ平均。120なら、球場補正後の得点創出力が平均より約20%高い目安です。
-        <Link
-          href="/about#wrc-plus"
-          className="ml-1 font-medium text-zinc-700 underline decoration-zinc-300 underline-offset-2 hover:text-zinc-950"
-        >
-          算出方法を見る
-        </Link>
-      </div>
-
       <RankingView
         batters={data.batters}
         regulationPaThreshold={data.regulationPaThreshold}

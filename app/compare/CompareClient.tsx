@@ -31,6 +31,8 @@ interface CompareBatter {
   hr: number;
   rbi: number;
   sb: number;
+  bb: number;
+  so: number;
 }
 
 interface Metric {
@@ -38,7 +40,13 @@ interface Metric {
   note?: string;
   getValue: (batter: CompareBatter) => number | null;
   format: (value: number) => string;
-  higherIsBetter: boolean;
+  better?: "higher" | "lower" | "none";
+}
+
+interface MetricGroup {
+  label: string;
+  description: string;
+  metrics: Metric[];
 }
 
 function seasonId(batter: CompareBatter): string {
@@ -65,6 +73,8 @@ function expandRow(row: CompareBatterRow): CompareBatter {
     hr,
     rbi,
     sb,
+    bb,
+    so,
   ] = row;
   return {
     year,
@@ -85,6 +95,8 @@ function expandRow(row: CompareBatterRow): CompareBatter {
     hr,
     rbi,
     sb,
+    bb,
+    so,
   };
 }
 
@@ -101,81 +113,97 @@ function fmtSignedPercent(value: number): string {
   return `${rounded >= 0 ? "+" : ""}${rounded}%`;
 }
 
-const METRICS: Metric[] = [
+function fmtPercent(value: number): string {
+  return `${(value * 100).toFixed(1)}%`;
+}
+
+function fmtParkFactor(value: number): string {
+  const environment = value >= 1.005 ? "打者有利" : value <= 0.995 ? "投手有利" : "中立";
+  return `${value.toFixed(3)}（${environment}）`;
+}
+
+const METRIC_GROUPS: MetricGroup[] = [
   {
-    label: "wRC+",
-    note: "リーグ平均100",
-    getValue: (b) => b.wrcPlus,
-    format: fmtWrcPlus,
-    higherIsBetter: true,
+    label: "総合評価",
+    description: "リーグ・球場の違いを補正した打撃評価",
+    metrics: [
+      {
+        label: "wRC+",
+        note: "リーグ平均100",
+        getValue: (b) => b.wrcPlus,
+        format: fmtWrcPlus,
+      },
+      {
+        label: "wOBA",
+        note: "打撃の得点価値",
+        getValue: (b) => b.woba,
+        format: fmtRate,
+      },
+    ],
   },
   {
-    label: "リーグ平均との差",
-    note: "wRC+基準",
-    getValue: (b) => b.wrcPlus - 100,
-    format: fmtSignedPercent,
-    higherIsBetter: true,
+    label: "打撃の質",
+    description: "長打力・選球眼・三振の傾向",
+    metrics: [
+      {
+        label: "ISO",
+        note: "長打力",
+        getValue: (b) => b.slg - b.avg,
+        format: fmtRate,
+      },
+      {
+        label: "BB%",
+        note: "四球 ÷ 打席",
+        getValue: (b) => (b.pa > 0 ? b.bb / b.pa : null),
+        format: fmtPercent,
+      },
+      {
+        label: "K%",
+        note: "三振 ÷ 打席",
+        getValue: (b) => (b.pa > 0 ? b.so / b.pa : null),
+        format: fmtPercent,
+        better: "lower",
+      },
+      {
+        label: "BB/K",
+        note: "四球 ÷ 三振",
+        getValue: (b) => (b.so > 0 ? b.bb / b.so : null),
+        format: (value) => value.toFixed(2),
+      },
+    ],
   },
   {
-    label: "wOBA",
-    getValue: (b) => b.woba,
-    format: fmtRate,
-    higherIsBetter: true,
+    label: "打撃成績",
+    description: "実際に残した率・量の成績",
+    metrics: [
+      {
+        label: "打席",
+        note: "サンプル量",
+        getValue: (b) => b.pa,
+        format: (value) => String(value),
+        better: "none",
+      },
+      { label: "打率", getValue: (b) => b.avg, format: fmtRate },
+      { label: "出塁率", getValue: (b) => b.obp, format: fmtRate },
+      { label: "長打率", getValue: (b) => b.slg, format: fmtRate },
+      { label: "OPS", getValue: (b) => b.ops, format: fmtRate },
+      { label: "本塁打", getValue: (b) => b.hr, format: (value) => String(value) },
+      { label: "打点", getValue: (b) => b.rbi, format: (value) => String(value) },
+      { label: "盗塁", getValue: (b) => b.sb, format: (value) => String(value) },
+    ],
   },
   {
-    label: "実効PF",
-    note: "1.000が中立",
-    getValue: (b) => b.parkFactor,
-    format: (value) => value.toFixed(3),
-    higherIsBetter: false,
-  },
-  {
-    label: "打席",
-    getValue: (b) => b.pa,
-    format: (value) => String(value),
-    higherIsBetter: false,
-  },
-  {
-    label: "打率",
-    getValue: (b) => b.avg,
-    format: fmtRate,
-    higherIsBetter: true,
-  },
-  {
-    label: "出塁率",
-    getValue: (b) => b.obp,
-    format: fmtRate,
-    higherIsBetter: true,
-  },
-  {
-    label: "長打率",
-    getValue: (b) => b.slg,
-    format: fmtRate,
-    higherIsBetter: true,
-  },
-  {
-    label: "OPS",
-    getValue: (b) => b.ops,
-    format: fmtRate,
-    higherIsBetter: true,
-  },
-  {
-    label: "本塁打",
-    getValue: (b) => b.hr,
-    format: (value) => String(value),
-    higherIsBetter: true,
-  },
-  {
-    label: "打点",
-    getValue: (b) => b.rbi,
-    format: (value) => String(value),
-    higherIsBetter: true,
-  },
-  {
-    label: "盗塁",
-    getValue: (b) => b.sb,
-    format: (value) => String(value),
-    higherIsBetter: true,
+    label: "打撃環境",
+    description: "選手の優劣ではなく、その年に立った球場の傾向",
+    metrics: [
+      {
+        label: "実効PF",
+        note: "1.000が中立",
+        getValue: (b) => b.parkFactor,
+        format: fmtParkFactor,
+        better: "none",
+      },
+    ],
   },
 ];
 
@@ -447,12 +475,24 @@ export default function CompareClient() {
           比較表を表示するには、あと{2 - selected.length}シーズン追加してください。
         </div>
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-zinc-200 bg-white">
+        <section className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+          <div className="flex flex-wrap items-end justify-between gap-2 border-b border-zinc-200 bg-zinc-50 px-4 py-4 sm:px-5">
+            <div>
+              <h2 className="font-bold tracking-tight text-zinc-900">主要指標比較</h2>
+              <p className="mt-0.5 text-xs text-zinc-500">
+                補正済みの評価、打撃内容、実際の成績を分けて見比べられます。
+              </p>
+            </div>
+            <span className="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-bold text-amber-800">
+              色付き＝比較上有利な数値
+            </span>
+          </div>
+          <div className="overflow-x-auto">
           <table className="w-full min-w-[680px] border-collapse text-sm">
             <thead>
               <tr className="border-b border-zinc-200 bg-zinc-50">
-                <th className="px-4 py-3 text-left text-xs font-bold text-zinc-500">
-                  主要指標比較
+                <th className="sticky left-0 z-10 bg-zinc-50 px-4 py-3 text-left text-xs font-bold text-zinc-500">
+                  指標
                 </th>
                 {selected.map((batter) => (
                   <th
@@ -468,49 +508,64 @@ export default function CompareClient() {
               </tr>
             </thead>
             <tbody>
-              {METRICS.map((metric) => {
-                const values = selected.map(metric.getValue);
-                const numericValues = values.filter(
-                  (value): value is number => value !== null
-                );
-                const best = metric.higherIsBetter
-                  ? Math.max(...numericValues)
-                  : null;
-                return (
-                  <tr key={metric.label} className="border-t border-zinc-100">
-                    <th className="px-4 py-3 text-left font-medium text-zinc-600">
-                      {metric.label}
-                      {metric.note && (
-                        <span className="ml-1 text-[10px] font-normal text-zinc-400">
-                          {metric.note}
-                        </span>
-                      )}
-                    </th>
-                    {values.map((value, index) => {
-                      const isBest =
-                        best !== null && value !== null && value === best;
-                      return (
-                        <td
-                          key={seasonId(selected[index])}
-                          className={`px-4 py-3 text-center text-base tabular-nums ${
-                            isBest
-                              ? "bg-amber-50 font-extrabold text-zinc-950"
-                              : "font-semibold text-zinc-600"
-                          }`}
-                        >
-                          {value === null ? "—" : metric.format(value)}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
+              {METRIC_GROUPS.flatMap((group) => [
+                <tr key={group.label} className="border-y border-zinc-200 bg-zinc-100/70">
+                  <th
+                    colSpan={selected.length + 1}
+                    className="px-4 py-2.5 text-left text-xs font-extrabold text-zinc-700"
+                  >
+                    {group.label}
+                    <span className="ml-2 font-normal text-zinc-400">{group.description}</span>
+                  </th>
+                </tr>,
+                ...group.metrics.map((metric) => {
+                  const values = selected.map(metric.getValue);
+                  const numericValues = values.filter(
+                    (value): value is number => value !== null
+                  );
+                  const best =
+                    metric.better === "none" || numericValues.length === 0
+                      ? null
+                      : metric.better === "lower"
+                        ? Math.min(...numericValues)
+                        : Math.max(...numericValues);
+                  return (
+                    <tr key={metric.label} className="border-t border-zinc-100">
+                      <th className="sticky left-0 z-10 bg-white px-4 py-3 text-left font-medium text-zinc-600">
+                        {metric.label}
+                        {metric.note && (
+                          <span className="ml-1 text-[10px] font-normal text-zinc-400">
+                            {metric.note}
+                          </span>
+                        )}
+                      </th>
+                      {values.map((value, index) => {
+                        const isBest =
+                          best !== null && value !== null && value === best;
+                        return (
+                          <td
+                            key={seasonId(selected[index])}
+                            className={`px-4 py-3 text-center text-base tabular-nums ${
+                              isBest
+                                ? "bg-amber-50 font-extrabold text-zinc-950"
+                                : "font-semibold text-zinc-600"
+                            }`}
+                          >
+                            {value === null ? "—" : metric.format(value)}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                }),
+              ])}
             </tbody>
           </table>
-          <p className="border-t border-zinc-100 px-4 py-3 text-[11px] leading-relaxed text-zinc-400">
-            黄色は各打撃指標の最高値です。実効PFは選手が実際に立った球場を打席数で加重した値で、1.000より高いほど打者有利な環境を示します。
+          </div>
+          <p className="border-t border-zinc-100 px-4 py-3 text-[11px] leading-relaxed text-zinc-400 sm:px-5">
+            実効PFは選手が実際に立った球場を打席数で加重した環境値です。値が高いほど打者有利ですが、選手の優劣を表すものではありません。wRC+はこの球場差とリーグ水準を補正して比較できます。
           </p>
-        </div>
+        </section>
       )}
     </div>
   );
