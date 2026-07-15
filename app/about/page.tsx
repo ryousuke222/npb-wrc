@@ -46,7 +46,9 @@ export default function AboutPage() {
       </section>
 
       <section className="mt-8 space-y-3">
-        <h2 className="text-lg font-semibold">wRC+の算出方法（簡易版であることの注意）</h2>
+        <h2 id="wrc-plus" className="scroll-mt-24 text-lg font-semibold">
+          wRC+の算出方法（簡易版であることの注意）
+        </h2>
         <p className="text-sm leading-relaxed text-zinc-700">
           本来wRC+の算出には、その年・そのリーグ独自の線形加重（wOBA）係数が必要です。しかしNPBはこの係数を無料で公表していないため、
           当サイトでは以下の近似的な方法で計算しています（パークファクターについては後述の通り試合結果から独自に算出しています）。

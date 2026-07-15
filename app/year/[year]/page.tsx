@@ -1,8 +1,24 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAvailableYears, getYearData } from "@/lib/data";
 import YearNav from "@/app/components/YearNav";
 import RankingView from "@/app/components/RankingView";
+
+function formatGeneratedAt(value: string): string | null {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+
+  return new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(date);
+}
 
 export async function generateStaticParams() {
   const years = await getAvailableYears();
@@ -36,6 +52,7 @@ export default async function YearPage({
   ]);
 
   if (!data) notFound();
+  const generatedAt = formatGeneratedAt(data.generatedAt);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-3xl">
@@ -46,10 +63,27 @@ export default async function YearPage({
           </h1>
           <p className="mt-1 text-sm text-zinc-500">
             wRC+（簡易版）による打者ランキング（打席数の条件は変更できます）
-            {!data.seasonComplete && "（シーズン進行中の暫定成績）"}
           </p>
+          {(generatedAt || !data.seasonComplete) && (
+            <p className="mt-1 text-xs font-medium text-zinc-400">
+              {generatedAt && `最終更新：${generatedAt}（日本時間）`}
+              {generatedAt && !data.seasonComplete && "・"}
+              {!data.seasonComplete && "シーズン途中の暫定値"}
+            </p>
+          )}
         </div>
         <YearNav years={years} currentYear={year} />
+      </div>
+
+      <div className="mb-5 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm leading-relaxed text-zinc-600">
+        <span className="font-bold text-zinc-800">wRC+の見方：</span>
+        100がリーグ平均。120なら、球場補正後の得点創出力が平均より約20%高い目安です。
+        <Link
+          href="/about#wrc-plus"
+          className="ml-1 font-medium text-zinc-700 underline decoration-zinc-300 underline-offset-2 hover:text-zinc-950"
+        >
+          算出方法を見る
+        </Link>
       </div>
 
       <RankingView

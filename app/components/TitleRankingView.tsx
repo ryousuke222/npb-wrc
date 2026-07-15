@@ -56,7 +56,7 @@ const LEAGUES: { key: LeagueKey; label: string }[] = [
   { key: "pacific", label: "パ・リーグ" },
 ];
 
-const LIST_SIZE = 1;
+const LIST_SIZE = 5;
 
 /** ベストナインの対象ポジション（投手部門は対象外） */
 const BEST_NINE_POSITIONS = ["捕手", "一塁手", "二塁手", "三塁手", "遊撃手", "外野手"];
@@ -75,10 +75,12 @@ export default function TitleRankingView({
   batters,
   years,
   initialYear,
+  latestSeasonComplete,
 }: {
   batters: BatterRanking[];
   years: number[];
   initialYear: number;
+  latestSeasonComplete: boolean;
 }) {
   const [year, setYear] = useState(initialYear);
 
@@ -156,7 +158,13 @@ export default function TitleRankingView({
                     return (
                       <Link
                         key={`${position}-${b.name}-${b.teamId}`}
-                        href={`/year/${b.year}/${b.rank}?from=all-time`}
+                        href={`/year/${b.year}/${b.rank}?from=titles`}
+                        onClick={() => {
+                          window.sessionStorage.setItem(
+                            `player-return:${b.year}:${b.rank}`,
+                            "history"
+                          );
+                        }}
                         style={{
                           borderLeftColor: color.bg,
                           backgroundColor: withAlpha(color.bg, 0.07),
@@ -193,7 +201,9 @@ export default function TitleRankingView({
 
       {!hasBestNine && (
         <p className="text-xs text-zinc-400">
-          この年度のベストナインデータはありません（2002年以降のみ対応）。
+          {year === initialYear && !latestSeasonComplete
+            ? "今シーズンのベストナインは、シーズン終了後の発表にあわせて反映します。"
+            : "この年度のベストナインデータはありません（2002年以降のみ対応）。"}
         </p>
       )}
     </div>

@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { getAllBatters, getAvailableYears, getLatestYear } from "@/lib/data";
+import {
+  getAllBatters,
+  getAvailableYears,
+  getLatestYear,
+  getYearData,
+} from "@/lib/data";
 import TitleRankingView from "@/app/components/TitleRankingView";
 
 export const metadata = {
@@ -14,6 +19,7 @@ export default async function TitlesPage() {
     getAvailableYears(),
     getLatestYear(),
   ]);
+  const latestYearData = await getYearData(latestYear);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-5xl">
@@ -32,7 +38,12 @@ export default async function TitlesPage() {
         </p>
       </div>
 
-      <TitleRankingView batters={batters} years={years} initialYear={latestYear} />
+      <TitleRankingView
+        batters={batters}
+        years={years}
+        initialYear={latestYear}
+        latestSeasonComplete={latestYearData?.seasonComplete ?? false}
+      />
     </div>
   );
 }
