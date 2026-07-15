@@ -1,14 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { aggregateCareerBatters } from "@/lib/career";
 import type { BatterRanking } from "@/lib/types";
 import { ALL_TEAM_IDS, TEAM_ID_DEFAULT_NAME, type TeamId } from "@/lib/teams";
 import { STAT_OPTIONS, getStatOption, type StatKey } from "@/lib/statOptions";
 import RankingList from "./RankingList";
+import CareerRankingList from "./CareerRankingList";
 import YearRangeSlider from "./YearRangeSlider";
 
 type Scope = "all" | "central" | "pacific" | `team:${TeamId}`;
 type AgeMode = "eq" | "gte" | "lte";
+type RankingMode = "season" | "career";
 
 const LEAGUE_TEAMS: { league: "central" | "pacific"; label: string }[] = [
   { league: "central", label: "セ・リーグ" },
@@ -55,7 +58,9 @@ export default function AllTimeView({
   }, [activeRosterNames]);
 
   const [scope, setScope] = useState<Scope>("all");
+  const [rankingMode, setRankingMode] = useState<RankingMode>("season");
   const [includeUnqualified, setIncludeUnqualified] = useState(false);
+  const [minimumCareerPa, setMinimumCareerPa] = useState(3000);
   const [activeOnly, setActiveOnly] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [fromYear, setFromYear] = useState(oldestYear);
@@ -74,9 +79,8 @@ export default function AllTimeView({
     return POSITION_ORDER.filter((p) => present.has(p));
   }, [batters]);
 
-  const scoped = useMemo(() => {
+  const commonFiltered = useMemo(() => {
     let list = batters;
-    if (!includeUnqualified) list = list.filter((b) => b.qualified);
     if (scope === "central" || scope === "pacific") {
       list = list.filter((b) => b.league === scope);
     } else if (scope.startsWith("team:")) {
@@ -92,11 +96,10 @@ export default function AllTimeView({
     }
     if (batsFilter) list = list.filter((b) => b.bats === batsFilter);
     if (positionFilter) list = list.filter((b) => b.position === positionFilter);
-    return [...list].sort((a, b) => stat.getValue(b) - stat.getValue(a));
+    return list;
   }, [
     batters,
     scope,
-    includeUnqualified,
     fromYear,
     toYear,
     activeOnly,
@@ -105,13 +108,58 @@ export default function AllTimeView({
     ageMode,
     batsFilter,
     positionFilter,
-    stat,
   ]);
 
-  const visible = scoped.slice(0, visibleCount);
+  const scoped = useMemo(
+    () =>
+      [...(includeUnqualified ? commonFiltered : commonFiltered.filter((b) => b.qualified))].sort(
+        (a, b) => stat.getValue(b) - stat.getValue(a)
+      ),
+    [commonFiltered, includeUnqualified, stat]
+  );
+
+  const careers = useMemo(
+    () =>
+      aggregateCareerBatters(commonFiltered)
+        .filter((career) => career.pa >= minimumCareerPa)
+        .sort((a, b) => b.wrcPlus - a.wrcPlus || b.pa - a.pa),
+    [commonFiltered, minimumCareerPa]
+  );
+
+  const visibleSeasons = scoped.slice(0, visibleCount);
+  const visibleCareers = careers.slice(0, visibleCount);
+  const visibleCountForMode = rankingMode === "career" ? visibleCareers.length : visibleSeasons.length;
+  const totalCount = rankingMode === "career" ? careers.length : scoped.length;
 
   return (
     <div>
+      <div className="mb-4 flex rounded-xl border border-zinc-200 bg-zinc-50 p-1">
+        <button
+          type="button"
+          onClick={() => {
+            setRankingMode("season");
+            setVisibleCount(PAGE_SIZE);
+          }}
+          className={`flex-1 rounded-lg px-3 py-2 text-sm font-bold transition-colors ${
+            rankingMode === "season" ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-500 hover:text-zinc-800"
+          }`}
+        >
+          シーズン単位
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setRankingMode("career");
+            setVisibleCount(PAGE_SIZE);
+          }}
+          className={`flex-1 rounded-lg px-3 py-2 text-sm font-bold transition-colors ${
+            rankingMode === "career" ? "bg-white text-zinc-900 shadow-sm" : "text-zinc-500 hover:text-zinc-800"
+          }`}
+        >
+          通算wRC+
+        </button>
+      </div>
+
       <div className="mb-4 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
         <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
           <div>
@@ -159,7 +207,8 @@ export default function AllTimeView({
             />
           </div>
 
-          <div>
+          {rankingMode === "season" ? (
+            <div>
             <label className="mb-1 block text-[11px] font-medium text-zinc-400">
               並び替え
             </label>
@@ -177,7 +226,26 @@ export default function AllTimeView({
                 </option>
               ))}
             </select>
-          </div>
+            </div>
+          ) : (
+            <div>
+              <label className="mb-1 block text-[11px] font-medium text-zinc-400">
+                通算打席
+              </label>
+              <select
+                value={minimumCareerPa}
+                onChange={(e) => {
+                  setMinimumCareerPa(Number(e.target.value));
+                  setVisibleCount(PAGE_SIZE);
+                }}
+                className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+              >
+                <option value={1000}>1,000打席以上</option>
+                <option value={3000}>3,000打席以上</option>
+                <option value={5000}>5,000打席以上</option>
+              </select>
+            </div>
+          )}
 
           <div>
             <label className="mb-1 block text-[11px] font-medium text-zinc-400">年齢</label>
@@ -248,18 +316,24 @@ export default function AllTimeView({
         </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-zinc-100 pt-3">
-          <label className="flex items-center gap-1.5 text-sm text-zinc-600">
-            <input
-              type="checkbox"
-              checked={includeUnqualified}
-              onChange={(e) => {
-                setIncludeUnqualified(e.target.checked);
-                setVisibleCount(PAGE_SIZE);
-              }}
-              className="h-4 w-4 rounded border-zinc-300"
-            />
-            規定打席未満のシーズンも含める
-          </label>
+          {rankingMode === "season" ? (
+            <label className="flex items-center gap-1.5 text-sm text-zinc-600">
+              <input
+                type="checkbox"
+                checked={includeUnqualified}
+                onChange={(e) => {
+                  setIncludeUnqualified(e.target.checked);
+                  setVisibleCount(PAGE_SIZE);
+                }}
+                className="h-4 w-4 rounded border-zinc-300"
+              />
+              規定打席未満のシーズンも含める
+            </label>
+          ) : (
+            <p className="text-sm text-zinc-600">
+              全シーズンを通算し、年度別wRC+を打席数で加重平均しています。
+            </p>
+          )}
 
           <label className="flex items-center gap-1.5 text-sm text-zinc-600">
             <input
@@ -277,27 +351,31 @@ export default function AllTimeView({
       </div>
 
       <p className="mb-3 text-xs text-zinc-400">
-        {scoped.length}シーズン中 上位{visible.length}件を表示中
+        {rankingMode === "career" ? `${totalCount}人中` : `${totalCount}シーズン中`} 上位{visibleCountForMode}件を表示中
       </p>
 
-      <RankingList
-        batters={visible}
-        showYear
-        backQuery="from=all-time"
-        valueLabel={stat.label}
-        getValue={stat.getValue}
-        formatValue={stat.formatValue}
-        {...(stat.flatColor ? { getValueColor: () => "text-zinc-900" } : {})}
-      />
+      {rankingMode === "career" ? (
+        <CareerRankingList careers={visibleCareers} />
+      ) : (
+        <RankingList
+          batters={visibleSeasons}
+          showYear
+          backQuery="from=all-time"
+          valueLabel={stat.label}
+          getValue={stat.getValue}
+          formatValue={stat.formatValue}
+          {...(stat.flatColor ? { getValueColor: () => "text-zinc-900" } : {})}
+        />
+      )}
 
-      {visibleCount < scoped.length && (
+      {visibleCount < totalCount && (
         <div className="mt-6 flex justify-center">
           <button
             type="button"
             onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
             className="rounded-md bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-200"
           >
-            さらに{Math.min(PAGE_SIZE, scoped.length - visibleCount)}件表示
+            さらに{Math.min(PAGE_SIZE, totalCount - visibleCount)}件表示
           </button>
         </div>
       )}

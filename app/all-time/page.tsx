@@ -10,7 +10,7 @@ import AllTimeView from "@/app/components/AllTimeView";
 export const metadata = {
   title: "歴代最強打者ランキング | NPB最強打者ランキング",
   description:
-    "NPB全シーズンを横断した、wRC+によるシーズン単位の歴代最強打者ランキング。",
+    "NPB全シーズンを横断した、シーズン単位と打席数加重の通算wRC+による歴代最強打者ランキング。",
 };
 
 export default async function AllTimePage() {
@@ -37,7 +37,7 @@ export default async function AllTimePage() {
           歴代最強打者ランキング
         </h1>
         <p className="mt-1 text-sm text-zinc-500">
-          {oldestYear}〜{newestYear}年の全シーズンを横断した、wRC+（簡易版）によるシーズン単位のランキングです
+          {oldestYear}〜{newestYear}年のシーズン単位・通算wRC+（打席数加重）を確認できます
         </p>
       </div>
 
