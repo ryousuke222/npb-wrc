@@ -163,7 +163,7 @@ export default function AllTimeView({
       <div className="mb-4 flex justify-end">
         <RandomSeasonButton batters={batters} />
       </div>
-      <div className="ui-subtle-surface mb-4 flex p-1">
+      <div className="mb-4 flex rounded-xl border border-zinc-200 bg-zinc-50 p-1">
         <button
           type="button"
           onClick={() => {
@@ -190,7 +190,7 @@ export default function AllTimeView({
         </button>
       </div>
 
-      <div className="ui-surface mb-4 p-3 sm:p-4">
+      <div className="mb-4 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
         <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
           <div>
             <label className="mb-1 block text-[11px] font-medium text-zinc-400">
@@ -202,7 +202,7 @@ export default function AllTimeView({
                 setScope(e.target.value as Scope);
                 setVisibleCount(PAGE_SIZE);
               }}
-              className="ui-control px-3 py-1.5 text-sm font-medium"
+              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
             >
               <option value="all">総合</option>
               <optgroup label="リーグ">
@@ -248,7 +248,7 @@ export default function AllTimeView({
                 setStatKey(e.target.value as StatKey);
                 setVisibleCount(PAGE_SIZE);
               }}
-              className="ui-control px-3 py-1.5 text-sm font-medium"
+              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
             >
               {STAT_OPTIONS.map((s) => (
                 <option key={s.key} value={s.key}>
@@ -268,7 +268,7 @@ export default function AllTimeView({
                   setMinimumCareerPa(Number(e.target.value));
                   setVisibleCount(PAGE_SIZE);
                 }}
-                className="ui-control px-3 py-1.5 text-sm font-medium"
+                className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
               >
                 <option value={1000}>1,000打席以上</option>
                 <option value={3000}>3,000打席以上</option>
@@ -291,7 +291,7 @@ export default function AllTimeView({
                       setVisibleCount(PAGE_SIZE);
                     }}
                     placeholder="指定なし"
-                    className="ui-control w-20 px-2 py-1.5 text-right tabular-nums"
+                    className="w-20 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-right tabular-nums"
                   />
                   <select
                     value={ageMode}
@@ -299,7 +299,7 @@ export default function AllTimeView({
                       setAgeMode(e.target.value as AgeMode);
                       setVisibleCount(PAGE_SIZE);
                     }}
-                    className="ui-control px-2 py-1.5 font-medium"
+                    className="rounded-md border border-zinc-300 bg-white px-2 py-1.5 font-medium"
                   >
                     <option value="eq">のみ</option>
                     <option value="gte">以上</option>
@@ -316,7 +316,7 @@ export default function AllTimeView({
                     setBatsFilter(e.target.value);
                     setVisibleCount(PAGE_SIZE);
                   }}
-                  className="ui-control px-3 py-1.5 text-sm font-medium"
+                  className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
                 >
                   <option value="">指定なし</option>
                   <option value="右">右打ち</option>
@@ -335,7 +335,7 @@ export default function AllTimeView({
                     setPositionFilter(e.target.value);
                     setVisibleCount(PAGE_SIZE);
                   }}
-                  className="ui-control px-3 py-1.5 text-sm font-medium"
+                  className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
                 >
                   <option value="">指定なし</option>
                   {positionsInScope.map((p) => (

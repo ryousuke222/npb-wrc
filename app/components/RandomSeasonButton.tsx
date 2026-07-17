@@ -20,7 +20,7 @@ export default function RandomSeasonButton({
     <button
       type="button"
       onClick={openRandomSeason}
-      className="ui-control rounded-full px-3 py-1.5 text-xs font-bold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900"
+      className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-bold text-zinc-600 transition-colors hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900"
     >
       ランダムなシーズン →
     </button>

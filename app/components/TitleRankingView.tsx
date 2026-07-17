@@ -133,7 +133,7 @@ export default function TitleRankingView({
           value={year}
           onChange={(e) => setYear(Number(e.target.value))}
           aria-label="表示年度"
-          className="ui-control px-3 py-1.5 text-sm font-medium"
+          className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
         >
           {years.map((y) => (
             <option key={y} value={y}>
@@ -184,7 +184,7 @@ export default function TitleRankingView({
                           borderLeftColor: color.bg,
                           backgroundColor: withAlpha(color.bg, 0.07),
                         }}
-                        className="flex items-center gap-2.5 rounded-2xl border border-l-[5px] border-zinc-200/70 py-2 pr-3 pl-2.5 shadow-sm transition-transform hover:-translate-y-0.5 hover:shadow-md"
+                        className="flex items-center gap-2.5 rounded-xl border border-l-[5px] border-zinc-200/70 py-2 pr-3 pl-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-md"
                       >
                         <span
                           style={{ backgroundColor: color.bg, color: color.on }}

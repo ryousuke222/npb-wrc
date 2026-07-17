@@ -17,7 +17,7 @@ export default function TeamBackLink() {
   return (
     <Link
       href={qs ? `/team-wrc?${qs}` : "/team-wrc"}
-      className="ui-back-link text-sm"
+      className="text-sm text-zinc-500 hover:text-zinc-800"
     >
       ← チームwRC+一覧に戻る
     </Link>
