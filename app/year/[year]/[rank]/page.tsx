@@ -77,6 +77,13 @@ export default async function PlayerPage({
   // 規定打席に関わらず全打者内で順位を出す（実際のタイトル戦の扱いに合わせている）。
   const leagueBatters = data.batters.filter((b) => b.league === batter.league);
   const qualifiedLeagueBatters = leagueBatters.filter((b) => b.qualified);
+  const wrcLeagueRank = batter.qualified
+    ? qualifiedLeagueBatters.filter((b) => b.wrcPlus > batter.wrcPlus).length + 1
+    : null;
+  const wrcPercentile =
+    wrcLeagueRank !== null && qualifiedLeagueBatters.length > 0
+      ? Math.round(((qualifiedLeagueBatters.length - wrcLeagueRank + 1) / qualifiedLeagueBatters.length) * 100)
+      : null;
 
   function rankAmong(
     pool: typeof leagueBatters,
@@ -204,6 +211,11 @@ export default async function PlayerPage({
             wRC+
           </span>
         </div>
+        {wrcPercentile !== null && (
+          <p className="mt-1 text-xs font-medium text-zinc-500">
+            {batter.league === "central" ? "セ・リーグ" : "パ・リーグ"}規定打席到達者の上位{wrcPercentile}%
+          </p>
+        )}
 
         {/* スラッシュライン＋OPS（リーグ平均位置を目盛り上の縦線で示すバー付き） */}
         <div className="mt-5 rounded-xl bg-zinc-50 px-4 py-4">

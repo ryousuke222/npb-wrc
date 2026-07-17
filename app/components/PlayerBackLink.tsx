@@ -53,6 +53,11 @@ export default function PlayerBackLink({ year, rank }: { year: number; rank: num
     label = "← 打撃タイトルランキングに戻る";
   }
 
+  if (from === "records") {
+    href = "/records";
+    label = "← 歴代シーズン記録に戻る";
+  }
+
   if (from === "compare") {
     href = "/compare";
     label = "← 選手比較に戻る";

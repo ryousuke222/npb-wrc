@@ -8,6 +8,7 @@ import { STAT_OPTIONS, getStatOption, type StatKey } from "@/lib/statOptions";
 import RankingList from "./RankingList";
 import CareerRankingList from "./CareerRankingList";
 import YearRangeSlider from "./YearRangeSlider";
+import RandomSeasonButton from "./RandomSeasonButton";
 
 type Scope = "all" | "central" | "pacific" | `team:${TeamId}`;
 type AgeMode = "eq" | "gte" | "lte";
@@ -159,6 +160,9 @@ export default function AllTimeView({
 
   return (
     <div>
+      <div className="mb-4 flex justify-end">
+        <RandomSeasonButton batters={batters} />
+      </div>
       <div className="mb-4 flex rounded-xl border border-zinc-200 bg-zinc-50 p-1">
         <button
           type="button"

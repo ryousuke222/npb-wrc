@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { href: "/all-time", label: "歴代", matches: (pathname: string) => pathname === "/all-time" },
   { href: "/team-wrc", label: "チーム", matches: (pathname: string) => pathname === "/team-wrc" },
   { href: "/titles", label: "タイトル", matches: (pathname: string) => pathname === "/titles" },
+  { href: "/records", label: "記録", matches: (pathname: string) => pathname === "/records" },
   { href: "/search", label: "検索", matches: (pathname: string) => pathname === "/search" },
   { href: "/compare", label: "比較", matches: (pathname: string) => pathname === "/compare" },
   { href: "/about", label: "このサイト", matches: (pathname: string) => pathname === "/about" },
