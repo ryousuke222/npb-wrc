@@ -15,12 +15,12 @@ export default function YearNav({
   const older = idx >= 0 && idx < years.length - 1 ? years[idx + 1] : null;
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center overflow-hidden rounded-lg border border-zinc-300 bg-white shadow-sm">
       <button
         type="button"
         disabled={!older}
         onClick={() => older && router.push(`/year/${older}`)}
-        className="rounded-md border border-zinc-300 px-2 py-1 text-sm disabled:opacity-30"
+        className="flex h-9 w-9 items-center justify-center border-r border-zinc-200 text-sm text-zinc-600 hover:bg-zinc-50 disabled:opacity-30"
         aria-label="前の年度"
       >
         ←
@@ -28,7 +28,7 @@ export default function YearNav({
       <select
         value={currentYear}
         onChange={(e) => router.push(`/year/${e.target.value}`)}
-        className="rounded-md border border-zinc-300 bg-white px-2 py-1 text-sm"
+        className="h-9 border-0 bg-white px-2 text-sm font-medium text-zinc-800 outline-none"
       >
         {years.map((y) => (
           <option key={y} value={y}>
@@ -40,7 +40,7 @@ export default function YearNav({
         type="button"
         disabled={!newer}
         onClick={() => newer && router.push(`/year/${newer}`)}
-        className="rounded-md border border-zinc-300 px-2 py-1 text-sm disabled:opacity-30"
+        className="flex h-9 w-9 items-center justify-center border-l border-zinc-200 text-sm text-zinc-600 hover:bg-zinc-50 disabled:opacity-30"
         aria-label="次の年度"
       >
         →

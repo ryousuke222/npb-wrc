@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getAvailableYears } from "@/lib/data";
 import CompareClient from "./CompareClient";
+import PageIntro from "@/app/components/PageIntro";
 
 export const metadata: Metadata = {
   title: "NPB選手・シーズン比較 | NPB最強打者ランキング",
@@ -13,13 +14,11 @@ export default async function ComparePage() {
   const years = await getAvailableYears();
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight">選手・シーズン比較</h1>
-        <p className="mt-1 text-sm leading-relaxed text-zinc-500">
-          1955〜{years[0]}年の打者から2〜3シーズンを選び、時代と球場を補正したwRC+を中心に比較できます。
-        </p>
-      </div>
+    <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
+      <PageIntro
+        title="選手・シーズン比較"
+        description={`1955〜${years[0]}年の打者から、最大3シーズンを並べて比べられます。`}
+      />
 
       <Suspense
         fallback={

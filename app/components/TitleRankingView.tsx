@@ -132,6 +132,7 @@ export default function TitleRankingView({
         <select
           value={year}
           onChange={(e) => setYear(Number(e.target.value))}
+          aria-label="表示年度"
           className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
         >
           {years.map((y) => (

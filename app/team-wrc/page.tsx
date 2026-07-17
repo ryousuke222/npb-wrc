@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { getAllTeamWrc } from "@/lib/data";
 import TeamWrcView from "@/app/components/TeamWrcView";
+import PageIntro from "@/app/components/PageIntro";
 
 export const metadata = {
   title: "チームwRC+一覧 | NPB最強打者ランキング",
@@ -12,19 +13,25 @@ export default async function TeamWrcPage() {
   const entries = await getAllTeamWrc();
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-3xl">
-      <h1 className="text-2xl font-bold tracking-tight">チームwRC+一覧</h1>
-      <p className="mt-1 text-sm text-zinc-500">
-        年度・球団ごとのチームwRC+（そのチームの全打者＝投手の代打成績も含む、を合算した
-        「チーム打線」全体の攻撃力を、パークファクター補正のうえリーグ平均100として指数化した値）です。
-        個人のwRC+と同じ算出式を、チーム全体の合算成績に適用しています。
-      </p>
+    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-8 lg:max-w-3xl">
+      <PageIntro
+        title="チームwRC+一覧"
+        description="球団単位で合算した打線の得点創出力を、リーグ平均100として比較します。"
+      />
 
-      <div className="mt-6">
+      <div>
         <Suspense fallback={<p className="text-sm text-zinc-400">読み込み中…</p>}>
           <TeamWrcView entries={entries} />
         </Suspense>
       </div>
+      <details className="mt-5 rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-600">
+        <summary className="cursor-pointer font-medium text-zinc-700">
+          チームwRC+について
+        </summary>
+        <p className="mt-2 leading-relaxed">
+          投手の代打成績を含む全打者の成績を合算し、個人と同じ考え方でパークファクター補正を適用しています。
+        </p>
+      </details>
     </div>
   );
 }

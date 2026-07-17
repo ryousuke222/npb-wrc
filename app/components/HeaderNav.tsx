@@ -5,13 +5,13 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const NAV_ITEMS = [
-  { href: "/", label: "年度別ランキング", matches: (pathname: string) => pathname === "/" || pathname.startsWith("/year/") },
-  { href: "/all-time", label: "歴代ランキング", matches: (pathname: string) => pathname === "/all-time" },
-  { href: "/team-wrc", label: "チームwRC+", matches: (pathname: string) => pathname === "/team-wrc" },
-  { href: "/titles", label: "打撃タイトル", matches: (pathname: string) => pathname === "/titles" },
-  { href: "/search", label: "選手検索", matches: (pathname: string) => pathname === "/search" },
-  { href: "/compare", label: "選手比較", matches: (pathname: string) => pathname === "/compare" },
-  { href: "/about", label: "このサイトについて", matches: (pathname: string) => pathname === "/about" },
+  { href: "/", label: "年度別", matches: (pathname: string) => pathname === "/" || pathname.startsWith("/year/") },
+  { href: "/all-time", label: "歴代", matches: (pathname: string) => pathname === "/all-time" },
+  { href: "/team-wrc", label: "チーム", matches: (pathname: string) => pathname === "/team-wrc" },
+  { href: "/titles", label: "タイトル", matches: (pathname: string) => pathname === "/titles" },
+  { href: "/search", label: "検索", matches: (pathname: string) => pathname === "/search" },
+  { href: "/compare", label: "比較", matches: (pathname: string) => pathname === "/compare" },
+  { href: "/about", label: "このサイト", matches: (pathname: string) => pathname === "/about" },
 ];
 
 function linkClass(active: boolean): string {
@@ -26,7 +26,7 @@ export default function HeaderNav() {
 
   return (
     <>
-      <nav className="hidden items-center gap-4 text-sm sm:flex" aria-label="メインメニュー">
+      <nav className="hidden items-center gap-3 text-sm sm:flex" aria-label="メインメニュー">
         {NAV_ITEMS.map((item) => {
           const active = item.matches(pathname);
           return (

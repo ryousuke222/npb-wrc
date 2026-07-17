@@ -1,4 +1,5 @@
 import SearchClient from "./SearchClient";
+import PageIntro from "@/app/components/PageIntro";
 
 export const metadata = {
   title: "選手検索 | NPB最強打者ランキング",
@@ -6,12 +7,12 @@ export const metadata = {
 
 export default function SearchPage() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-bold tracking-tight">選手検索</h1>
-      <p className="mt-1 text-sm text-zinc-500">
-        名前で選手を検索し、直近シーズンの成績ページから年度別の推移を確認できます。
-      </p>
-      <div className="mt-6">
+    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-8">
+      <PageIntro
+        title="選手検索"
+        description="名前から探して、年度別成績の推移を確認できます。"
+      />
+      <div>
         <SearchClient />
       </div>
     </div>

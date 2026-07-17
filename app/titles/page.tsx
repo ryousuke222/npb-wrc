@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   getAllBatters,
   getAvailableYears,
@@ -6,6 +5,7 @@ import {
   getYearData,
 } from "@/lib/data";
 import TitleRankingView from "@/app/components/TitleRankingView";
+import PageIntro from "@/app/components/PageIntro";
 
 export const metadata = {
   title: "打撃タイトルランキング | NPB最強打者ランキング",
@@ -22,21 +22,13 @@ export default async function TitlesPage() {
   const latestYearData = await getYearData(latestYear);
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-5xl">
-      <div className="mb-6">
-        <Link
-          href={`/year/${latestYear}`}
-          className="text-sm text-zinc-500 hover:text-zinc-800"
-        >
-          ← 年度別ランキングに戻る
-        </Link>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight">
-          打撃タイトルランキング
-        </h1>
-        <p className="mt-1 text-sm text-zinc-500">
-          セ・リーグ／パ・リーグ別に、6つの打撃タイトル保持者とベストナイン受賞者を確認できます（年度を切り替えられます）
-        </p>
-      </div>
+    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-8 lg:max-w-5xl">
+      <PageIntro
+        title="打撃タイトル"
+        description="セ・パ別の6部門リーダーとベストナインを年度ごとに確認できます。"
+        backHref={`/year/${latestYear}`}
+        backLabel="年度別ランキング"
+      />
 
       <TitleRankingView
         batters={batters}
