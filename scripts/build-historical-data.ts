@@ -66,6 +66,8 @@ const LEAGUE_BY_TEAM: Record<TeamId, LeagueKey> = {
   E: "pacific",
   Kn: "pacific",
   Da: "pacific",
+  To: "pacific",
+  Ta: "pacific",
 };
 
 function sleep(ms: number) {

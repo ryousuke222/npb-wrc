@@ -82,6 +82,7 @@ const START_YEAR = 2005;
 const CACHE_DIR = path.join(process.cwd(), ".cache", "raw");
 const DATA_DIR = path.join(process.cwd(), "data");
 const REQUEST_DELAY_MS = 200;
+const MAX_FETCH_RETRIES = 3;
 // シーズン進行中の年度の集計ページ（チーム打撃成績・個人打撃成績・投手一覧）は
 // 試合のたびに更新されるため、無期限キャッシュにせず短いTTLで再取得を強制する。
 const CURRENT_YEAR_CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000; // 6時間
@@ -117,18 +118,27 @@ async function fetchCached(
     // キャッシュなし、または期限切れ。取得する
   }
 
-  const res = await fetch(url, {
-    headers: { "User-Agent": "npb-wrc-ranking-personal-project/1.0" },
-  });
-  if (!res.ok) {
-    await sleep(REQUEST_DELAY_MS);
-    return null;
+  for (let attempt = 0; attempt <= MAX_FETCH_RETRIES; attempt++) {
+    try {
+      const res = await fetch(url, {
+        headers: { "User-Agent": "npb-wrc-ranking-personal-project/1.0" },
+      });
+      if (!res.ok) {
+        await sleep(REQUEST_DELAY_MS);
+        return null;
+      }
+      const html = await res.text();
+      await mkdir(path.dirname(cachePath), { recursive: true });
+      await writeFile(cachePath, html, "utf-8");
+      await sleep(REQUEST_DELAY_MS);
+      return html;
+    } catch (error) {
+      if (attempt === MAX_FETCH_RETRIES) throw error;
+      await sleep(REQUEST_DELAY_MS * 2 ** (attempt + 1));
+    }
   }
-  const html = await res.text();
-  await mkdir(path.dirname(cachePath), { recursive: true });
-  await writeFile(cachePath, html, "utf-8");
-  await sleep(REQUEST_DELAY_MS);
-  return html;
+
+  return null;
 }
 
 function formatDate(d: Date): string {
@@ -221,8 +231,12 @@ async function computePersonalParkFactors(
       `${year}-gm-${date}.html`
     );
     if (!html) continue;
+    const regularSeasonGames = parseGameDayResults(html);
+    // CS・日本シリーズ等を個人の実効PFに混ぜない。打撃成績の母集団と同じ
+    // レギュラーシーズンの試合日だけを、後続のボックススコア集計に渡す。
+    if (regularSeasonGames.length === 0) continue;
     gmHtmlByDate.set(date, html);
-    yearGames.push(...parseGameDayResults(html));
+    yearGames.push(...regularSeasonGames);
   }
   const primaryVenuesByTeam = getPrimaryVenuesByTeam(yearGames);
 
@@ -535,11 +549,13 @@ async function main() {
   const onlyYear = process.env.BUILD_YEAR
     ? Number(process.env.BUILD_YEAR)
     : null;
+  const startYear = Number(process.env.BUILD_START_YEAR ?? START_YEAR);
+  const endYear = Number(process.env.BUILD_END_YEAR ?? currentYear);
   const years: number[] = onlyYear
     ? [onlyYear]
     : Array.from(
-        { length: currentYear - START_YEAR + 1 },
-        (_, i) => START_YEAR + i
+        { length: endYear - startYear + 1 },
+        (_, i) => startYear + i
       );
 
   await mkdir(DATA_DIR, { recursive: true });

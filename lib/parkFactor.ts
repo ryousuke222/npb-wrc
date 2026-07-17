@@ -8,6 +8,8 @@ export interface TeamSplit {
   awayGames: number;
   awayRunsFor: number;
   awayRunsAgainst: number;
+  /** 同一リーグ公式戦で対戦した相手球団。年度ごとのリーグ球団数を求めるために使う */
+  opponents: Set<TeamId>;
 }
 
 function emptySplit(): TeamSplit {
@@ -18,6 +20,7 @@ function emptySplit(): TeamSplit {
     awayGames: 0,
     awayRunsFor: 0,
     awayRunsAgainst: 0,
+    opponents: new Set<TeamId>(),
   };
 }
 
@@ -87,11 +90,13 @@ export function aggregateTeamSplits(
     home.homeGames += 1;
     home.homeRunsFor += g.homeScore;
     home.homeRunsAgainst += g.awayScore;
+    home.opponents.add(g.awayTeam);
 
     const away = get(g.awayTeam);
     away.awayGames += 1;
     away.awayRunsFor += g.awayScore;
     away.awayRunsAgainst += g.homeScore;
+    away.opponents.add(g.homeTeam);
   }
 
   return splits;
@@ -101,7 +106,7 @@ export interface ParkFactor {
   /**
    * 素の年度別パークファクター（複数年加重プール・信頼度回帰後）。
    * 本拠地の(得点+失点)/試合 ÷「6本拠地（自チーム含む）で均等にプレーした場合の期待値」
-   * （= 他球場平均×5/6 + 本拠地平均×1/6）。
+   * （= 他球場平均×(リーグ球団数-1)/リーグ球団数 + 本拠地平均×1/リーグ球団数）。
    */
   raw: number;
   /** 打者は年間の約半分しか本拠地でプレーしないことを踏まえ、1.0側に半減させた値。wRC+の計算に使用 */
@@ -254,6 +259,8 @@ export function calcWeightedParkFactor(
   let wHomeRuns = 0;
   let wAwayGames = 0;
   let wAwayRuns = 0;
+  let weightedLeagueTeamCount = 0;
+  let leagueTeamCountWeight = 0;
   let rawHomeGames = 0;
   let rawAwayGames = 0;
 
@@ -266,6 +273,14 @@ export function calcWeightedParkFactor(
     wAwayRuns += weight * (s.awayRunsFor + s.awayRunsAgainst);
     rawHomeGames += s.homeGames;
     rawAwayGames += s.awayGames;
+    // 1955〜1957年のパ・リーグのように6球団以外の年度にも対応する。
+    // 対戦相手数 + 自球団で、その年度のリーグ球団数を復元できる。
+    const leagueTeamCount = s.opponents.size + 1;
+    if (leagueTeamCount >= 2) {
+      const sampleWeight = weight * s.homeGames;
+      weightedLeagueTeamCount += leagueTeamCount * sampleWeight;
+      leagueTeamCountWeight += sampleWeight;
+    }
   }
 
   if (rawHomeGames < MIN_GAMES || rawAwayGames < MIN_GAMES) return null;
@@ -275,8 +290,12 @@ export function calcWeightedParkFactor(
   const awayPerGame = wAwayRuns / wAwayGames;
   if (awayPerGame === 0) return null;
 
-  // 「6本拠地で均等にプレーした場合」の期待値（自チーム1/6 + 他5球団5/6）と比較する
-  const blendedPerGame = (awayPerGame * 5 + homePerGame * 1) / 6;
+  const leagueTeamCount =
+    leagueTeamCountWeight > 0 ? weightedLeagueTeamCount / leagueTeamCountWeight : 6;
+  // リーグの全本拠地で均等にプレーした場合の期待値と比較する。
+  // 複数年プールでは年度ごとの球団数を試合数で加重している。
+  const blendedPerGame =
+    (awayPerGame * (leagueTeamCount - 1) + homePerGame) / leagueTeamCount;
   if (blendedPerGame === 0) return null;
   const rawPf = homePerGame / blendedPerGame;
 

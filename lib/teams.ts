@@ -18,11 +18,13 @@ export type TeamId =
   /** 近鉄バファローズ。2004年限りで消滅（2005年にオリックスと合併）した歴史上のみの球団 */
   | "Kn"
   /**
-   * 大映スターズ（トンボ/高橋ユニオンズも同系譜として扱う）。1957年限りで消滅
-   * （1958年に毎日と合併し大毎オリオンズに）した歴史上のみの球団。
-   * 毎日はそのままロッテ系譜(M)として存続するため、Knの前例と同様に別IDとして分離する。
+   * 大映スターズ。1957年限りで消滅し、1958年に毎日と合併して大毎オリオンズとなった。
    */
-  | "Da";
+  | "Da"
+  /** 1955年のトンボユニオンズ（大映とは別球団） */
+  | "To"
+  /** 1956年の高橋ユニオンズ（大映とは別球団） */
+  | "Ta";
 
 export const ALL_TEAM_IDS: TeamId[] = [
   "G",
@@ -40,7 +42,7 @@ export const ALL_TEAM_IDS: TeamId[] = [
 ];
 
 /** 現在は消滅している歴史上のみの球団（現行の年度別ランキング等では対象外） */
-export const HISTORICAL_ONLY_TEAM_IDS: TeamId[] = ["Kn", "Da"];
+export const HISTORICAL_ONLY_TEAM_IDS: TeamId[] = ["Kn", "Da", "To", "Ta"];
 
 const TEAM_ID_BY_FULLNAME: Record<string, TeamId> = {
   読売: "G",
@@ -91,10 +93,11 @@ const TEAM_ID_BY_FULLNAME: Record<string, TeamId> = {
   太平洋: "L",
   クラウン: "L",
 
-  // 大映スターズ（トンボ/高橋ユニオンズ含む、1958年に毎日と合併し消滅）
+  // 1955年のトンボ、1956年の高橋は大映とは別球団。パークファクターを
+  // 正しく算出するため、系譜上の近さではなく当時の実在球団単位で分ける。
   大映: "Da",
-  トンボ: "Da",
-  高橋: "Da",
+  トンボ: "To",
+  高橋: "Ta",
 };
 
 /** 試合日程ページ・チーム成績ページに現れる球団名（全角スペース混じり）をチームIDに変換する */
@@ -162,4 +165,6 @@ export const TEAM_ID_DEFAULT_NAME: Record<TeamId, string> = {
   E: "楽天",
   Kn: "近鉄",
   Da: "大映",
+  To: "トンボ",
+  Ta: "高橋",
 };

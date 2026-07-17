@@ -22,6 +22,8 @@ export const TEAM_COLORS: Record<TeamId, TeamColor> = {
   E: { bg: "#870043", on: "#FFFFFF" }, // 楽天 クリムゾン
   Kn: { bg: "#7B1E3A", on: "#FFFFFF" }, // 近鉄 ワインレッド（歴史上のみの球団）
   Da: { bg: "#4B2E83", on: "#FFFFFF" }, // 大映 パープル（歴史上のみの球団）
+  To: { bg: "#6B4F2D", on: "#FFFFFF" }, // トンボ ブラウン（歴史上のみの球団）
+  Ta: { bg: "#476B8A", on: "#FFFFFF" }, // 高橋 スチールブルー（歴史上のみの球団）
 };
 
 export const FALLBACK_COLOR: TeamColor = { bg: "#9CA3AF", on: "#FFFFFF" };
