@@ -124,7 +124,7 @@ export default function RankingView({
 
   return (
     <div>
-      <div className="mb-4 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
+      <div className="ui-surface mb-4 p-3 sm:p-4">
         <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
           {!hideScopeFilter && (
             <div>
@@ -134,7 +134,7 @@ export default function RankingView({
               <select
                 value={scope}
                 onChange={(e) => setScope(e.target.value as Scope)}
-                className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+                className="ui-control px-3 py-1.5 text-sm font-medium"
               >
                 <option value="all">総合</option>
                 <optgroup label="リーグ">
@@ -162,7 +162,7 @@ export default function RankingView({
             <select
               value={statKey}
               onChange={(e) => setStatKey(e.target.value as StatKey)}
-              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+              className="ui-control px-3 py-1.5 text-sm font-medium"
             >
               {STAT_OPTIONS.map((s) => (
                 <option key={s.key} value={s.key}>
@@ -185,7 +185,7 @@ export default function RankingView({
                 onChange={(e) => setMinPaInput(e.target.value)}
                 onBlur={commitMinPa}
                 onKeyDown={(e) => e.key === "Enter" && commitMinPa()}
-                className="w-20 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-right text-sm tabular-nums"
+                className="ui-control w-20 px-2 py-1.5 text-right text-sm tabular-nums"
               />
               <span className="text-xs text-zinc-400">打席以上</span>
             </div>
@@ -202,12 +202,12 @@ export default function RankingView({
                     value={ageFilterInput}
                     onChange={(e) => setAgeFilterInput(e.target.value)}
                     placeholder="指定なし"
-                    className="w-20 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-right text-sm tabular-nums"
+                    className="ui-control w-20 px-2 py-1.5 text-right text-sm tabular-nums"
                   />
                   <select
                     value={ageMode}
                     onChange={(e) => setAgeMode(e.target.value as AgeMode)}
-                    className="rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-sm font-medium"
+                    className="ui-control px-2 py-1.5 text-sm font-medium"
                   >
                     <option value="eq">のみ</option>
                     <option value="gte">以上</option>
@@ -221,7 +221,7 @@ export default function RankingView({
                 <select
                   value={batsFilter}
                   onChange={(e) => setBatsFilter(e.target.value)}
-                  className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+                  className="ui-control px-3 py-1.5 text-sm font-medium"
                 >
                   <option value="">指定なし</option>
                   <option value="右">右打ち</option>
@@ -237,7 +237,7 @@ export default function RankingView({
                 <select
                   value={positionFilter}
                   onChange={(e) => setPositionFilter(e.target.value)}
-                  className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+                  className="ui-control px-3 py-1.5 text-sm font-medium"
                 >
                   <option value="">指定なし</option>
                   {positionsInScope.map((p) => (

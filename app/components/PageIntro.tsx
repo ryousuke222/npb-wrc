@@ -23,7 +23,7 @@ export default function PageIntro({
       {backHref && backLabel && (
         <Link
           href={backHref}
-          className="text-xs font-medium text-zinc-500 hover:text-zinc-900"
+          className="ui-back-link"
         >
           ← {backLabel}
         </Link>

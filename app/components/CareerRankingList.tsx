@@ -51,7 +51,7 @@ export default function CareerRankingList({ careers }: { careers: CareerBatter[]
                 borderLeftColor: color.bg,
                 backgroundColor: withAlpha(color.bg, 0.07),
               }}
-              className="flex items-center gap-3 rounded-xl border border-l-[6px] border-zinc-200/70 py-3 pr-4 pl-3 transition-transform hover:-translate-y-0.5 hover:shadow-md sm:gap-4 sm:py-4 sm:pr-5"
+              className="flex items-center gap-3 rounded-2xl border border-l-[6px] border-zinc-200/70 py-3 pr-4 pl-3 shadow-sm transition-transform hover:-translate-y-0.5 hover:shadow-md sm:gap-4 sm:py-4 sm:pr-5"
             >
               <span
                 style={{ backgroundColor: color.bg, color: color.on }}

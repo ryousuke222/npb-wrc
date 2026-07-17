@@ -15,7 +15,7 @@ export default function YearNav({
   const older = idx >= 0 && idx < years.length - 1 ? years[idx + 1] : null;
 
   return (
-    <div className="flex items-center overflow-hidden rounded-lg border border-zinc-300 bg-white shadow-sm">
+    <div className="flex items-center overflow-hidden rounded-xl border border-zinc-300 bg-white shadow-sm">
       <button
         type="button"
         disabled={!older}

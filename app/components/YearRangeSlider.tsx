@@ -71,7 +71,7 @@ export default function YearRangeSlider({
         onBlur={commitFrom}
         onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
         aria-label="開始年（入力）"
-        className="w-14 shrink-0 rounded-md border border-zinc-300 bg-white px-1 py-1 text-right text-sm font-medium tabular-nums"
+        className="ui-control w-14 shrink-0 px-1 py-1 text-right text-sm font-medium tabular-nums"
       />
       <div className="relative h-5 flex-1">
         <div className="absolute top-1/2 h-1.5 w-full -translate-y-1/2 rounded-full bg-zinc-200" />
@@ -117,7 +117,7 @@ export default function YearRangeSlider({
         onBlur={commitTo}
         onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
         aria-label="終了年（入力）"
-        className="w-14 shrink-0 rounded-md border border-zinc-300 bg-white px-1 py-1 text-sm font-medium tabular-nums"
+        className="ui-control w-14 shrink-0 px-1 py-1 text-sm font-medium tabular-nums"
       />
       {(fromYear !== min || toYear !== max) && (
         <button

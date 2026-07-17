@@ -153,7 +153,7 @@ export default function TeamWrcView({ entries }: { entries: TeamWrcEntry[] }) {
 
   return (
     <div>
-      <div className="mb-4 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
+      <div className="ui-surface mb-4 p-3 sm:p-4">
         <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
           <div>
             <label className="mb-1 block text-[11px] font-medium text-zinc-400">
@@ -165,7 +165,7 @@ export default function TeamWrcView({ entries }: { entries: TeamWrcEntry[] }) {
                 setScope(e.target.value as Scope);
                 setVisibleCount(PAGE_SIZE);
               }}
-              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+              className="ui-control px-3 py-1.5 text-sm font-medium"
             >
               <option value="all">総合</option>
               <optgroup label="リーグ">
@@ -195,7 +195,7 @@ export default function TeamWrcView({ entries }: { entries: TeamWrcEntry[] }) {
                 setStatKey(e.target.value as TeamStatKey);
                 setVisibleCount(PAGE_SIZE);
               }}
-              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+              className="ui-control px-3 py-1.5 text-sm font-medium"
             >
               {TEAM_STAT_OPTIONS.map((s) => (
                 <option key={s.key} value={s.key}>

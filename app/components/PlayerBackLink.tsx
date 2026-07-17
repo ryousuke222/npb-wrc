@@ -76,7 +76,7 @@ export default function PlayerBackLink({ year, rank }: { year: number; rank: num
     <button
       type="button"
       onClick={handleBack}
-      className="text-sm text-zinc-500 hover:text-zinc-800"
+      className="ui-back-link text-sm"
     >
       {label}
     </button>

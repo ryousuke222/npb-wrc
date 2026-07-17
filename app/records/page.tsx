@@ -47,7 +47,7 @@ export default async function RecordsPage() {
             .slice(0, 5);
 
           return (
-            <section key={category.label} className="rounded-xl border border-zinc-200 bg-white p-4">
+            <section key={category.label} className="ui-surface p-4">
               <div className="mb-3 flex items-baseline justify-between gap-3">
                 <h2 className="font-bold text-zinc-900">歴代 {category.label}</h2>
                 <span className="text-[11px] text-zinc-400">{category.note}</span>
@@ -59,7 +59,7 @@ export default async function RecordsPage() {
                     <li key={`${batter.year}-${batter.rank}`}>
                       <Link
                         href={`/year/${batter.year}/${batter.rank}?from=records`}
-                        className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-zinc-50"
+                        className="flex items-center gap-2 rounded-xl px-2 py-1.5 transition-colors hover:bg-zinc-50"
                       >
                         <span className="w-4 text-center text-xs font-bold tabular-nums text-zinc-400">{index + 1}</span>
                         <span
