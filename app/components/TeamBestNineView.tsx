@@ -87,7 +87,7 @@ export default function TeamBestNineView({ batters }: { batters: BatterRanking[]
           <h2 className="text-xl font-extrabold tracking-tight text-zinc-900">
             {TEAM_ID_DEFAULT_NAME[teamId]} 歴代ベストナイン
           </h2>
-          <span className="text-xs text-zinc-400">各ポジションの最高wRC+</span>
+          <span className="text-xs text-zinc-400">投手を除く各ポジションの最高wRC+</span>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

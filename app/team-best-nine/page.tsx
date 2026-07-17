@@ -14,7 +14,7 @@ export default async function TeamBestNinePage() {
     <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-8 lg:max-w-5xl">
       <PageIntro
         title="球団別 歴代ベストナイン"
-        description="各ポジションで最も高いwRC+を記録したシーズンから選ぶ、球団ごとの打撃ベストナイン。"
+        description="投手を除く各ポジションで、最も高いwRC+を記録したシーズンから選ぶ球団別打撃ベストナイン。"
         backHref={`/year/${latestYear}`}
         backLabel="年度別ランキング"
       />
