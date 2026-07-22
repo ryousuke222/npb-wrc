@@ -10,26 +10,30 @@ function playerHref(batter: BatterRanking) {
 
 function PlayerRows({ players }: { players: BatterRanking[] }) {
   return (
-    <ol className="divide-y divide-zinc-100">
-      {players.map((player, index) => (
-        <li key={`${player.teamId}-${player.rank}`}>
-          <Link
-            href={playerHref(player)}
-            className="flex items-center gap-2 py-2.5 hover:bg-zinc-50"
-          >
-            <span className="w-5 text-center text-xs font-bold tabular-nums text-zinc-400">
-              {index + 1}
-            </span>
-            <span className="min-w-0 flex-1 truncate text-sm font-semibold text-zinc-800">
-              {player.name}
-            </span>
-            <span className="text-xs text-zinc-400">{player.teamName}</span>
-            <span className="text-base font-extrabold tabular-nums text-zinc-950">
-              {fmtWrcPlus(player.wrcPlus)}
-            </span>
-          </Link>
-        </li>
-      ))}
+    <ol className="space-y-1.5">
+      {players.map((player, index) => {
+        const color = teamColor(player.teamId);
+        return (
+          <li key={`${player.teamId}-${player.rank}`}>
+            <Link
+              href={playerHref(player)}
+              style={{ borderLeftColor: color.bg, backgroundColor: withAlpha(color.bg, 0.07) }}
+              className="flex items-center gap-2 rounded-lg border border-l-4 border-zinc-200/80 px-2.5 py-2 transition-shadow hover:shadow-sm"
+            >
+              <span className="w-5 text-center text-xs font-bold tabular-nums text-zinc-400">
+                {index + 1}
+              </span>
+              <span className="min-w-0 flex-1 truncate text-sm font-semibold text-zinc-800">
+                {player.name}
+              </span>
+              <span className="shrink-0 text-[11px] text-zinc-400">{player.teamName}</span>
+              <span className="text-base font-extrabold tabular-nums text-zinc-950">
+                {fmtWrcPlus(player.wrcPlus)}
+              </span>
+            </Link>
+          </li>
+        );
+      })}
     </ol>
   );
 }
