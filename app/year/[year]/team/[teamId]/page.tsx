@@ -10,6 +10,9 @@ import {
 } from "@/lib/teams";
 import RankingView from "@/app/components/RankingView";
 import TeamBackLink from "@/app/components/TeamBackLink";
+import TeamSeasonSummary from "@/app/components/TeamSeasonSummary";
+import { getLatestYear } from "@/lib/data";
+import { getTeamWeeklyRisers } from "@/lib/latest";
 
 const TARGET_TEAM_IDS: TeamId[] = [...ALL_TEAM_IDS, ...HISTORICAL_ONLY_TEAM_IDS];
 
@@ -52,13 +55,14 @@ export default async function YearTeamPage({
   if (!TARGET_TEAM_IDS.includes(teamIdParam as TeamId)) notFound();
   const teamId = teamIdParam as TeamId;
 
-  const data = await getYearData(year);
+  const [data, latestYear] = await Promise.all([getYearData(year), getLatestYear()]);
   if (!data) notFound();
 
   const teamBatters = data.batters.filter((b) => b.teamId === teamId);
   if (teamBatters.length === 0) notFound();
 
   const teamName = teamBatters[0].teamName;
+  const weeklyRisers = year === latestYear ? await getTeamWeeklyRisers(data, teamId) : null;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-3xl">
@@ -74,6 +78,8 @@ export default async function YearTeamPage({
           wRC+（簡易版）による{teamName}在籍打者のランキング（打席数の条件は変更できます）
         </p>
       </div>
+
+      <TeamSeasonSummary data={data} teamId={teamId} weeklyRisers={weeklyRisers} />
 
       <RankingView
         batters={teamBatters}

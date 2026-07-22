@@ -158,10 +158,49 @@ export default function AllTimeView({
     setPositionFilter("");
   };
 
+  const applyDiscoveryPreset = (preset: "u21" | "over30" | "outfielder" | "right" | "left") => {
+    setVisibleCount(PAGE_SIZE);
+    if (preset === "u21") {
+      setAgeFilterInput("21");
+      setAgeMode("lte");
+    } else if (preset === "over30") {
+      setAgeFilterInput("30");
+      setAgeMode("gte");
+    } else if (preset === "outfielder") {
+      setPositionFilter("外野手");
+    } else if (preset === "right") {
+      setBatsFilter("右");
+    } else {
+      setBatsFilter("左");
+    }
+    setShowAdvanced(true);
+  };
+
   return (
     <div>
       <div className="mb-4 flex justify-end">
         <RandomSeasonButton batters={batters} />
+      </div>
+      <div className="mb-4 rounded-xl border border-zinc-200 bg-white p-3">
+        <p className="text-[11px] font-bold text-zinc-400">発見する</p>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {[
+            ["u21", "21歳以下"],
+            ["over30", "30歳以上"],
+            ["outfielder", "外野手"],
+            ["right", "右打ち"],
+            ["left", "左打ち"],
+          ].map(([preset, label]) => (
+            <button
+              key={preset}
+              type="button"
+              onClick={() => applyDiscoveryPreset(preset as "u21" | "over30" | "outfielder" | "right" | "left")}
+              className="rounded-full bg-zinc-100 px-3 py-1.5 text-xs font-bold text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
       <div className="mb-4 flex rounded-xl border border-zinc-200 bg-zinc-50 p-1">
         <button

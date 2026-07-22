@@ -12,13 +12,20 @@ export type BatterChange = {
   difference: number;
 };
 
+export type WeeklyMovement = {
+  wrcPlus: BatterChange[];
+  hr: BatterChange[];
+  pa: BatterChange[];
+  ops: BatterChange[];
+};
+
 export type LatestDashboardData = {
   year: number;
   data: YearData;
   teams: TeamWrc[];
   leagueLeaders: Record<"central" | "pacific", BatterRanking[]>;
   mvpCandidates: Record<"central" | "pacific", BatterRanking[]>;
-  weeklyRisers: BatterChange[] | null;
+  weeklyMovement: WeeklyMovement | null;
   comparisonLabel: string | null;
 };
 
@@ -48,8 +55,8 @@ async function getSnapshots(year: number): Promise<YearData[]> {
  * 「今週伸びた」は、最新値から6日以上前の最も新しい保存値と比較する。
  * まだ比較できるスナップショットがない間は null を返し、推測値を表示しない。
  */
-async function getWeeklyRisers(current: YearData): Promise<{
-  risers: BatterChange[] | null;
+async function getWeeklyMovement(current: YearData): Promise<{
+  movement: WeeklyMovement | null;
   label: string | null;
 }> {
   const snapshots = await getSnapshots(current.year);
@@ -57,18 +64,22 @@ async function getWeeklyRisers(current: YearData): Promise<{
   const cutoff = currentTime - 6 * 24 * 60 * 60 * 1000;
   const baseline = snapshots.filter((snapshot) => new Date(snapshot.generatedAt).getTime() <= cutoff).at(-1);
 
-  if (!baseline) return { risers: null, label: null };
+  if (!baseline) return { movement: null, label: null };
 
   const previous = new Map(baseline.batters.map((batter) => [playerKey(batter), batter]));
-  const risers = current.batters
+  const changes = current.batters
     .filter((batter) => batter.pa >= 30)
     .map((batter) => {
       const old = previous.get(playerKey(batter));
-      return old ? { batter, difference: batter.wrcPlus - old.wrcPlus } : null;
+      return old ? { batter, old } : null;
     })
-    .filter((entry): entry is BatterChange => entry !== null)
-    .sort((a, b) => b.difference - a.difference)
-    .slice(0, 10);
+    .filter((entry): entry is { batter: BatterRanking; old: BatterRanking } => entry !== null);
+
+  const topChanges = (getDifference: (entry: { batter: BatterRanking; old: BatterRanking }) => number) =>
+    changes
+      .map((entry) => ({ batter: entry.batter, difference: getDifference(entry) }))
+      .sort((a, b) => b.difference - a.difference)
+      .slice(0, 10);
 
   const from = new Intl.DateTimeFormat("ja-JP", {
     timeZone: "Asia/Tokyo",
@@ -81,7 +92,21 @@ async function getWeeklyRisers(current: YearData): Promise<{
     day: "numeric",
   }).format(new Date(current.generatedAt));
 
-  return { risers, label: `${from} → ${to}` };
+  return {
+    movement: {
+      wrcPlus: topChanges(({ batter, old }) => batter.wrcPlus - old.wrcPlus),
+      hr: topChanges(({ batter, old }) => batter.hr - old.hr),
+      pa: topChanges(({ batter, old }) => batter.pa - old.pa),
+      // 10打席以上増えた選手だけを対象にし、小サンプルの極端な変化を避ける。
+      ops: topChanges(({ batter, old }) => (batter.pa - old.pa >= 10 ? batter.ops - old.ops : -Infinity)),
+    },
+    label: `${from} → ${to}`,
+  };
+}
+
+export async function getTeamWeeklyRisers(data: YearData, teamId: TeamId): Promise<BatterChange[] | null> {
+  const { movement } = await getWeeklyMovement(data);
+  return movement?.wrcPlus.filter(({ batter }) => batter.teamId === teamId).slice(0, 3) ?? null;
 }
 
 export async function getLatestDashboardData(): Promise<LatestDashboardData | null> {
@@ -106,7 +131,7 @@ export async function getLatestDashboardData(): Promise<LatestDashboardData | nu
       // 守備・走塁を含まないため、あくまで打撃MVP候補として扱う。
       .sort((a, b) => (b.wrcPlus - 100) * b.pa - (a.wrcPlus - 100) * a.pa);
 
-  const { risers: weeklyRisers, label: comparisonLabel } = await getWeeklyRisers(data);
+  const { movement: weeklyMovement, label: comparisonLabel } = await getWeeklyMovement(data);
 
   return {
     year,
@@ -121,7 +146,7 @@ export async function getLatestDashboardData(): Promise<LatestDashboardData | nu
       central: mvpByLeague("central").slice(0, 5),
       pacific: mvpByLeague("pacific").slice(0, 5),
     },
-    weeklyRisers,
+    weeklyMovement,
     comparisonLabel,
   };
 }

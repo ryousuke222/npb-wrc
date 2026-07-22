@@ -122,6 +122,21 @@ function fmtParkFactor(value: number): string {
   return `${value.toFixed(3)}（${environment}）`;
 }
 
+const COMPARISON_HIGHLIGHTS: {
+  label: string;
+  getValue: (batter: CompareBatter) => number;
+  format: (value: number) => string;
+}[] = [
+  { label: "総合", getValue: (batter) => batter.wrcPlus, format: fmtWrcPlus },
+  { label: "OPS", getValue: (batter) => batter.ops, format: fmtRate },
+  { label: "本塁打", getValue: (batter) => batter.hr, format: (value) => `${value}本` },
+  {
+    label: "選球眼",
+    getValue: (batter) => (batter.pa > 0 ? batter.bb / batter.pa : 0),
+    format: fmtPercent,
+  },
+];
+
 const METRIC_GROUPS: MetricGroup[] = [
   {
     label: "総合評価",
@@ -475,7 +490,24 @@ export default function CompareClient() {
           比較表を表示するには、あと{2 - selected.length}シーズン追加してください。
         </div>
       ) : (
-        <section className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+        <>
+          <section className="mt-6 grid gap-2 sm:grid-cols-4">
+            {COMPARISON_HIGHLIGHTS.map((metric) => {
+              const winner = selected.reduce((best, batter) =>
+                metric.getValue(batter) > metric.getValue(best) ? batter : best
+              );
+              return (
+                <div key={metric.label} className="rounded-xl border border-zinc-200 bg-white px-3 py-3">
+                  <p className="text-[11px] font-bold text-zinc-400">{metric.label} リード</p>
+                  <p className="mt-1 truncate text-sm font-bold text-zinc-800">{winner.name}</p>
+                  <p className="text-lg font-extrabold tabular-nums text-zinc-950">
+                    {metric.format(metric.getValue(winner))}
+                  </p>
+                </div>
+              );
+            })}
+          </section>
+          <section className="mt-4 overflow-hidden rounded-2xl border border-zinc-200 bg-white">
           <div className="flex flex-wrap items-end justify-between gap-2 border-b border-zinc-200 bg-zinc-50 px-4 py-4 sm:px-5">
             <div>
               <h2 className="font-bold tracking-tight text-zinc-900">主要指標比較</h2>
@@ -565,7 +597,8 @@ export default function CompareClient() {
           <p className="border-t border-zinc-100 px-4 py-3 text-[11px] leading-relaxed text-zinc-400 sm:px-5">
             実効PFは選手が実際に立った球場を打席数で加重した環境値です。値が高いほど打者有利ですが、選手の優劣を表すものではありません。wRC+はこの球場差とリーグ水準を補正して比較できます。
           </p>
-        </section>
+          </section>
+        </>
       )}
     </div>
   );
