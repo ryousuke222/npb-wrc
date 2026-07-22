@@ -5,6 +5,7 @@ import { formatGeneratedAtJa } from "@/lib/date";
 import YearNav from "@/app/components/YearNav";
 import RankingView from "@/app/components/RankingView";
 import PageIntro from "@/app/components/PageIntro";
+import Link from "next/link";
 
 export async function generateStaticParams() {
   const years = await getAvailableYears();
@@ -58,6 +59,15 @@ export default async function YearPage({
         }
         actions={<YearNav years={years} currentYear={year} />}
       />
+      {isLatestYear && (
+        <Link
+          href="/latest"
+          className="mb-4 flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm transition-colors hover:bg-zinc-50"
+        >
+          <span className="font-semibold text-zinc-800">チームwRC+・リーグ別・注目打者をまとめて見る</span>
+          <span className="font-bold text-zinc-400">→</span>
+        </Link>
+      )}
       <RankingView
         batters={data.batters}
         regulationPaThreshold={data.regulationPaThreshold}
