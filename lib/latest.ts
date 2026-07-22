@@ -78,6 +78,7 @@ async function getWeeklyMovement(current: YearData): Promise<{
   const topChanges = (getDifference: (entry: { batter: BatterRanking; old: BatterRanking }) => number) =>
     changes
       .map((entry) => ({ batter: entry.batter, difference: getDifference(entry) }))
+      .filter((entry) => Number.isFinite(entry.difference))
       .sort((a, b) => b.difference - a.difference)
       .slice(0, 10);
 

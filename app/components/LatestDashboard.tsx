@@ -103,9 +103,10 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
       <section className="rounded-xl border border-zinc-200 bg-white p-4">
         <SectionTitle title="今週の急上昇" note={comparisonLabel ?? "週次データを蓄積中"} />
         {weeklyMovement ? (
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { label: "wRC+上昇", values: weeklyMovement.wrcPlus, format: (value: number) => `+${fmtWrcPlus(value)}` },
+              { label: "OPS上昇", values: weeklyMovement.ops, format: (value: number) => `+${value.toFixed(3).replace(/^0\./, ".")}` },
               { label: "本塁打", values: weeklyMovement.hr, format: (value: number) => `+${value}本` },
               { label: "打席増加", values: weeklyMovement.pa, format: (value: number) => `+${value}打席` },
             ].map((group) => (
