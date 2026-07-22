@@ -87,11 +87,11 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
 
       <section className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-xl border border-zinc-200 bg-white p-4">
-          <SectionTitle title="現時点のMVP候補 セ" note="打撃指標による候補" />
+          <SectionTitle title="打撃MVP候補 セ" note="wRC+と打席数" />
           <PlayerRows players={mvpCandidates.central.slice(0, 5)} />
         </div>
         <div className="rounded-xl border border-zinc-200 bg-white p-4">
-          <SectionTitle title="現時点のMVP候補 パ" note="打撃指標による候補" />
+          <SectionTitle title="打撃MVP候補 パ" note="wRC+と打席数" />
           <PlayerRows players={mvpCandidates.pacific.slice(0, 5)} />
         </div>
       </section>

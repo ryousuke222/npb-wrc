@@ -99,6 +99,12 @@ export async function getLatestDashboardData(): Promise<LatestDashboardData | nu
     qualified
       .filter((batter) => batter.league === league)
       .sort((a, b) => b.wrcPlus - a.wrcPlus);
+  const mvpByLeague = (league: "central" | "pacific") =>
+    qualified
+      .filter((batter) => batter.league === league)
+      // wRC+の「平均からどれだけ上か」に打席数を掛け、率と出場量の両方を反映する。
+      // 守備・走塁を含まないため、あくまで打撃MVP候補として扱う。
+      .sort((a, b) => (b.wrcPlus - 100) * b.pa - (a.wrcPlus - 100) * a.pa);
 
   const { risers: weeklyRisers, label: comparisonLabel } = await getWeeklyRisers(data);
 
@@ -112,8 +118,8 @@ export async function getLatestDashboardData(): Promise<LatestDashboardData | nu
     },
     // MVPを断定せず、規定打席とwRC+で見る「現時点の候補」として表示する。
     mvpCandidates: {
-      central: byLeague("central").slice(0, 5),
-      pacific: byLeague("pacific").slice(0, 5),
+      central: mvpByLeague("central").slice(0, 5),
+      pacific: mvpByLeague("pacific").slice(0, 5),
     },
     weeklyRisers,
     comparisonLabel,
