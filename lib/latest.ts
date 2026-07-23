@@ -16,7 +16,7 @@ export type MvpCandidate = {
   batter: BatterRanking;
   /**
    * 同一リーグ内の首位を100とする打撃総合スコア。
-   * 率の指標であるwRC+を半分、得点に直結する本塁打と打点を各4分の1としている。
+   * wRC+を主軸に、打点・本塁打・打率を補助指標としている。
    */
   score: number;
 };
@@ -139,16 +139,18 @@ export async function getLatestDashboardData(): Promise<LatestDashboardData | nu
       wrcPlus: Math.max(...batters.map((batter) => batter.wrcPlus), 1),
       hr: Math.max(...batters.map((batter) => batter.hr), 1),
       rbi: Math.max(...batters.map((batter) => batter.rbi), 1),
+      avg: Math.max(...batters.map((batter) => batter.avg), 0.001),
     };
 
     return batters
       .map((batter) => ({
         batter,
-        // MVP投票で目に留まりやすい長打・打点も反映し、wRC+上位とは別の見方を作る。
+        // wRC+を主軸にしつつ、表彰の文脈で重視されやすい打点・本塁打・打率も反映する。
         score:
-          (batter.wrcPlus / leaders.wrcPlus) * 50 +
-          (batter.hr / leaders.hr) * 25 +
-          (batter.rbi / leaders.rbi) * 25,
+          (batter.wrcPlus / leaders.wrcPlus) * 65 +
+          (batter.rbi / leaders.rbi) * 12.5 +
+          (batter.hr / leaders.hr) * 12.5 +
+          (batter.avg / leaders.avg) * 10,
       }))
       .sort((a, b) => b.score - a.score);
   };

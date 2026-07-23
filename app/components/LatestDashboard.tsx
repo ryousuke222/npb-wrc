@@ -54,7 +54,7 @@ function MvpRows({ candidates }: { candidates: MvpCandidate[] }) {
               <span className="w-5 text-center text-xs font-bold tabular-nums text-zinc-400">{index + 1}</span>
               <span className="min-w-0 flex-1 truncate text-sm font-semibold text-zinc-800">{player.name}</span>
               <span className="hidden shrink-0 text-[11px] text-zinc-400 sm:inline">
-                {player.hr}本・{player.rbi}打点
+                wRC+{fmtWrcPlus(player.wrcPlus)}・{player.hr}本・{player.rbi}打点・{player.avg.toFixed(3).replace(/^0\./, ".")}
               </span>
               <span className="shrink-0 text-base font-extrabold tabular-nums text-zinc-950">
                 {score.toFixed(1)}
@@ -129,7 +129,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
       </section>
 
       <p className="-mt-3 text-xs leading-relaxed text-zinc-500">
-        打撃MVP候補は規定打席到達者を対象に、リーグ首位を基準として wRC+ 50%・本塁打 25%・打点 25% で算出。
+        打撃MVP候補は規定打席到達者を対象に、リーグ首位を基準として wRC+ 65%・打点 12.5%・本塁打 12.5%・打率 10% で算出。
         守備・走塁・チーム成績は含みません。
       </p>
 
