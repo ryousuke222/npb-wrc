@@ -15,6 +15,7 @@ export type MonthlyBatter = {
 export type CurrentMonthRanking = {
   year: number;
   label: string;
+  minPa: number;
   central: MonthlyBatter[];
   pacific: MonthlyBatter[];
 } | null;
@@ -47,6 +48,11 @@ export async function getCurrentMonthRanking(): Promise<CurrentMonthRanking> {
     .sort((a, b) => new Date(a.generatedAt).getTime() - new Date(b.generatedAt).getTime())[0];
   if (!baseline || new Date(baseline.generatedAt).getTime() >= new Date(current.generatedAt).getTime()) return null;
 
+  // 月初からまだ日が浅い、またはリーグ間で試合数に差がある期間でも空のランキングに
+  // ならないよう、経過日数に応じて最低打席数を10〜20打席の範囲で調整する。
+  const elapsedDays = Math.max(1, Math.ceil((new Date(current.generatedAt).getTime() - new Date(baseline.generatedAt).getTime()) / 86_400_000));
+  const minPa = Math.min(20, Math.max(10, elapsedDays * 3));
+
   const old = new Map(baseline.batters.map((batter) => [key(batter), batter]));
   const rows = current.batters.flatMap((batter) => {
     const before = old.get(key(batter));
@@ -58,7 +64,7 @@ export async function getCurrentMonthRanking(): Promise<CurrentMonthRanking> {
     const hbp = batter.hbp - before.hbp;
     const sf = batter.sf - before.sf;
     const totalBases = batter.totalBases - before.totalBases;
-    if (pa < 20 || ab <= 0) return [];
+    if (pa < minPa || ab <= 0) return [];
     const avg = hits / ab;
     const obpDenom = ab + bb + hbp + sf;
     const obp = obpDenom > 0 ? (hits + bb + hbp) / obpDenom : 0;
@@ -68,5 +74,5 @@ export async function getCurrentMonthRanking(): Promise<CurrentMonthRanking> {
     .filter((row) => row.batter.league === league)
     .sort((a, b) => b.ops - a.ops || b.pa - a.pa)
     .slice(0, 10);
-  return { year, label: `${monthLabel(baseline.generatedAt)} → ${monthLabel(current.generatedAt)}`, central: rank("central"), pacific: rank("pacific") };
+  return { year, label: `${monthLabel(baseline.generatedAt)} → ${monthLabel(current.generatedAt)}`, minPa, central: rank("central"), pacific: rank("pacific") };
 }
