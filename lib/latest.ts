@@ -12,6 +12,15 @@ export type BatterChange = {
   difference: number;
 };
 
+export type MvpCandidate = {
+  batter: BatterRanking;
+  /**
+   * 同一リーグ内の首位を100とする打撃総合スコア。
+   * 率の指標であるwRC+を半分、得点に直結する本塁打と打点を各4分の1としている。
+   */
+  score: number;
+};
+
 export type WeeklyMovement = {
   wrcPlus: BatterChange[];
   hr: BatterChange[];
@@ -24,7 +33,7 @@ export type LatestDashboardData = {
   data: YearData;
   teams: TeamWrc[];
   leagueLeaders: Record<"central" | "pacific", BatterRanking[]>;
-  mvpCandidates: Record<"central" | "pacific", BatterRanking[]>;
+  mvpCandidates: Record<"central" | "pacific", MvpCandidate[]>;
   weeklyMovement: WeeklyMovement | null;
   comparisonLabel: string | null;
 };
@@ -125,12 +134,25 @@ export async function getLatestDashboardData(): Promise<LatestDashboardData | nu
     qualified
       .filter((batter) => batter.league === league)
       .sort((a, b) => b.wrcPlus - a.wrcPlus);
-  const mvpByLeague = (league: "central" | "pacific") =>
-    qualified
-      .filter((batter) => batter.league === league)
-      // wRC+の「平均からどれだけ上か」に打席数を掛け、率と出場量の両方を反映する。
-      // 守備・走塁を含まないため、あくまで打撃MVP候補として扱う。
-      .sort((a, b) => (b.wrcPlus - 100) * b.pa - (a.wrcPlus - 100) * a.pa);
+  const mvpByLeague = (league: "central" | "pacific") => {
+    const batters = qualified.filter((batter) => batter.league === league);
+    const leaders = {
+      wrcPlus: Math.max(...batters.map((batter) => batter.wrcPlus), 1),
+      hr: Math.max(...batters.map((batter) => batter.hr), 1),
+      rbi: Math.max(...batters.map((batter) => batter.rbi), 1),
+    };
+
+    return batters
+      .map((batter) => ({
+        batter,
+        // MVP投票で目に留まりやすい長打・打点も反映し、wRC+上位とは別の見方を作る。
+        score:
+          (batter.wrcPlus / leaders.wrcPlus) * 50 +
+          (batter.hr / leaders.hr) * 25 +
+          (batter.rbi / leaders.rbi) * 25,
+      }))
+      .sort((a, b) => b.score - a.score);
+  };
 
   const { movement: weeklyMovement, label: comparisonLabel } = await getWeeklyMovement(data);
 
@@ -142,7 +164,7 @@ export async function getLatestDashboardData(): Promise<LatestDashboardData | nu
       central: byLeague("central").slice(0, 10),
       pacific: byLeague("pacific").slice(0, 10),
     },
-    // MVPを断定せず、規定打席とwRC+で見る「現時点の候補」として表示する。
+    // 守備・走塁は含まないため、打撃面に限定した「現時点の候補」として表示する。
     mvpCandidates: {
       central: mvpByLeague("central").slice(0, 5),
       pacific: mvpByLeague("pacific").slice(0, 5),

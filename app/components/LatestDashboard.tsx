@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { BatterRanking } from "@/lib/types";
-import type { LatestDashboardData } from "@/lib/latest";
+import type { LatestDashboardData, MvpCandidate } from "@/lib/latest";
 import { teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus } from "@/lib/wrc";
 import XRankingImageButton from "./XRankingImageButton";
@@ -30,6 +30,34 @@ function PlayerRows({ players }: { players: BatterRanking[] }) {
               <span className="shrink-0 text-[11px] text-zinc-400">{player.teamName}</span>
               <span className="text-base font-extrabold tabular-nums text-zinc-950">
                 {fmtWrcPlus(player.wrcPlus)}
+              </span>
+            </Link>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+function MvpRows({ candidates }: { candidates: MvpCandidate[] }) {
+  return (
+    <ol className="space-y-1.5">
+      {candidates.map(({ batter: player, score }, index) => {
+        const color = teamColor(player.teamId);
+        return (
+          <li key={`${player.teamId}-${player.rank}`}>
+            <Link
+              href={playerHref(player)}
+              style={{ borderLeftColor: color.bg, backgroundColor: withAlpha(color.bg, 0.07) }}
+              className="flex items-center gap-2 rounded-lg border border-l-4 border-zinc-200/80 px-2.5 py-2 transition-shadow hover:shadow-sm"
+            >
+              <span className="w-5 text-center text-xs font-bold tabular-nums text-zinc-400">{index + 1}</span>
+              <span className="min-w-0 flex-1 truncate text-sm font-semibold text-zinc-800">{player.name}</span>
+              <span className="hidden shrink-0 text-[11px] text-zinc-400 sm:inline">
+                {player.hr}本・{player.rbi}打点
+              </span>
+              <span className="shrink-0 text-base font-extrabold tabular-nums text-zinc-950">
+                {score.toFixed(1)}
               </span>
             </Link>
           </li>
@@ -91,14 +119,19 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
 
       <section className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-xl border border-zinc-200 bg-white p-4">
-          <SectionTitle title="打撃MVP候補 セ" note="wRC+と打席数" />
-          <PlayerRows players={mvpCandidates.central.slice(0, 5)} />
+          <SectionTitle title="打撃MVP候補 セ" note="総合スコア" />
+          <MvpRows candidates={mvpCandidates.central.slice(0, 5)} />
         </div>
         <div className="rounded-xl border border-zinc-200 bg-white p-4">
-          <SectionTitle title="打撃MVP候補 パ" note="wRC+と打席数" />
-          <PlayerRows players={mvpCandidates.pacific.slice(0, 5)} />
+          <SectionTitle title="打撃MVP候補 パ" note="総合スコア" />
+          <MvpRows candidates={mvpCandidates.pacific.slice(0, 5)} />
         </div>
       </section>
+
+      <p className="-mt-3 text-xs leading-relaxed text-zinc-500">
+        打撃MVP候補は規定打席到達者を対象に、リーグ首位を基準として wRC+ 50%・本塁打 25%・打点 25% で算出。
+        守備・走塁・チーム成績は含みません。
+      </p>
 
       <section className="rounded-xl border border-zinc-200 bg-white p-4">
         <SectionTitle title="今週の急上昇" note={comparisonLabel ?? "週次データを蓄積中"} />
