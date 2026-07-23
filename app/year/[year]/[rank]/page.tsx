@@ -3,9 +3,11 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getAvailableYears, getPlayerHistory, getYearData } from "@/lib/data";
+import { getSimilarSeasons } from "@/lib/playerInsights";
 import { teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus } from "@/lib/wrc";
 import CareerHistory from "@/app/components/CareerHistory";
+import PlayerInsights from "@/app/components/PlayerInsights";
 import PlayerBackLink from "@/app/components/PlayerBackLink";
 
 // 規定打席到達者のみビルド時に静的生成する（大半のアクセスがここに集中するため）。
@@ -63,7 +65,10 @@ export default async function PlayerPage({
   if (!batter) notFound();
 
   const color = teamColor(batter.teamId);
-  const history = await getPlayerHistory(batter.name, batter.nameKey);
+  const [history, similar] = await Promise.all([
+    getPlayerHistory(batter.name, batter.nameKey),
+    getSimilarSeasons(batter),
+  ]);
 
   const lgTotals = data.leagueContext[batter.league].totals;
   const lgAvg = lgTotals.ab > 0 ? lgTotals.hits / lgTotals.ab : 0;
@@ -84,6 +89,9 @@ export default async function PlayerPage({
     wrcLeagueRank !== null && qualifiedLeagueBatters.length > 0
       ? Math.round(((qualifiedLeagueBatters.length - wrcLeagueRank + 1) / qualifiedLeagueBatters.length) * 100)
       : null;
+  const teamRank = batter.qualified
+    ? data.batters.filter((entry) => entry.teamId === batter.teamId && entry.qualified && entry.wrcPlus > batter.wrcPlus).length + 1
+    : null;
 
   function rankAmong(
     pool: typeof leagueBatters,
@@ -326,6 +334,7 @@ export default async function PlayerPage({
 
       </div>
 
+      <PlayerInsights batter={batter} history={history} similar={similar} teamRank={teamRank} leagueRank={wrcLeagueRank} />
       <CareerHistory history={history} currentYear={year} />
     </div>
   );
