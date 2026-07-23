@@ -14,6 +14,7 @@ export type MonthlyBatter = {
 
 export type CurrentMonthRanking = {
   year: number;
+  month: number;
   label: string;
   minPa: number;
   central: MonthlyBatter[];
@@ -43,6 +44,7 @@ export async function getCurrentMonthRanking(): Promise<CurrentMonthRanking> {
     return null;
   }
   const currentMonth = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tokyo", month: "2-digit" }).format(new Date(current.generatedAt));
+  const month = Number(currentMonth);
   const baseline = snapshots
     .filter((snapshot) => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tokyo", month: "2-digit" }).format(new Date(snapshot.generatedAt)) === currentMonth)
     .sort((a, b) => new Date(a.generatedAt).getTime() - new Date(b.generatedAt).getTime())[0];
@@ -74,5 +76,5 @@ export async function getCurrentMonthRanking(): Promise<CurrentMonthRanking> {
     .filter((row) => row.batter.league === league)
     .sort((a, b) => b.ops - a.ops || b.pa - a.pa)
     .slice(0, 10);
-  return { year, label: `${monthLabel(baseline.generatedAt)} → ${monthLabel(current.generatedAt)}`, minPa, central: rank("central"), pacific: rank("pacific") };
+  return { year, month, label: `${monthLabel(baseline.generatedAt)} → ${monthLabel(current.generatedAt)}`, minPa, central: rank("central"), pacific: rank("pacific") };
 }
