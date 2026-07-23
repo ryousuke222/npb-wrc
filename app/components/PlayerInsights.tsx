@@ -46,11 +46,14 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
         </span>
       </div>
       <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-        <div className="col-span-2 rounded-2xl bg-zinc-950 p-4 text-white sm:col-span-1">
-          <div className="text-[10px] font-bold tracking-wide text-zinc-400">リーグ wRC+</div>
+        <div
+          style={{ backgroundColor: withAlpha(color.bg, 0.12), color: color.bg }}
+          className="col-span-2 rounded-2xl border border-white p-4 sm:col-span-1"
+        >
+          <div className="text-[10px] font-bold tracking-wide opacity-70">リーグ wRC+</div>
           <div className="mt-2 flex items-end gap-1">
             <span className="text-4xl font-black tabular-nums">{leagueRank ? leagueRank : "—"}</span>
-            <span className="pb-1 text-xs font-bold text-zinc-400">{leagueRank ? "位" : "参考"}</span>
+            <span className="pb-1 text-xs font-bold opacity-70">{leagueRank ? "位" : "参考"}</span>
           </div>
         </div>
         {[
@@ -67,33 +70,36 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
     </section>
 
     <section
-      style={{ borderTopColor: color.bg }}
-      className="overflow-hidden rounded-2xl border border-t-[5px] border-zinc-800 bg-zinc-950 text-white shadow-sm"
+      style={{
+        borderTopColor: color.bg,
+        backgroundImage: `linear-gradient(135deg, ${withAlpha(color.bg, 0.11)}, white 48%)`,
+      }}
+      className="overflow-hidden rounded-2xl border border-t-[5px] border-zinc-200 bg-white shadow-sm"
     >
       <div className="grid sm:grid-cols-[1.05fr_1.45fr]">
-        <div className="border-b border-white/10 p-5 sm:border-r sm:border-b-0 sm:p-6">
-          <p className="text-[10px] font-bold tracking-[0.18em] text-zinc-500">CAREER SUMMARY</p>
-          <h2 className="mt-1 text-lg font-extrabold">キャリア要約</h2>
+        <div className="border-b border-zinc-200 p-5 sm:border-r sm:border-b-0 sm:p-6">
+          <p className="text-[10px] font-bold tracking-[0.18em] text-zinc-400">CAREER SUMMARY</p>
+          <h2 className="mt-1 text-lg font-extrabold text-zinc-950">キャリア要約</h2>
           <p className="mt-1 text-xs text-zinc-500">{firstYear}–{lastYear}・{careerYears}シーズン</p>
           <div className="mt-6">
             <div className="text-[11px] font-bold text-zinc-500">通算 wRC+</div>
-            <div className="mt-1 text-5xl font-black tabular-nums tracking-tight">
+            <div style={{ color: color.bg }} className="mt-1 text-5xl font-black tabular-nums tracking-tight">
               {total.pa ? fmtWrcPlus(total.weightedWrc / total.pa) : "—"}
             </div>
             <div className="mt-1 text-[11px] text-zinc-500">年度別wRC+を打席数で加重平均</div>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-px bg-white/10">
+        <div className="grid grid-cols-2 gap-px bg-zinc-200">
           {[
             { label: "通算打席", value: total.pa.toLocaleString("ja-JP"), unit: "PA" },
             { label: "通算本塁打", value: total.hr.toLocaleString("ja-JP"), unit: "HR" },
             { label: "通算打点", value: total.rbi.toLocaleString("ja-JP"), unit: "RBI" },
             { label: "規定打席到達", value: qualifiedYears, unit: "SEASONS" },
           ].map((item) => (
-            <div key={item.label} className="bg-zinc-950 p-5 sm:p-6">
-              <div className="text-[10px] font-bold tracking-wide text-zinc-500">{item.label}</div>
-              <div className="mt-3 text-3xl font-black tabular-nums tracking-tight">{item.value}</div>
-              <div className="mt-1 text-[9px] font-bold tracking-[0.16em] text-zinc-600">{item.unit}</div>
+            <div key={item.label} className="bg-white p-5 sm:p-6">
+              <div className="text-[10px] font-bold tracking-wide text-zinc-400">{item.label}</div>
+              <div className="mt-3 text-3xl font-black tabular-nums tracking-tight text-zinc-950">{item.value}</div>
+              <div className="mt-1 text-[9px] font-bold tracking-[0.16em] text-zinc-400">{item.unit}</div>
             </div>
           ))}
         </div>
