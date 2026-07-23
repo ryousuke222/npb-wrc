@@ -134,14 +134,17 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
       </p>
 
       <section className="rounded-xl border border-zinc-200 bg-white p-4">
-        <SectionTitle title="今週の急上昇" note={comparisonLabel ?? "週次データを蓄積中"} />
+        <div className="mb-3 flex items-baseline justify-between gap-3">
+          <SectionTitle title="今日の注目" note={comparisonLabel ?? "比較データを蓄積中"} />
+          <Link href="/monthly" className="shrink-0 text-xs font-bold text-zinc-600 hover:text-zinc-950">月間ランキング →</Link>
+        </div>
         {weeklyMovement ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { label: "wRC+上昇", values: weeklyMovement.wrcPlus, format: (value: number) => `+${fmtWrcPlus(value)}` },
-              { label: "OPS上昇", values: weeklyMovement.ops, format: (value: number) => `+${value.toFixed(3).replace(/^0\./, ".")}` },
-              { label: "本塁打", values: weeklyMovement.hr, format: (value: number) => `+${value}本` },
-              { label: "打席増加", values: weeklyMovement.pa, format: (value: number) => `+${value}打席` },
+              { label: "wRC+急上昇", values: weeklyMovement.wrcPlus, format: (value: number) => `+${fmtWrcPlus(value)}` },
+              { label: "OPS急上昇", values: weeklyMovement.ops, format: (value: number) => `+${value.toFixed(3).replace(/^0\./, ".")}` },
+              { label: "本塁打を積み上げ", values: weeklyMovement.hr, format: (value: number) => `+${value}本` },
+              { label: "出場量", values: weeklyMovement.pa, format: (value: number) => `+${value}打席` },
             ].map((group) => (
               <div key={group.label}>
                 <h3 className="mb-1.5 text-xs font-bold text-zinc-500">{group.label}</h3>
@@ -164,7 +167,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
           </div>
         ) : (
           <p className="text-sm leading-relaxed text-zinc-500">
-            最初の比較用データを保存しました。次回以降の更新で、wRC+・本塁打・打席数の変化を表示します。
+            次回のデータ更新後、前回更新から伸びた打者を表示します。
           </p>
         )}
       </section>

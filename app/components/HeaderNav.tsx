@@ -7,6 +7,7 @@ import { useState } from "react";
 const NAV_ITEMS = [
   { href: "/", label: "年度別", matches: (pathname: string) => pathname === "/" || pathname.startsWith("/year/") },
   { href: "/latest", label: "最新", matches: (pathname: string) => pathname === "/latest" },
+  { href: "/monthly", label: "月間", matches: (pathname: string) => pathname === "/monthly" },
   { href: "/all-time", label: "歴代", matches: (pathname: string) => pathname === "/all-time" },
   { href: "/team-wrc", label: "チーム", matches: (pathname: string) => pathname === "/team-wrc" },
   { href: "/titles", label: "タイトル", matches: (pathname: string) => pathname === "/titles" },

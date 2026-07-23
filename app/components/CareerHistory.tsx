@@ -27,10 +27,37 @@ export default function CareerHistory({
   // 固定スケールを使う（そうしないと1シーズンの外れ値に他の全シーズンの棒グラフが
   // 潰されてしまう）。200はエリート級シーズン（wRC+160〜200前後）が満杯近くまで伸びる値。
   const CHART_MAX_WRC = 200;
+  const graphMin = 50;
+  const graphMax = Math.max(CHART_MAX_WRC, ...history.map((entry) => Math.ceil(entry.wrcPlus / 10) * 10));
+  const graphWidth = 600;
+  const graphHeight = 150;
+  const graphPadding = { left: 28, right: 12, top: 12, bottom: 24 };
+  const pointFor = (entry: BatterRanking, index: number) => {
+    const x = graphPadding.left + (history.length === 1 ? 0 : index / (history.length - 1)) * (graphWidth - graphPadding.left - graphPadding.right);
+    const clamped = Math.max(graphMin, Math.min(graphMax, entry.wrcPlus));
+    const y = graphPadding.top + (1 - (clamped - graphMin) / (graphMax - graphMin)) * (graphHeight - graphPadding.top - graphPadding.bottom);
+    return { x, y };
+  };
+  const graphPoints = history.map(pointFor);
 
   return (
     <div className="mt-6 rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8">
       <h2 className="text-sm font-bold text-zinc-500">年度別成績の推移</h2>
+      <div className="mt-4 rounded-xl bg-zinc-50 px-2 py-3 sm:px-4">
+        <div className="mb-1 flex items-center justify-between text-[11px] text-zinc-400"><span>wRC+</span><span>年度推移</span></div>
+        <svg viewBox={`0 0 ${graphWidth} ${graphHeight}`} role="img" aria-label="年度別wRC+推移" className="h-36 w-full overflow-visible">
+          {[100, 150, 200].filter((value) => value <= graphMax).map((value) => {
+            const y = graphPadding.top + (1 - (value - graphMin) / (graphMax - graphMin)) * (graphHeight - graphPadding.top - graphPadding.bottom);
+            return <g key={value}><line x1={graphPadding.left} x2={graphWidth - graphPadding.right} y1={y} y2={y} stroke="#e4e4e7" strokeDasharray="3 3" /><text x="0" y={y + 4} fill="#a1a1aa" fontSize="10">{value}</text></g>;
+          })}
+          <polyline points={graphPoints.map(({ x, y }) => `${x},${y}`).join(" ")} fill="none" stroke="#18181b" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+          {history.map((entry, index) => {
+            const point = graphPoints[index];
+            const color = teamColor(entry.teamId);
+            return <g key={`${entry.year}-${entry.teamId}-${entry.rank}`}><title>{`${entry.year}年 ${entry.teamName} wRC+ ${fmtWrcPlus(entry.wrcPlus)}`}</title><circle cx={point.x} cy={point.y} r="4" fill={color.bg} stroke="white" strokeWidth="2" /><text x={point.x} y={graphHeight - 5} textAnchor="middle" fill="#71717a" fontSize="10">{String(entry.year).slice(2)}</text></g>;
+          })}
+        </svg>
+      </div>
 
       {/* モバイル幅では列数の多いテーブルが横スクロール必須になるため、
           年度ごとのカード積み重ねに切り替える（PC幅はテーブル表示） */}

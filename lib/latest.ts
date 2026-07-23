@@ -61,8 +61,8 @@ async function getSnapshots(year: number): Promise<YearData[]> {
 }
 
 /**
- * 「今週伸びた」は、最新値から6日以上前の最も新しい保存値と比較する。
- * まだ比較できるスナップショットがない間は null を返し、推測値を表示しない。
+ * 直近の更新から伸びた打者を表示する。日次更新後すぐに「今日の注目」として使えるよう、
+ * 現在値より前の最も新しい保存値と比較する。
  */
 async function getWeeklyMovement(current: YearData): Promise<{
   movement: WeeklyMovement | null;
@@ -70,8 +70,7 @@ async function getWeeklyMovement(current: YearData): Promise<{
 }> {
   const snapshots = await getSnapshots(current.year);
   const currentTime = new Date(current.generatedAt).getTime();
-  const cutoff = currentTime - 6 * 24 * 60 * 60 * 1000;
-  const baseline = snapshots.filter((snapshot) => new Date(snapshot.generatedAt).getTime() <= cutoff).at(-1);
+  const baseline = snapshots.filter((snapshot) => new Date(snapshot.generatedAt).getTime() < currentTime).at(-1);
 
   if (!baseline) return { movement: null, label: null };
 
