@@ -11,8 +11,14 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
   const bestWrc = qualified.reduce((best, entry) => !best || entry.wrcPlus > best.wrcPlus ? entry : best, null as BatterRanking | null);
   const bestOps = qualified.reduce((best, entry) => !best || entry.ops > best.ops ? entry : best, null as BatterRanking | null);
   const maxHr = history.reduce((best, entry) => !best || entry.hr > best.hr ? entry : best, null as BatterRanking | null);
-  const maxRbi = history.reduce((best, entry) => !best || entry.rbi > best.rbi ? entry : best, null as BatterRanking | null);
-  const total = history.reduce((sum, entry) => ({ pa: sum.pa + entry.pa, hr: sum.hr + entry.hr, rbi: sum.rbi + entry.rbi, weightedWrc: sum.weightedWrc + entry.wrcPlus * entry.pa }), { pa: 0, hr: 0, rbi: 0, weightedWrc: 0 });
+  const bestAvg = qualified.reduce((best, entry) => !best || entry.avg > best.avg ? entry : best, null as BatterRanking | null);
+  const total = history.reduce((sum, entry) => ({
+    pa: sum.pa + entry.pa,
+    ab: sum.ab + entry.ab,
+    hits: sum.hits + entry.hits,
+    hr: sum.hr + entry.hr,
+    weightedWrc: sum.weightedWrc + entry.wrcPlus * entry.pa,
+  }), { pa: 0, ab: 0, hits: 0, hr: 0, weightedWrc: 0 });
   const firstYear = Math.min(...history.map((entry) => entry.year));
   const lastYear = Math.max(...history.map((entry) => entry.year));
   const careerYears = new Set(history.map((entry) => entry.year)).size;
@@ -23,7 +29,7 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
     { label: "最高wRC+", season: bestWrc, value: bestWrc ? fmtWrcPlus(bestWrc.wrcPlus) : "—" },
     { label: "最高OPS", season: bestOps, value: bestOps ? fmtRate(bestOps.ops) : "—" },
     { label: "最多本塁打", season: maxHr, value: maxHr ? `${maxHr.hr}本` : "—" },
-    { label: "最多打点", season: maxRbi, value: maxRbi ? `${maxRbi.rbi}打点` : "—" },
+    { label: "最高打率", season: bestAvg, value: bestAvg ? fmtRate(bestAvg.avg) : "—" },
   ];
   return <div className="mt-6 space-y-6">
     <section
@@ -93,7 +99,7 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
           {[
             { label: "通算打席", value: total.pa.toLocaleString("ja-JP"), unit: "PA" },
             { label: "通算本塁打", value: total.hr.toLocaleString("ja-JP"), unit: "HR" },
-            { label: "通算打点", value: total.rbi.toLocaleString("ja-JP"), unit: "RBI" },
+            { label: "通算打率", value: total.ab ? fmtRate(total.hits / total.ab) : "—", unit: "AVG" },
             { label: "規定打席到達", value: qualifiedYears, unit: "SEASONS" },
           ].map((item) => (
             <div key={item.label} className="bg-white p-5 sm:p-6">
