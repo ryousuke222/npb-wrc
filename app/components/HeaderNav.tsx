@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { href: "/team-best-nine", label: "ベスト9", matches: (pathname: string) => pathname === "/team-best-nine" },
   { href: "/search", label: "検索", matches: (pathname: string) => pathname === "/search" },
   { href: "/compare", label: "比較", matches: (pathname: string) => pathname === "/compare" },
+  { href: "/watchlist", label: "ウォッチ", matches: (pathname: string) => pathname === "/watchlist" },
   { href: "/about", label: "このサイト", matches: (pathname: string) => pathname === "/about" },
 ];
 
