@@ -14,6 +14,7 @@ const POSITIONS = [
   { key: "三塁手", label: "三塁手", slots: 1 },
   { key: "遊撃手", label: "遊撃手", slots: 1 },
   { key: "外野手", label: "外野手", slots: 3 },
+  { key: "DH", label: "DH", slots: 1 },
 ] as const;
 
 const POSITION_BADGE: Record<string, string> = {
@@ -23,6 +24,7 @@ const POSITION_BADGE: Record<string, string> = {
   三塁手: "三",
   遊撃手: "遊",
   外野手: "外",
+  DH: "DH",
 };
 
 function bestSeasonsForPosition(
@@ -33,7 +35,10 @@ function bestSeasonsForPosition(
   const bestByPlayer = new Map<string, BatterRanking>();
 
   for (const batter of batters) {
-    if (batter.position !== position || !batter.qualified) continue;
+    const matchesPosition = position === "DH"
+      ? batter.bestNinePosition === "DH"
+      : batter.position === position;
+    if (!matchesPosition || !batter.qualified) continue;
     const current = bestByPlayer.get(batter.name);
     if (!current || batter.wrcPlus > current.wrcPlus || (batter.wrcPlus === current.wrcPlus && batter.pa > current.pa)) {
       bestByPlayer.set(batter.name, batter);
@@ -134,7 +139,7 @@ export default function TeamBestNineView({ batters }: { batters: BatterRanking[]
       </div>
 
       <p className="mt-4 text-xs leading-relaxed text-zinc-400">
-        規定打席到達者のうち、その球団で守備位置に就いたシーズンの最高wRC+を採用しています。外野手は上位3人です。
+        規定打席到達者のうち、その球団で守備位置に就いたシーズンの最高wRC+を採用しています。外野手は上位3人、DHは公式ベストDH受賞シーズンから選出します。
       </p>
     </div>
   );

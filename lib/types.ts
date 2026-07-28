@@ -75,7 +75,7 @@ export interface BatterRanking extends BatterRow {
   position?: string;
   /**
    * その年度にベストナイン（NPB.jp公式の年間表彰、メディア投票制）を受賞した場合の
-   * 受賞ポジション（捕手/一塁手/二塁手/三塁手/遊撃手/外野手。投手部門は対象外）。
+   * 受賞ポジション（捕手/一塁手/二塁手/三塁手/遊撃手/外野手/DH。投手部門は対象外）。
    * 受賞ページが存在する2002年以降のみ、かつ未受賞の場合は未設定
    */
   bestNinePosition?: string;

@@ -8,7 +8,13 @@ export interface BestNineWinner {
   teamText: string;
 }
 
-const BATTING_POSITIONS = new Set(["捕手", "一塁手", "二塁手", "三塁手", "遊撃手", "外野手"]);
+const BATTING_POSITIONS = new Set(["捕手", "一塁手", "二塁手", "三塁手", "遊撃手", "外野手", "DH"]);
+
+function normalizePosition(rawPosition: string): string {
+  // パ・リーグの公式表記は年度によって「ベストDH」「ベストDH（指名打者）」となる。
+  if (rawPosition.startsWith("ベストDH")) return "DH";
+  return rawPosition;
+}
 
 /**
  * ベストナイン投票結果ページ（/award/{year}/voting_bt9.html）をパースする。
@@ -33,7 +39,7 @@ export function parseBestNine(html: string): BestNineWinner[] {
       if (cls.includes("teamflag_central")) currentLeague = "central";
       else if (cls.includes("teamflag_pacific")) currentLeague = "pacific";
     } else if (el.tagName === "th") {
-      if ($el.attr("colspan") === "4") currentPosition = $el.text().trim();
+      if ($el.attr("colspan") === "4") currentPosition = normalizePosition($el.text().trim());
     } else {
       const tds = $el.find("td");
       if (tds.length >= 3 && currentLeague && BATTING_POSITIONS.has(currentPosition)) {

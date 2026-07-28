@@ -73,7 +73,7 @@ const LEAGUES: { key: LeagueKey; label: string }[] = [
 const LIST_SIZE = 1;
 
 /** ベストナインの対象ポジション（投手部門は対象外） */
-const BEST_NINE_POSITIONS = ["捕手", "一塁手", "二塁手", "三塁手", "遊撃手", "外野手"];
+const BEST_NINE_POSITIONS = ["捕手", "一塁手", "二塁手", "三塁手", "遊撃手", "外野手", "DH"];
 
 /** ベストナインカードの丸バッジに表示する短縮ラベル */
 const POSITION_SHORT_LABEL: Record<string, string> = {
@@ -83,6 +83,7 @@ const POSITION_SHORT_LABEL: Record<string, string> = {
   三塁手: "三",
   遊撃手: "遊",
   外野手: "外",
+  DH: "DH",
 };
 
 export default function TitleRankingView({
