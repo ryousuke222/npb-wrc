@@ -15,6 +15,7 @@ const NAV_ITEMS = [
   { href: "/search", label: "検索", matches: (pathname: string) => pathname === "/search" },
   { href: "/compare", label: "比較", matches: (pathname: string) => pathname === "/compare" },
   { href: "/watchlist", label: "ウォッチ", matches: (pathname: string) => pathname === "/watchlist" },
+  { href: "/archetypes", label: "タイプ", matches: (pathname: string) => pathname === "/archetypes" },
   { href: "/about", label: "このサイト", matches: (pathname: string) => pathname === "/about" },
 ];
 
