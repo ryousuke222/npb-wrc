@@ -4,13 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const PRIMARY_NAV_ITEMS = [
-  { href: "/latest", label: "最新", matches: (pathname: string) => pathname === "/latest" },
-  { href: "/", label: "年度別", matches: (pathname: string) => pathname.startsWith("/year/") },
-  { href: "/all-time", label: "歴代", matches: (pathname: string) => pathname === "/all-time" },
-  { href: "/compare", label: "比較", matches: (pathname: string) => pathname === "/compare" },
-];
-
 const MORE_NAV_ITEMS = [
   { href: "/monthly", label: "月間", matches: (pathname: string) => pathname === "/monthly" },
   { href: "/team-wrc", label: "チーム", matches: (pathname: string) => pathname === "/team-wrc" },
@@ -27,15 +20,21 @@ function linkClass(active: boolean): string {
     : "text-zinc-600 hover:text-zinc-900";
 }
 
-export default function HeaderNav() {
+export default function HeaderNav({ latestYear }: { latestYear: number }) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const primaryNavItems = [
+    { href: "/latest", label: "最新", matches: (path: string) => path === "/latest" },
+    { href: `/year/${latestYear}`, label: "年度別", matches: (path: string) => path.startsWith("/year/") },
+    { href: "/all-time", label: "歴代", matches: (path: string) => path === "/all-time" },
+    { href: "/compare", label: "比較", matches: (path: string) => path === "/compare" },
+  ];
   const moreIsActive = MORE_NAV_ITEMS.some((item) => item.matches(pathname));
 
   return (
     <>
       <nav className="hidden items-center gap-3 text-sm md:flex" aria-label="メインメニュー">
-        {PRIMARY_NAV_ITEMS.map((item) => {
+        {primaryNavItems.map((item) => {
           const active = item.matches(pathname);
           return (
             <Link
@@ -83,7 +82,7 @@ export default function HeaderNav() {
             <div className="mx-auto max-w-5xl">
               <p className="px-3 pb-1 pt-1 text-[10px] font-bold tracking-wider text-zinc-400">メイン</p>
               <div className="grid grid-cols-2 gap-1">
-              {PRIMARY_NAV_ITEMS.map((item) => {
+              {primaryNavItems.map((item) => {
                 const active = item.matches(pathname);
                 return (
                   <Link

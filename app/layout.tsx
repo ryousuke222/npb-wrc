@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import HeaderNav from "./components/HeaderNav";
+import { getLatestYear } from "@/lib/data";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,11 +29,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const latestYear = await getLatestYear();
+
   return (
     <html
       lang="ja"
@@ -49,7 +52,7 @@ export default function RootLayout({
                 wRC+
               </span>
             </Link>
-            <HeaderNav />
+            <HeaderNav latestYear={latestYear} />
           </div>
         </header>
         <main className="flex-1">{children}</main>
