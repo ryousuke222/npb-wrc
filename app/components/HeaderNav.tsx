@@ -4,16 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const NAV_ITEMS = [
-  { href: "/", label: "年度別", matches: (pathname: string) => pathname === "/" || pathname.startsWith("/year/") },
+const PRIMARY_NAV_ITEMS = [
   { href: "/latest", label: "最新", matches: (pathname: string) => pathname === "/latest" },
-  { href: "/monthly", label: "月間", matches: (pathname: string) => pathname === "/monthly" },
+  { href: "/", label: "年度別", matches: (pathname: string) => pathname.startsWith("/year/") },
   { href: "/all-time", label: "歴代", matches: (pathname: string) => pathname === "/all-time" },
+  { href: "/compare", label: "比較", matches: (pathname: string) => pathname === "/compare" },
+];
+
+const MORE_NAV_ITEMS = [
+  { href: "/monthly", label: "月間", matches: (pathname: string) => pathname === "/monthly" },
   { href: "/team-wrc", label: "チーム", matches: (pathname: string) => pathname === "/team-wrc" },
   { href: "/titles", label: "タイトル", matches: (pathname: string) => pathname === "/titles" },
   { href: "/team-best-nine", label: "ベスト9", matches: (pathname: string) => pathname === "/team-best-nine" },
   { href: "/search", label: "検索", matches: (pathname: string) => pathname === "/search" },
-  { href: "/compare", label: "比較", matches: (pathname: string) => pathname === "/compare" },
   { href: "/watchlist", label: "ウォッチ", matches: (pathname: string) => pathname === "/watchlist" },
   { href: "/about", label: "このサイト", matches: (pathname: string) => pathname === "/about" },
 ];
@@ -27,11 +30,12 @@ function linkClass(active: boolean): string {
 export default function HeaderNav() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const moreIsActive = MORE_NAV_ITEMS.some((item) => item.matches(pathname));
 
   return (
     <>
-      <nav className="hidden items-center gap-3 text-sm sm:flex" aria-label="メインメニュー">
-        {NAV_ITEMS.map((item) => {
+      <nav className="hidden items-center gap-3 text-sm md:flex" aria-label="メインメニュー">
+        {PRIMARY_NAV_ITEMS.map((item) => {
           const active = item.matches(pathname);
           return (
             <Link
@@ -46,9 +50,21 @@ export default function HeaderNav() {
             </Link>
           );
         })}
+        <details className="relative">
+          <summary className={`cursor-pointer list-none border-b-2 py-1 transition-colors ${moreIsActive ? "border-zinc-900 font-bold text-zinc-950" : "border-transparent text-zinc-600 hover:text-zinc-900"}`}>
+            もっと <span className="text-[10px]">▼</span>
+          </summary>
+          <div className="absolute right-0 top-8 z-20 grid w-48 gap-1 rounded-xl border border-zinc-200 bg-white p-2 shadow-lg">
+            {MORE_NAV_ITEMS.map((item) => (
+              <Link key={item.href} href={item.href} className={`rounded-lg px-3 py-2 text-sm ${item.matches(pathname) ? "bg-zinc-100 font-bold text-zinc-950" : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900"}`}>
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </details>
       </nav>
 
-      <div className="sm:hidden">
+      <div className="md:hidden">
         <button
           type="button"
           onClick={() => setIsOpen((open) => !open)}
@@ -64,8 +80,10 @@ export default function HeaderNav() {
             aria-label="メインメニュー"
             className="absolute inset-x-0 top-full border-b border-zinc-200 bg-white px-4 py-3 shadow-lg"
           >
-            <div className="mx-auto grid max-w-5xl grid-cols-2 gap-1">
-              {NAV_ITEMS.map((item) => {
+            <div className="mx-auto max-w-5xl">
+              <p className="px-3 pb-1 pt-1 text-[10px] font-bold tracking-wider text-zinc-400">メイン</p>
+              <div className="grid grid-cols-2 gap-1">
+              {PRIMARY_NAV_ITEMS.map((item) => {
                 const active = item.matches(pathname);
                 return (
                   <Link
@@ -81,6 +99,26 @@ export default function HeaderNav() {
                   </Link>
                 );
               })}
+              </div>
+              <p className="px-3 pb-1 pt-4 text-[10px] font-bold tracking-wider text-zinc-400">もっと見る</p>
+              <div className="grid grid-cols-2 gap-1">
+              {MORE_NAV_ITEMS.map((item) => {
+                const active = item.matches(pathname);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    aria-current={active ? "page" : undefined}
+                    className={`rounded-md px-3 py-2.5 text-sm ${
+                      active ? "bg-zinc-100 font-bold text-zinc-950" : linkClass(false)
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+              </div>
             </div>
           </nav>
         )}

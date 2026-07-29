@@ -60,13 +60,20 @@ export default async function YearPage({
         actions={<YearNav years={years} currentYear={year} />}
       />
       {isLatestYear && (
-        <Link
-          href="/latest"
-          className="mb-4 flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm transition-colors hover:bg-zinc-50"
-        >
-          <span className="font-semibold text-zinc-800">チームwRC+・リーグ別・注目打者をまとめて見る</span>
-          <span className="font-bold text-zinc-400">→</span>
-        </Link>
+        <div className="mb-4 grid gap-2 sm:grid-cols-3">
+          <Link href="/latest" className="rounded-xl border border-amber-200 bg-amber-50/70 px-4 py-3 text-sm transition-colors hover:bg-amber-100/70">
+            <span className="block font-bold text-zinc-800">いまの勢力図を見る →</span>
+            <span className="mt-0.5 block text-xs text-zinc-500">チーム・リーグ・注目打者</span>
+          </Link>
+          <Link href="/monthly" className="rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm transition-colors hover:bg-zinc-50">
+            <span className="block font-bold text-zinc-800">今月の好調打者 →</span>
+            <span className="mt-0.5 block text-xs text-zinc-500">月間OPSランキング</span>
+          </Link>
+          <Link href="/compare" className="rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm transition-colors hover:bg-zinc-50">
+            <span className="block font-bold text-zinc-800">選手を比較する →</span>
+            <span className="mt-0.5 block text-xs text-zinc-500">2〜3選手を並べて確認</span>
+          </Link>
+        </div>
       )}
       <RankingView
         batters={data.batters}
