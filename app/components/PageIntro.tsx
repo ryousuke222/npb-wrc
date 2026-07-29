@@ -19,7 +19,7 @@ export default function PageIntro({
   actions,
 }: PageIntroProps) {
   return (
-    <div className="mb-5 border-b border-zinc-200 pb-5 sm:mb-6">
+    <div className="mb-5 border-b border-zinc-200 pb-5 sm:mb-6 lg:mb-8 lg:pb-6">
       {backHref && backLabel && (
         <Link
           href={backHref}
@@ -30,7 +30,7 @@ export default function PageIntro({
       )}
       <div className={`flex flex-wrap items-start justify-between gap-4 ${backHref ? "mt-2" : ""}`}>
         <div className="min-w-0">
-          <h1 className="text-2xl font-extrabold tracking-tight text-zinc-950 sm:text-3xl">
+          <h1 className="text-2xl font-extrabold tracking-tight text-zinc-950 sm:text-3xl lg:text-4xl">
             {title}
           </h1>
           {description && (

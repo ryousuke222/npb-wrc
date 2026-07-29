@@ -25,7 +25,7 @@ export default async function AllTimePage() {
   const newestYear = years[0];
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-8 lg:max-w-3xl">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:py-10">
       <PageIntro
         title="歴代最強打者ランキング"
         description={`${oldestYear}〜${newestYear}年。単年と通算wRC+を切り替えて見られます。`}

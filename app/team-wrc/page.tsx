@@ -13,7 +13,7 @@ export default async function TeamWrcPage() {
   const entries = await getAllTeamWrc();
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-8 lg:max-w-3xl">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:py-10">
       <PageIntro
         title="チームwRC+一覧"
         description="球団単位で合算した打線の得点創出力を、リーグ平均100として比較します。"

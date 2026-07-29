@@ -45,7 +45,7 @@ export default async function Home() {
   ];
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-10">
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10 lg:py-12">
       <section className="rounded-2xl border border-zinc-200 bg-white px-5 py-7 shadow-sm sm:px-8 sm:py-10">
         <p className="text-xs font-bold tracking-[0.18em] text-zinc-400">NPB BATTING DATABASE</p>
         <h1 className="mt-3 max-w-3xl text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-4xl">

@@ -123,9 +123,13 @@ export default function RankingView({
   };
 
   return (
-    <div>
-      <div className="mb-4 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
-        <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
+    <div className="lg:grid lg:grid-cols-[17rem_minmax(0,1fr)] lg:items-start lg:gap-6">
+      <div className="mb-4 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4 lg:sticky lg:top-20 lg:mb-0">
+        <div className="mb-3 hidden items-center justify-between border-b border-zinc-100 pb-3 lg:flex">
+          <h2 className="text-sm font-bold text-zinc-900">表示条件</h2>
+          <span className="text-[10px] text-zinc-400">ランキングを絞り込む</span>
+        </div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1">
           {!hideScopeFilter && (
             <div>
               <label className="mb-1 block text-[11px] font-medium text-zinc-400">
@@ -134,7 +138,7 @@ export default function RankingView({
               <select
                 value={scope}
                 onChange={(e) => setScope(e.target.value as Scope)}
-                className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+                className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium"
               >
                 <option value="all">総合</option>
                 <optgroup label="リーグ">
@@ -162,7 +166,7 @@ export default function RankingView({
             <select
               value={statKey}
               onChange={(e) => setStatKey(e.target.value as StatKey)}
-              className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+              className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium"
             >
               {STAT_OPTIONS.map((s) => (
                 <option key={s.key} value={s.key}>
@@ -185,7 +189,7 @@ export default function RankingView({
                 onChange={(e) => setMinPaInput(e.target.value)}
                 onBlur={commitMinPa}
                 onKeyDown={(e) => e.key === "Enter" && commitMinPa()}
-                className="w-20 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-right text-sm tabular-nums"
+                className="min-w-0 flex-1 rounded-md border border-zinc-300 bg-white px-2 py-2 text-right text-sm tabular-nums"
               />
               <span className="text-xs text-zinc-400">打席以上</span>
             </div>
@@ -202,12 +206,12 @@ export default function RankingView({
                     value={ageFilterInput}
                     onChange={(e) => setAgeFilterInput(e.target.value)}
                     placeholder="指定なし"
-                    className="w-20 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-right text-sm tabular-nums"
+                    className="min-w-0 flex-1 rounded-md border border-zinc-300 bg-white px-2 py-2 text-right text-sm tabular-nums"
                   />
                   <select
                     value={ageMode}
                     onChange={(e) => setAgeMode(e.target.value as AgeMode)}
-                    className="rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-sm font-medium"
+                    className="rounded-md border border-zinc-300 bg-white px-2 py-2 text-sm font-medium"
                   >
                     <option value="eq">のみ</option>
                     <option value="gte">以上</option>
@@ -221,7 +225,7 @@ export default function RankingView({
                 <select
                   value={batsFilter}
                   onChange={(e) => setBatsFilter(e.target.value)}
-                  className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+                  className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium"
                 >
                   <option value="">指定なし</option>
                   <option value="右">右打ち</option>
@@ -237,7 +241,7 @@ export default function RankingView({
                 <select
                   value={positionFilter}
                   onChange={(e) => setPositionFilter(e.target.value)}
-                  className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium"
+                  className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium"
                 >
                   <option value="">指定なし</option>
                   {positionsInScope.map((p) => (
@@ -251,12 +255,12 @@ export default function RankingView({
           )}
         </div>
 
-        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-zinc-100 pt-3">
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-zinc-100 pt-3 lg:flex-col lg:items-stretch">
           <button
             type="button"
             onClick={() => setShowAdvanced((show) => !show)}
             aria-expanded={showAdvanced}
-            className="rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-50"
+            className="rounded-full border border-zinc-200 bg-white px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-50"
           >
             {showAdvanced ? "詳細条件を閉じる" : "詳細条件"}
           </button>
@@ -264,14 +268,14 @@ export default function RankingView({
             <button
               type="button"
               onClick={resetFilters}
-              className="rounded-full px-2.5 py-1 text-xs font-medium text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
+              className="rounded-full px-2.5 py-1.5 text-xs font-medium text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
             >
               条件をリセット
             </button>
           )}
         </div>
 
-        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
           {presets.map((p) => (
             <button
               key={p}
@@ -289,16 +293,21 @@ export default function RankingView({
         </div>
       </div>
 
-      <p className="mb-3 text-xs text-zinc-400">{filtered.length}名を表示中</p>
+      <div className="min-w-0">
+        <div className="mb-3 flex items-baseline justify-between gap-3">
+          <p className="text-xs font-medium text-zinc-500">{filtered.length}名を表示中</p>
+          <p className="hidden text-[11px] text-zinc-400 lg:block">選手を押すと詳細データを表示</p>
+        </div>
 
-      <RankingList
-        batters={filtered}
-        backQuery={playerBackQuery}
-        valueLabel={stat.label}
-        getValue={stat.getValue}
-        formatValue={stat.formatValue}
-        {...(stat.flatColor ? { getValueColor: () => "text-zinc-900" } : {})}
-      />
+        <RankingList
+          batters={filtered}
+          backQuery={playerBackQuery}
+          valueLabel={stat.label}
+          getValue={stat.getValue}
+          formatValue={stat.formatValue}
+          {...(stat.flatColor ? { getValueColor: () => "text-zinc-900" } : {})}
+        />
+      </div>
     </div>
   );
 }

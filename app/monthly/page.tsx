@@ -18,7 +18,7 @@ export const metadata = { title: "月間ランキング | NPB最強打者ラン�
 
 export default async function MonthlyPage() {
   const monthly = await getCurrentMonthRanking();
-  return <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-8 lg:max-w-3xl"><PageIntro title={monthly ? `${monthly.year}年${monthly.month}月 月間ランキング` : "月間ランキング"} description="今月の打撃成績をOPSでランキング。月初からのデータがたまるほど、月間成績として精度が上がります。" meta={monthly ? `集計期間：${monthly.label}・${monthly.minPa}打席以上` : "月間比較データを蓄積中"} />
+  return <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:py-10"><PageIntro title={monthly ? `${monthly.year}年${monthly.month}月 月間ランキング` : "月間ランキング"} description="今月の打撃成績をOPSでランキング。月初からのデータがたまるほど、月間成績として精度が上がります。" meta={monthly ? `集計期間：${monthly.label}・${monthly.minPa}打席以上` : "月間比較データを蓄積中"} />
     {monthly ? <div className="grid gap-4 sm:grid-cols-2"><section className="rounded-xl border border-zinc-200 bg-white p-4"><div className="mb-3 flex items-baseline justify-between"><h2 className="text-base font-bold">セ・リーグ OPS</h2><span className="text-[11px] text-zinc-400">{monthly.month}月</span></div><Rows rows={monthly.central} /></section><section className="rounded-xl border border-zinc-200 bg-white p-4"><div className="mb-3 flex items-baseline justify-between"><h2 className="text-base font-bold">パ・リーグ OPS</h2><span className="text-[11px] text-zinc-400">{monthly.month}月</span></div><Rows rows={monthly.pacific} /></section></div> : <div className="rounded-xl border border-zinc-200 bg-white p-5 text-sm leading-relaxed text-zinc-500">月の最初と最新のデータがそろうと、月間ランキングを表示します。</div>}
   </div>;
 }

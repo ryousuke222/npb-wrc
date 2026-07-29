@@ -43,7 +43,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col overflow-x-hidden bg-zinc-50 text-zinc-900">
         <header className="border-b border-zinc-200 bg-white/80 backdrop-blur sticky top-0 z-10">
-          <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
             <Link href="/" className="flex min-w-0 items-baseline gap-1.5">
               <span className="truncate text-base font-bold tracking-tight sm:text-lg">
                 NPB最強打者ランキング
