@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { BatterRanking } from "@/lib/types";
 import type { BatterChange, LatestDashboardData, MvpCandidate } from "@/lib/latest";
+import type { TeamWrc } from "@/lib/wrc";
 import { teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus } from "@/lib/wrc";
 import XRankingImageButton from "./XRankingImageButton";
@@ -52,6 +53,32 @@ function PlayerRows({ players }: { players: BatterRanking[] }) {
                 <span className="block text-xl font-extrabold tabular-nums text-zinc-950 sm:text-2xl">
                   {fmtWrcPlus(player.wrcPlus)}
                 </span>
+                <span className="block text-[10px] font-medium text-zinc-400">wRC+</span>
+              </span>
+            </Link>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+function TeamRows({ year, teams }: { year: number; teams: TeamWrc[] }) {
+  return (
+    <ol className="space-y-2">
+      {teams.map((team, index) => {
+        const color = teamColor(team.teamId);
+        return (
+          <li key={team.teamId}>
+            <Link
+              href={`/year/${year}/team/${team.teamId}`}
+              style={{ borderLeftColor: color.bg, backgroundColor: withAlpha(color.bg, 0.06) }}
+              className="flex items-center gap-3 rounded-xl border border-l-[5px] border-zinc-200/80 px-3 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-sm"
+            >
+              <RankingNumber value={index + 1} />
+              <span className="min-w-0 flex-1 text-sm font-bold text-zinc-800">{team.teamName}</span>
+              <span className="text-right">
+                <span className="block text-xl font-extrabold tabular-nums text-zinc-950">{fmtWrcPlus(team.wrcPlus)}</span>
                 <span className="block text-[10px] font-medium text-zinc-400">wRC+</span>
               </span>
             </Link>
@@ -178,6 +205,8 @@ function FocusGroup({ label, values, format }: FocusGroupProps) {
 
 export default function LatestDashboard({ dashboard }: { dashboard: LatestDashboardData }) {
   const { year, teams, leagueLeaders, mvpCandidates, weeklyMovement, comparisonLabel } = dashboard;
+  const centralTeams = teams.filter((team) => team.league === "central");
+  const pacificTeams = teams.filter((team) => team.league === "pacific");
 
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
@@ -192,30 +221,19 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
 
       <section className="order-3 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <SectionTitle title={`${year}年 チームwRC+ランキング`} note="打線全体・全12球団" />
+          <SectionTitle title={`${year}年 チームwRC+ランキング`} note="リーグ内順位・全12球団" />
           <XRankingImageButton year={year} teams={teams} />
         </div>
-        <ol className="grid gap-2 sm:grid-cols-2">
-          {teams.map((team, index) => {
-            const color = teamColor(team.teamId);
-            return (
-              <li key={team.teamId}>
-                <Link
-                  href={`/year/${year}/team/${team.teamId}`}
-                  style={{ borderLeftColor: color.bg, backgroundColor: withAlpha(color.bg, 0.06) }}
-                  className="flex items-center gap-3 rounded-xl border border-l-[5px] border-zinc-200/80 px-3 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-sm"
-                >
-                  <RankingNumber value={index + 1} />
-                  <span className="min-w-0 flex-1 text-sm font-bold text-zinc-800">{team.teamName}</span>
-                  <span className="text-right">
-                    <span className="block text-xl font-extrabold tabular-nums text-zinc-950">{fmtWrcPlus(team.wrcPlus)}</span>
-                    <span className="block text-[10px] font-medium text-zinc-400">wRC+</span>
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ol>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div>
+            <SectionTitle title="セ・リーグ" note="全6球団" />
+            <TeamRows year={year} teams={centralTeams} />
+          </div>
+          <div>
+            <SectionTitle title="パ・リーグ" note="全6球団" />
+            <TeamRows year={year} teams={pacificTeams} />
+          </div>
+        </div>
       </section>
 
       <section className="order-4 grid gap-4 lg:grid-cols-2">
