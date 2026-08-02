@@ -225,6 +225,20 @@ export default async function PlayerPage({
           </p>
         )}
 
+        <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {[
+            { label: "打率", value: fmtRate(batter.avg) },
+            { label: "OPS", value: batter.ops.toFixed(3) },
+            { label: "本塁打", value: `${batter.hr}本` },
+            { label: "打席", value: `${batter.pa}` },
+          ].map((stat) => (
+            <div key={stat.label} className="rounded-xl bg-zinc-50 px-3 py-2.5 text-center">
+              <div className="text-lg font-extrabold tabular-nums text-zinc-900 sm:text-xl">{stat.value}</div>
+              <div className="mt-0.5 text-[10px] font-medium text-zinc-400">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
         {/* スラッシュライン＋OPS（リーグ平均位置を目盛り上の縦線で示すバー付き） */}
         <div className="mt-5 rounded-xl bg-zinc-50 px-4 py-4">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">

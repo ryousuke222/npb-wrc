@@ -106,8 +106,8 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
   const { year, teams, leagueLeaders, mvpCandidates, weeklyMovement, comparisonLabel } = dashboard;
 
   return (
-    <div className="space-y-5 sm:space-y-6">
-      <div className="flex justify-end">
+    <div className="flex flex-col gap-5 sm:gap-6">
+      <div className="order-1 flex justify-end">
         <Link
           href={`/year/${year}`}
           className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-bold text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-950"
@@ -116,7 +116,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
         </Link>
       </div>
 
-      <section className="rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
+      <section className="order-3 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <SectionTitle title={`${year}年 チームwRC+ランキング`} note="打線全体・全12球団" />
           <XRankingImageButton year={year} teams={teams} />
@@ -144,7 +144,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
         </ol>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-2">
+      <section className="order-4 grid gap-4 lg:grid-cols-2">
         <div className="rounded-xl border border-zinc-200 bg-white p-4">
           <SectionTitle title="セ・リーグ 打者TOP10" note="規定打席・wRC+" />
           <PlayerRows players={leagueLeaders.central} />
@@ -155,7 +155,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
         </div>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-2">
+      <section className="order-5 grid gap-4 lg:grid-cols-2">
         <div className="rounded-xl border border-zinc-200 bg-white p-4">
           <SectionTitle title="打撃MVP候補 セ" note="総合スコア" />
           <MvpRows candidates={mvpCandidates.central.slice(0, 5)} />
@@ -166,9 +166,9 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
         </div>
       </section>
 
-      <p className="-mt-2 text-xs leading-relaxed text-zinc-500">打撃MVP候補は規定打席到達者を対象に、リーグ首位を基準として wRC+ 65%・打点 12.5%・本塁打 12.5%・打率 10% で算出。守備・走塁・チーム成績は含みません。</p>
+      <p className="order-6 text-xs leading-relaxed text-zinc-500">打撃MVP候補は規定打席到達者を対象に、リーグ首位を基準として wRC+ 65%・打点 12.5%・本塁打 12.5%・打率 10% で算出。守備・走塁・チーム成績は含みません。</p>
 
-      <section className="rounded-xl border border-zinc-200 bg-white p-4">
+      <section className="order-2 rounded-xl border border-zinc-200 bg-white p-4">
         <div className="mb-3 flex items-baseline justify-between gap-3">
           <SectionTitle title="今日の注目" note={comparisonLabel ?? "比較データを蓄積中"} />
           <Link href="/monthly" className="shrink-0 text-xs font-bold text-zinc-600 hover:text-zinc-950">月間ランキング →</Link>

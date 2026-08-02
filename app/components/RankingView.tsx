@@ -52,6 +52,7 @@ export default function RankingView({
   const [batsFilter, setBatsFilter] = useState("");
   const [positionFilter, setPositionFilter] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const ageFilter = ageFilterInput === "" ? null : Number(ageFilterInput);
   const hasCustomFilters =
     scope !== initialScope ||
@@ -133,7 +134,19 @@ export default function RankingView({
 
   return (
     <div className="lg:grid lg:grid-cols-[17rem_minmax(0,1fr)] lg:items-start lg:gap-6">
-      <div className="mb-4 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4 lg:sticky lg:top-20 lg:mb-0">
+      <div className="mb-4 lg:sticky lg:top-20 lg:mb-0">
+        <button
+          type="button"
+          onClick={() => setShowMobileFilters((show) => !show)}
+          aria-expanded={showMobileFilters}
+          className="flex w-full items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-bold text-zinc-700 lg:hidden"
+        >
+          <span>絞り込み・並び替え</span>
+          <span className="text-xs font-medium text-zinc-400">
+            {hasCustomFilters ? "条件を変更中" : showMobileFilters ? "閉じる" : "開く"}
+          </span>
+        </button>
+        <div className={`${showMobileFilters ? "mt-2 block" : "hidden"} rounded-xl border border-zinc-200 bg-white p-3 sm:p-4 lg:mt-0 lg:block`}>
         <div className="mb-3 hidden items-center justify-between border-b border-zinc-100 pb-3 lg:flex">
           <h2 className="text-sm font-bold text-zinc-900">表示条件</h2>
           <span className="text-[10px] text-zinc-400">ランキングを絞り込む</span>
@@ -313,6 +326,7 @@ export default function RankingView({
               {p === regulationPaThreshold ? `規定打席(${p})` : p === 0 ? "全打者" : p}
             </button>
           ))}
+        </div>
         </div>
       </div>
 
