@@ -425,6 +425,7 @@ async function buildYear(year: number): Promise<YearData | null> {
   };
   const allBatters: Omit<BatterRanking, "rank" | "leagueRank">[] = [];
   const parkFactors: Record<string, TeamParkFactorInfo> = {};
+  const teamGames: Partial<Record<TeamId, number>> = {};
   const regThresholds: number[] = [];
   let anyData = false;
 
@@ -475,6 +476,7 @@ async function buildYear(year: number): Promise<YearData | null> {
     }[] = [];
 
     for (const team of teamRows) {
+      teamGames[team.teamId] = team.games;
       const regThreshold = Math.round(team.games * 3.1);
       if (team.games > 0) regThresholds.push(regThreshold);
 
@@ -584,6 +586,7 @@ async function buildYear(year: number): Promise<YearData | null> {
     seasonComplete,
     leagueContext,
     parkFactors,
+    teamGames,
     regulationPaThreshold,
     batters,
   };

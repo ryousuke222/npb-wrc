@@ -105,6 +105,8 @@ export interface YearData {
   seasonComplete: boolean;
   leagueContext: Record<LeagueKey, LeagueContext>;
   parkFactors: Record<string, TeamParkFactorInfo>;
+  /** 球団ごとの消化試合数。月間ランキングの規定打席を算出するために使う。 */
+  teamGames?: Partial<Record<TeamId, number>>;
   /** UIの打席数フィルターの初期値として使う目安値（その年度の規定打席の代表値） */
   regulationPaThreshold: number;
   batters: BatterRanking[];

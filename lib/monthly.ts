@@ -2,10 +2,13 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { getLatestYear, getYearData } from "./data";
 import type { BatterRanking, YearData } from "./types";
+import type { TeamId } from "./teams";
 
 export type MonthlyBatter = {
   batter: BatterRanking;
   pa: number;
+  teamGames: number;
+  requiredPa: number;
   avg: number;
   ops: number;
   hr: number;
@@ -16,7 +19,6 @@ export type CurrentMonthRanking = {
   year: number;
   month: number;
   label: string;
-  minPa: number;
   central: MonthlyBatter[];
   pacific: MonthlyBatter[];
 } | null;
@@ -27,6 +29,22 @@ function key(batter: BatterRanking) {
 
 function monthLabel(date: string) {
   return new Intl.DateTimeFormat("ja-JP", { timeZone: "Asia/Tokyo", month: "numeric", day: "numeric" }).format(new Date(date));
+}
+
+function teamGamesById(data: YearData): Map<TeamId, number> {
+  if (data.teamGames && Object.keys(data.teamGames).length > 0) {
+    return new Map(
+      Object.entries(data.teamGames).map(([teamId, games]) => [teamId as TeamId, games ?? 0])
+    );
+  }
+
+  // 過去のスナップショットには球団の消化試合数がないため、各球団で最も多く
+  // 出場した打者の試合数を代用する。新しいスナップショットでは上の値を優先する。
+  const result = new Map<TeamId, number>();
+  for (const batter of data.batters) {
+    result.set(batter.teamId, Math.max(result.get(batter.teamId) ?? 0, batter.games));
+  }
+  return result;
 }
 
 export async function getCurrentMonthRanking(): Promise<CurrentMonthRanking> {
@@ -50,10 +68,8 @@ export async function getCurrentMonthRanking(): Promise<CurrentMonthRanking> {
     .sort((a, b) => new Date(a.generatedAt).getTime() - new Date(b.generatedAt).getTime())[0];
   if (!baseline || new Date(baseline.generatedAt).getTime() >= new Date(current.generatedAt).getTime()) return null;
 
-  // 月初からまだ日が浅い、またはリーグ間で試合数に差がある期間でも空のランキングに
-  // ならないよう、経過日数に応じて最低打席数を10〜20打席の範囲で調整する。
-  const elapsedDays = Math.max(1, Math.ceil((new Date(current.generatedAt).getTime() - new Date(baseline.generatedAt).getTime()) / 86_400_000));
-  const minPa = Math.min(20, Math.max(10, elapsedDays * 3));
+  const currentTeamGames = teamGamesById(current);
+  const baselineTeamGames = teamGamesById(baseline);
 
   const old = new Map(baseline.batters.map((batter) => [key(batter), batter]));
   const rows = current.batters.flatMap((batter) => {
@@ -66,15 +82,20 @@ export async function getCurrentMonthRanking(): Promise<CurrentMonthRanking> {
     const hbp = batter.hbp - before.hbp;
     const sf = batter.sf - before.sf;
     const totalBases = batter.totalBases - before.totalBases;
-    if (pa < minPa || ab <= 0) return [];
+    const teamGames = Math.max(
+      0,
+      (currentTeamGames.get(batter.teamId) ?? 0) - (baselineTeamGames.get(batter.teamId) ?? 0)
+    );
+    const requiredPa = Math.ceil(teamGames * 3.1);
+    if (teamGames === 0 || pa < requiredPa || ab <= 0) return [];
     const avg = hits / ab;
     const obpDenom = ab + bb + hbp + sf;
     const obp = obpDenom > 0 ? (hits + bb + hbp) / obpDenom : 0;
-    return [{ batter, pa, avg, ops: obp + totalBases / ab, hr: batter.hr - before.hr, rbi: batter.rbi - before.rbi }];
+    return [{ batter, pa, teamGames, requiredPa, avg, ops: obp + totalBases / ab, hr: batter.hr - before.hr, rbi: batter.rbi - before.rbi }];
   });
   const rank = (league: "central" | "pacific") => rows
     .filter((row) => row.batter.league === league)
     .sort((a, b) => b.ops - a.ops || b.pa - a.pa)
     .slice(0, 10);
-  return { year, month, label: `${monthLabel(baseline.generatedAt)} → ${monthLabel(current.generatedAt)}`, minPa, central: rank("central"), pacific: rank("pacific") };
+  return { year, month, label: `${monthLabel(baseline.generatedAt)} → ${monthLabel(current.generatedAt)}`, central: rank("central"), pacific: rank("pacific") };
 }
