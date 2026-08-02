@@ -88,7 +88,9 @@ async function getWeeklyMovement(current: YearData): Promise<{
   const topChanges = (getDifference: (entry: { batter: BatterRanking; old: BatterRanking }) => number) =>
     changes
       .map((entry) => ({ batter: entry.batter, difference: getDifference(entry) }))
-      .filter((entry) => Number.isFinite(entry.difference))
+      // 試合前やデータ更新だけで成績が変わっていないときに「+0」を
+      // 急上昇として出さない。動きがない日はダッシュボード側で更新待ちを案内する。
+      .filter((entry) => Number.isFinite(entry.difference) && entry.difference > 0)
       .sort((a, b) => b.difference - a.difference)
       .slice(0, 10);
 

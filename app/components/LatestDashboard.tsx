@@ -207,6 +207,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
   const { year, teams, leagueLeaders, mvpCandidates, weeklyMovement, comparisonLabel } = dashboard;
   const centralTeams = teams.filter((team) => team.league === "central");
   const pacificTeams = teams.filter((team) => team.league === "pacific");
+  const hasMovement = weeklyMovement !== null && Object.values(weeklyMovement).some((values) => values.length > 0);
 
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
@@ -275,7 +276,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
             <Link href="/monthly" className="shrink-0 text-xs font-bold text-zinc-600 hover:text-zinc-950">月間ランキング →</Link>
           </div>
         </div>
-        {weeklyMovement ? (
+        {weeklyMovement && hasMovement ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {([
               { label: "wRC+急上昇", values: weeklyMovement.wrcPlus, format: (value: number) => `+${fmtWrcPlus(value)}` },
@@ -288,7 +289,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
           </div>
         ) : (
           <p className="text-sm leading-relaxed text-zinc-500">
-            次回のデータ更新後、前回更新から伸びた打者を表示します。
+            当日の試合終了後に成績が更新されると、前回更新から伸びた打者を表示します。
           </p>
         )}
       </section>

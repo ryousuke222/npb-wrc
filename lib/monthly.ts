@@ -23,12 +23,28 @@ export type CurrentMonthRanking = {
   pacific: MonthlyBatter[];
 } | null;
 
+type MonthlyRanking = Exclude<CurrentMonthRanking, null>;
+
 function key(batter: BatterRanking) {
   return `${batter.nameKey ?? batter.name}|${batter.teamId}`;
 }
 
 function monthLabel(date: string) {
   return new Intl.DateTimeFormat("ja-JP", { timeZone: "Asia/Tokyo", month: "numeric", day: "numeric" }).format(new Date(date));
+}
+
+function monthKey(date: string) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+  }).format(new Date(date));
+}
+
+function monthNumber(date: string) {
+  return Number(
+    new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tokyo", month: "2-digit" }).format(new Date(date))
+  );
 }
 
 function teamGamesById(data: YearData): Map<TeamId, number> {
@@ -61,18 +77,13 @@ export async function getCurrentMonthRanking(): Promise<CurrentMonthRanking> {
   } catch {
     return null;
   }
-  const currentMonth = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tokyo", month: "2-digit" }).format(new Date(current.generatedAt));
-  const month = Number(currentMonth);
-  const baseline = snapshots
-    .filter((snapshot) => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tokyo", month: "2-digit" }).format(new Date(snapshot.generatedAt)) === currentMonth)
-    .sort((a, b) => new Date(a.generatedAt).getTime() - new Date(b.generatedAt).getTime())[0];
-  if (!baseline || new Date(baseline.generatedAt).getTime() >= new Date(current.generatedAt).getTime()) return null;
+  const orderedSnapshots = snapshots.sort((a, b) => new Date(a.generatedAt).getTime() - new Date(b.generatedAt).getTime());
 
-  const currentTeamGames = teamGamesById(current);
-  const baselineTeamGames = teamGamesById(baseline);
-
-  const old = new Map(baseline.batters.map((batter) => [key(batter), batter]));
-  const rows = current.batters.flatMap((batter) => {
+  function rankPeriod(baseline: YearData, end: YearData): MonthlyRanking {
+    const currentTeamGames = teamGamesById(end);
+    const baselineTeamGames = teamGamesById(baseline);
+    const old = new Map(baseline.batters.map((batter) => [key(batter), batter]));
+    const rows = end.batters.flatMap((batter) => {
     const before = old.get(key(batter));
     if (!before) return [];
     const pa = batter.pa - before.pa;
@@ -93,9 +104,32 @@ export async function getCurrentMonthRanking(): Promise<CurrentMonthRanking> {
     const obp = obpDenom > 0 ? (hits + bb + hbp) / obpDenom : 0;
     return [{ batter, pa, teamGames, requiredPa, avg, ops: obp + totalBases / ab, hr: batter.hr - before.hr, rbi: batter.rbi - before.rbi }];
   });
-  const rank = (league: "central" | "pacific") => rows
-    .filter((row) => row.batter.league === league)
-    .sort((a, b) => b.ops - a.ops || b.pa - a.pa)
-    .slice(0, 10);
-  return { year, month, label: `${monthLabel(baseline.generatedAt)} → ${monthLabel(current.generatedAt)}`, central: rank("central"), pacific: rank("pacific") };
+    const rank = (league: "central" | "pacific") => rows
+      .filter((row) => row.batter.league === league)
+      .sort((a, b) => b.ops - a.ops || b.pa - a.pa)
+      .slice(0, 10);
+    return {
+      year,
+      month: monthNumber(end.generatedAt),
+      label: `${monthLabel(baseline.generatedAt)} → ${monthLabel(end.generatedAt)}`,
+      central: rank("central"),
+      pacific: rank("pacific"),
+    };
+  }
+
+  const currentKey = monthKey(current.generatedAt);
+  const currentMonthSnapshots = orderedSnapshots.filter((snapshot) => monthKey(snapshot.generatedAt) === currentKey);
+  const currentBaseline = currentMonthSnapshots[0];
+  if (currentBaseline && new Date(currentBaseline.generatedAt).getTime() < new Date(current.generatedAt).getTime()) {
+    const currentRanking = rankPeriod(currentBaseline, current);
+    // 月初はまだ規定打席に届かず空になる。空の今月ではなく、直近で成立した月を出す。
+    if (currentRanking.central.length > 0 || currentRanking.pacific.length > 0) return currentRanking;
+  }
+
+  const previousSnapshots = orderedSnapshots.filter((snapshot) => monthKey(snapshot.generatedAt) !== currentKey);
+  if (previousSnapshots.length < 2) return null;
+  const latestPreviousKey = monthKey(previousSnapshots.at(-1)!.generatedAt);
+  const targetMonthSnapshots = previousSnapshots.filter((snapshot) => monthKey(snapshot.generatedAt) === latestPreviousKey);
+  if (targetMonthSnapshots.length < 2) return null;
+  return rankPeriod(targetMonthSnapshots[0], targetMonthSnapshots.at(-1)!);
 }
