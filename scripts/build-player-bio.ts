@@ -69,8 +69,29 @@ function stripInitial(name: string): string {
 }
 
 function normalizeForMatch(name: string): string {
-  if (name.includes("　")) return name;
-  return stripInitial(name);
+  // 名簿の改名欄は「矢野輝弘」のように姓名の空白を省略するため、
+  // 表示用の全角スペースや全角英数を照合キーには含めない。
+  return stripInitial(name).normalize("NFKC").replace(/[\s　]/g, "");
+}
+
+/**
+ * NPB名簿には現行の登録名とともに「［改名］」の履歴が載っている。
+ * 年齢・投打の補完でも旧登録名を同じ選手IDへ解決しないと、改名前の年度だけ
+ * プロフィール情報が欠けてしまうため、全ての登録名を照合キーにする。
+ */
+function namesForRegistryEntry(entry: RegistryEntry): string[] {
+  const names = new Set([entry.name]);
+  const renamed = entry.yearsText.split("［改名］")[1];
+  if (!renamed) return [...names];
+
+  for (const part of renamed.split(",")) {
+    const name = part
+      .trim()
+      .replace(/^(?:\d{2}(?:[～~]\d{2})?|[～~]\d{2})[^\p{Script=Han}々ヶァ-ヶＡ-ＺA-Z]*/u, "")
+      .trim();
+    if (name) names.add(name);
+  }
+  return [...names];
 }
 
 interface Bio {
@@ -159,10 +180,12 @@ async function main() {
   console.log("[2/4] 年度・球団別の解決テーブルを構築中...");
   const byMatchKey = new Map<string, RegistryEntry[]>();
   for (const e of allEntries) {
-    const key = normalizeForMatch(e.name);
-    const list = byMatchKey.get(key) ?? [];
-    list.push(e);
-    byMatchKey.set(key, list);
+    for (const name of namesForRegistryEntry(e)) {
+      const key = normalizeForMatch(name);
+      const list = byMatchKey.get(key) ?? [];
+      list.push(e);
+      byMatchKey.set(key, list);
+    }
   }
 
   const resolutionByMatchKey = new Map<string, Map<string, string>>();
