@@ -61,8 +61,8 @@ async function getSnapshots(year: number): Promise<YearData[]> {
 }
 
 /**
- * およそ1週間前の保存値と比較して、直近の伸びを表示する。
- * 日次更新との差では打席数が少なすぎるため、OPSなどの率系指標も意味のある比較になる。
+ * 直近の更新から伸びた打者を表示する。日次更新後すぐに「今日の注目」として使えるよう、
+ * 現在値より前の最も新しい保存値と比較する。
  */
 async function getWeeklyMovement(current: YearData): Promise<{
   movement: WeeklyMovement | null;
@@ -70,11 +70,8 @@ async function getWeeklyMovement(current: YearData): Promise<{
 }> {
   const snapshots = await getSnapshots(current.year);
   const currentTime = new Date(current.generatedAt).getTime();
-  const weekAgo = currentTime - 7 * 24 * 60 * 60 * 1000;
   const earlierSnapshots = snapshots.filter((snapshot) => new Date(snapshot.generatedAt).getTime() < currentTime);
-  // 1週間以上前のうち最も新しい保存値を優先し、まだ蓄積が少ない場合だけ最初の保存値を使う。
-  const baseline = earlierSnapshots.filter((snapshot) => new Date(snapshot.generatedAt).getTime() <= weekAgo).at(-1)
-    ?? earlierSnapshots[0];
+  const baseline = earlierSnapshots.at(-1);
 
   if (!baseline) return { movement: null, label: null };
 
@@ -110,8 +107,8 @@ async function getWeeklyMovement(current: YearData): Promise<{
       wrcPlus: topChanges(({ batter, old }) => batter.wrcPlus - old.wrcPlus),
       hr: topChanges(({ batter, old }) => batter.hr - old.hr),
       pa: topChanges(({ batter, old }) => batter.pa - old.pa),
-      // 10打席以上増えた選手だけを対象にし、小サンプルの極端な変化を避ける。
-      ops: topChanges(({ batter, old }) => (batter.pa - old.pa >= 10 ? batter.ops - old.ops : -Infinity)),
+      // 4打席以上増えた選手だけを対象にし、1打席だけの極端な変化を避ける。
+      ops: topChanges(({ batter, old }) => (batter.pa - old.pa >= 4 ? batter.ops - old.ops : -Infinity)),
     },
     label: `${from} → ${to}`,
   };
