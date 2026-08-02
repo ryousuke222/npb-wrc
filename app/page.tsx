@@ -1,99 +1,108 @@
 import Link from "next/link";
 import { getLatestYear } from "@/lib/data";
 
+const MORE_PATHS = [
+  { href: "/compare", label: "選手比較", detail: "2〜3選手を並べて見る" },
+  { href: "/all-time", label: "歴代ランキング", detail: "最高の単年・通算成績" },
+  { href: "/monthly", label: "月間ランキング", detail: "直近で成立した月の好調打者" },
+  { href: "/team-wrc", label: "チームwRC+", detail: "打線全体の得点創出力" },
+  { href: "/titles", label: "打撃タイトル", detail: "年度別の受賞者" },
+  { href: "/team-best-nine", label: "球団別ベスト9", detail: "歴代のベストオーダー" },
+];
+
 export default async function Home() {
   const latestYear = await getLatestYear();
 
-  const primaryPaths = [
-    {
-      href: "/latest",
-      eyebrow: "NOW",
-      title: "いまの打撃勢力図を見る",
-      body: "チームwRC+、セ・パ打者TOP、MVP候補を一度に確認。",
-      accent: "border-amber-300 bg-amber-50/70",
-    },
-    {
-      href: `/year/${latestYear}`,
-      eyebrow: `${latestYear} SEASON`,
-      title: "年度別ランキングを掘る",
-      body: "リーグ、球団、打席数、指標を指定して全打者を比べる。",
-      accent: "border-sky-300 bg-sky-50/70",
-    },
-    {
-      href: "/all-time",
-      eyebrow: "ALL TIME",
-      title: "歴代の名シーズンを見る",
-      body: "単年と通算のwRC+で、時代を横断して比較。",
-      accent: "border-violet-300 bg-violet-50/70",
-    },
-    {
-      href: "/compare",
-      eyebrow: "COMPARE",
-      title: "選手を並べて比べる",
-      body: "2〜3選手のシーズン成績を同じ画面で比較。",
-      accent: "border-emerald-300 bg-emerald-50/70",
-    },
-  ];
-
-  const morePaths = [
-    { href: "/monthly", label: "月間ランキング", detail: "今月の好調打者" },
-    { href: "/titles", label: "打撃タイトル", detail: "各年度の受賞者" },
-    { href: "/team-wrc", label: "チーム比較", detail: "打線全体を比較" },
-    { href: "/team-best-nine", label: "球団別ベスト9", detail: "歴代ベストオーダー" },
-    { href: "/search", label: "選手検索", detail: "名前から探す" },
-  ];
-
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10 lg:py-12">
-      <section className="rounded-2xl border border-zinc-200 bg-white px-5 py-7 shadow-sm sm:px-8 sm:py-10">
+    <div className="mx-auto max-w-5xl px-4 py-7 sm:px-6 sm:py-10 lg:py-14">
+      <section className="border-b border-zinc-200 pb-8 sm:pb-10">
         <p className="text-xs font-bold tracking-[0.18em] text-zinc-400">NPB BATTING DATABASE</p>
-        <h1 className="mt-3 max-w-3xl text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-4xl">
-          NPBの打撃を、いま・年度・歴代で比べる。
+        <h1 className="mt-3 max-w-3xl text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-4xl lg:text-5xl">
+          NPBの打撃を、
+          <br className="hidden sm:block" />
+          分かりやすく比べる。
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-600 sm:text-base">
-          wRC+を軸に、打者の得点創出力を見やすく整理したデータベースです。まずは最新ランキングからどうぞ。
+        <p className="mt-4 max-w-xl text-sm leading-7 text-zinc-600 sm:text-base">
+          wRC+を軸に、いまの勢力図から歴代の名シーズンまで。見たい切り口からすぐにたどれます。
         </p>
-        <div className="mt-5 flex flex-wrap gap-2">
-          <Link href="/latest" className="rounded-lg bg-zinc-950 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-zinc-700">
-            最新ランキングを見る →
-          </Link>
-          <Link href={`/year/${latestYear}`} className="rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-bold text-zinc-700 transition-colors hover:bg-zinc-50">
-            {latestYear}年の全打者ランキング
-          </Link>
-        </div>
       </section>
 
-      <section className="mt-8">
+      <section className="mt-7 sm:mt-9">
         <div className="mb-3 flex items-baseline justify-between gap-3">
-          <h2 className="text-lg font-extrabold tracking-tight text-zinc-950">目的から選ぶ</h2>
-          <span className="text-xs text-zinc-400">よく使う4つの入口</span>
+          <h2 className="text-lg font-extrabold tracking-tight text-zinc-950">まず見るなら</h2>
+          <span className="text-xs text-zinc-400">よく使う入口</span>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {primaryPaths.map((item) => (
-            <Link key={item.href} href={item.href} className={`group rounded-xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md ${item.accent}`}>
-              <p className="text-[10px] font-extrabold tracking-[0.16em] text-zinc-400">{item.eyebrow}</p>
-              <div className="mt-2 flex items-start justify-between gap-3">
-                <div>
-                  <h3 className="font-bold text-zinc-900">{item.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-zinc-600">{item.body}</p>
-                </div>
-                <span className="pt-0.5 text-lg text-zinc-400 transition-transform group-hover:translate-x-0.5">→</span>
+        <div className="grid gap-3 md:grid-cols-2">
+          <Link
+            href="/latest"
+            className="group rounded-2xl border border-zinc-900 bg-zinc-900 p-5 text-white transition hover:-translate-y-0.5 hover:bg-zinc-800 hover:shadow-lg sm:p-6"
+          >
+            <p className="text-xs font-bold tracking-wider text-zinc-400">NOW</p>
+            <div className="mt-7 flex items-end justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-extrabold tracking-tight">最新ランキング</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-zinc-300">チームwRC+、セ・パ打者TOP、今日の注目をまとめて見る。</p>
               </div>
-            </Link>
-          ))}
+              <span className="mb-0.5 text-2xl transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </Link>
+          <Link
+            href={`/year/${latestYear}`}
+            className="group rounded-2xl border border-sky-200 bg-sky-50 p-5 transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-lg sm:p-6"
+          >
+            <p className="text-xs font-bold tracking-wider text-sky-600">{latestYear} SEASON</p>
+            <div className="mt-7 flex items-end justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-extrabold tracking-tight text-zinc-900">年度別ランキング</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-zinc-600">球団・リーグ・打席数・指標で、全打者を絞り込む。</p>
+              </div>
+              <span className="mb-0.5 text-2xl text-sky-600 transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </Link>
         </div>
       </section>
 
-      <section className="mt-8 rounded-xl border border-zinc-200 bg-white p-4 sm:p-5">
+      <section className="mt-7 grid gap-3 sm:grid-cols-[1.15fr_0.85fr] sm:mt-9">
+        <Link
+          href="/search"
+          className="group rounded-2xl border border-zinc-200 bg-white p-5 transition hover:border-zinc-400 hover:shadow-md"
+        >
+          <p className="text-xs font-bold tracking-wider text-zinc-400">PLAYER</p>
+          <div className="mt-4 flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-extrabold tracking-tight text-zinc-950">選手を名前から探す</h2>
+              <p className="mt-1 text-sm text-zinc-500">旧登録名でも検索できます。</p>
+            </div>
+            <span className="rounded-lg bg-zinc-100 px-3 py-2 text-sm font-bold text-zinc-700 transition-colors group-hover:bg-zinc-900 group-hover:text-white">検索 →</span>
+          </div>
+        </Link>
+        <Link
+          href="/compare"
+          className="group rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md"
+        >
+          <p className="text-xs font-bold tracking-wider text-emerald-600">COMPARE</p>
+          <h2 className="mt-4 text-lg font-extrabold tracking-tight text-zinc-900">2〜3選手を比較</h2>
+          <p className="mt-1 text-sm text-zinc-600">時代をまたいで成績を並べる。</p>
+        </Link>
+      </section>
+
+      <section className="mt-7 sm:mt-9">
         <div className="mb-3 flex items-baseline justify-between gap-3">
-          <h2 className="text-base font-extrabold tracking-tight text-zinc-950">もっと見る</h2>
-          <span className="text-xs text-zinc-400">テーマ別のページ</span>
+          <h2 className="text-base font-extrabold tracking-tight text-zinc-950">テーマから見る</h2>
+          <span className="text-xs text-zinc-400">データ別の入口</span>
         </div>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-          {morePaths.map((item) => (
-            <Link key={item.href} href={item.href} className="rounded-lg border border-zinc-200 px-3 py-3 transition-colors hover:border-zinc-300 hover:bg-zinc-50">
-              <span className="block text-sm font-bold text-zinc-800">{item.label}</span>
-              <span className="mt-0.5 block text-[11px] text-zinc-400">{item.detail}</span>
+        <div className="grid divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 bg-white sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-3 lg:divide-x">
+          {MORE_PATHS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="group flex items-center justify-between gap-3 px-4 py-3.5 transition-colors hover:bg-zinc-50"
+            >
+              <span>
+                <span className="block text-sm font-bold text-zinc-800">{item.label}</span>
+                <span className="mt-0.5 block text-xs text-zinc-400">{item.detail}</span>
+              </span>
+              <span className="text-zinc-300 transition-transform group-hover:translate-x-0.5 group-hover:text-zinc-700">→</span>
             </Link>
           ))}
         </div>
