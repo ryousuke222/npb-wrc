@@ -35,15 +35,15 @@ export default async function Home() {
         <div className="grid gap-3 md:grid-cols-2">
           <Link
             href="/latest"
-            className="group rounded-2xl border border-zinc-900 bg-zinc-900 p-5 text-white transition hover:-translate-y-0.5 hover:bg-zinc-800 hover:shadow-lg sm:p-6"
+            className="group rounded-2xl border border-amber-200 bg-amber-50 p-5 transition hover:-translate-y-0.5 hover:border-amber-300 hover:shadow-lg sm:p-6"
           >
-            <p className="text-xs font-bold tracking-wider text-zinc-400">NOW</p>
+            <p className="text-xs font-bold tracking-wider text-amber-700">NOW</p>
             <div className="mt-7 flex items-end justify-between gap-4">
               <div>
-                <h3 className="text-xl font-extrabold tracking-tight">最新ランキング</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-zinc-300">チームwRC+、セ・パ打者TOP、今日の注目をまとめて見る。</p>
+                <h3 className="text-xl font-extrabold tracking-tight text-zinc-900">最新ランキング</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-zinc-600">チームwRC+、セ・パ打者TOP、今日の注目をまとめて見る。</p>
               </div>
-              <span className="mb-0.5 text-2xl transition-transform group-hover:translate-x-1">→</span>
+              <span className="mb-0.5 text-2xl text-amber-700 transition-transform group-hover:translate-x-1">→</span>
             </div>
           </Link>
           <Link
@@ -73,7 +73,7 @@ export default async function Home() {
               <h2 className="text-lg font-extrabold tracking-tight text-zinc-950">選手を名前から探す</h2>
               <p className="mt-1 text-sm text-zinc-500">旧登録名でも検索できます。</p>
             </div>
-            <span className="rounded-lg bg-zinc-100 px-3 py-2 text-sm font-bold text-zinc-700 transition-colors group-hover:bg-zinc-900 group-hover:text-white">検索 →</span>
+            <span className="rounded-lg bg-zinc-100 px-3 py-2 text-sm font-bold text-zinc-700 transition-colors group-hover:bg-zinc-200">検索 →</span>
           </div>
         </Link>
         <Link

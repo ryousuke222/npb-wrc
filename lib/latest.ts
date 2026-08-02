@@ -40,8 +40,10 @@ export type LatestDashboardData = {
 };
 
 function playerKey(batter: BatterRanking): string {
-  // 同名選手とシーズン中の移籍を区別するため、球団も含める。
-  return `${batter.nameKey ?? batter.name}|${batter.teamId}`;
+  // 日次スナップショットはプロフィール補完（nameKey付与）より先に保存された
+  // 旧データもあるため、内部IDではなく登録名＋球団で照合する。月間・日次の
+  // 短い比較期間では同一球団の同名選手を取り違える可能性は極めて低い。
+  return `${batter.name.normalize("NFKC").replace(/[\s　]/g, "")}|${batter.teamId}`;
 }
 
 async function getSnapshots(year: number): Promise<YearData[]> {
@@ -62,8 +64,8 @@ async function getSnapshots(year: number): Promise<YearData[]> {
 }
 
 /**
- * 直近の更新から伸びた打者を表示する。日次更新後すぐに「今日の注目」として使えるよう、
- * 現在値より前の最も新しい保存値と比較する。
+ * 直近で成績が動いた更新から伸びた打者を表示する。試合のない日や、試合終了前に
+ * 自動更新が走った場合でも、前回のゼロ差分で「今日の注目」が空にならないようにする。
  */
 async function getWeeklyMovement(current: YearData): Promise<{
   movement: WeeklyMovement | null;
@@ -72,7 +74,13 @@ async function getWeeklyMovement(current: YearData): Promise<{
   const snapshots = await getSnapshots(current.year);
   const currentTime = new Date(current.generatedAt).getTime();
   const earlierSnapshots = snapshots.filter((snapshot) => new Date(snapshot.generatedAt).getTime() < currentTime);
-  const baseline = earlierSnapshots.at(-1);
+  const baseline = [...earlierSnapshots].reverse().find((snapshot) => {
+    const previous = new Map(snapshot.batters.map((batter) => [playerKey(batter), batter]));
+    return current.batters.some((batter) => {
+      const old = previous.get(playerKey(batter));
+      return old && (batter.pa !== old.pa || batter.hr !== old.hr || batter.rbi !== old.rbi || batter.hits !== old.hits);
+    });
+  });
 
   if (!baseline) return { movement: null, label: null };
 

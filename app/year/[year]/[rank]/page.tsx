@@ -85,9 +85,11 @@ export default async function PlayerPage({
   const wrcLeagueRank = batter.qualified
     ? qualifiedLeagueBatters.filter((b) => b.wrcPlus > batter.wrcPlus).length + 1
     : null;
-  const wrcPercentile =
+  // 「上位◯%」は順位の割合で示す。従来の値はパーセンタイル（首位ほど100%）を
+  // そのまま使っていたため、首位が「上位100%」と逆の意味で表示されていた。
+  const wrcTopPercent =
     wrcLeagueRank !== null && qualifiedLeagueBatters.length > 0
-      ? Math.round(((qualifiedLeagueBatters.length - wrcLeagueRank + 1) / qualifiedLeagueBatters.length) * 100)
+      ? Math.max(1, Math.ceil((wrcLeagueRank / qualifiedLeagueBatters.length) * 100))
       : null;
   const teamRank = batter.qualified
     ? data.batters.filter((entry) => entry.teamId === batter.teamId && entry.qualified && entry.wrcPlus > batter.wrcPlus).length + 1
@@ -226,9 +228,9 @@ export default async function PlayerPage({
             wRC+
           </span>
         </div>
-        {wrcPercentile !== null && (
+        {wrcTopPercent !== null && (
           <p className="mt-1 text-xs font-medium text-zinc-500">
-            {batter.league === "central" ? "セ・リーグ" : "パ・リーグ"}規定打席到達者の上位{wrcPercentile}%
+            {batter.league === "central" ? "セ・リーグ" : "パ・リーグ"}規定打席到達者の上位{wrcTopPercent}%
           </p>
         )}
 

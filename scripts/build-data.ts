@@ -43,6 +43,19 @@ function batterDetailsKey(batter: BatterRanking): string {
 }
 
 /**
+ * NPBの成績表は外国人選手を「サンタナ」のように頭文字なしで返すことがある一方、
+ * 後段の名寄せ処理では「Ｄ．サンタナ」に補正する。更新前後で属性を引き継ぐための
+ * 補助キーとして頭文字・空白・全角半角を除いた表記を使う。
+ */
+function normalizedBatterDetailsKey(batter: BatterRanking): string {
+  const normalizedName = batter.name
+    .normalize("NFKC")
+    .replace(/^[A-Z]\./, "")
+    .replace(/[\s　]/g, "");
+  return `${normalizedName}|${batter.teamId}`;
+}
+
+/**
  * 日次更新で打撃成績を作り直しても、別の収集処理で付与した選手の属性を失わないようにする。
  * 年齢・打席・守備位置・表彰は、それぞれ専用スクリプトが補完するためここでは引き継ぐだけにする。
  */
@@ -65,12 +78,36 @@ async function restorePersistentBatterDetails(data: YearData): Promise<YearData>
       ])
     );
 
+    // 正確な登録名キーを最優先する。頭文字を除いたキーは同じ年度・同じ球団に
+    // 候補が1人だけの場合のみ使い、同姓の外国人選手を誤って結合しない。
+    const fallbackDetailsByKey = new Map<string, PersistentBatterDetails | null>();
+    for (const batter of previous.batters) {
+      const key = normalizedBatterDetailsKey(batter);
+      const details: PersistentBatterDetails = {
+        age: batter.age,
+        bats: batter.bats,
+        position: batter.position,
+        titles: batter.titles,
+        bestNinePosition: batter.bestNinePosition,
+        nameKey: batter.nameKey,
+      };
+      if (fallbackDetailsByKey.has(key)) {
+        fallbackDetailsByKey.set(key, null);
+      } else {
+        fallbackDetailsByKey.set(key, details);
+      }
+    }
+
     return {
       ...data,
-      batters: data.batters.map((batter) => ({
-        ...detailsByKey.get(batterDetailsKey(batter)),
-        ...batter,
-      })),
+      batters: data.batters.map((batter) => {
+        const exact = detailsByKey.get(batterDetailsKey(batter));
+        const fallback = fallbackDetailsByKey.get(normalizedBatterDetailsKey(batter));
+        return {
+          ...(exact ?? fallback ?? undefined),
+          ...batter,
+        };
+      }),
     };
   } catch {
     return data;

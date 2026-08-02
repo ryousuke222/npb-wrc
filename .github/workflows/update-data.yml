@@ -54,6 +54,9 @@ jobs:
           YEAR=$(TZ=Asia/Tokyo date +%Y)
           npx tsx scripts/build-player-bio.ts "$YEAR"
           npx tsx scripts/build-fielding-position-current.ts "$YEAR"
+          # build-data内でも一度保存するが、その時点では年齢・選手IDの補完前。
+          # 補完済みデータで当日分を上書きし、日次・月間比較の照合キーをそろえる。
+          npx tsx scripts/snapshot-current-season.ts
 
       - name: Save scrape cache
         if: always()
