@@ -27,6 +27,14 @@ const CACHE_DIR = path.join(process.cwd(), ".cache", "raw");
 const DATA_DIR = path.join(process.cwd(), "data");
 const REQUEST_DELAY_MS = 200;
 
+/**
+ * NPBの年度別成績ページは、選手名簿の反映前に頭文字を省くことがある。
+ * 公式名簿だけでは当年分を解決できない既知の表記ゆれをここで補う。
+ */
+const MANUAL_NAME_BY_SEASON_TEAM: Record<string, string> = {
+  "2026_S_サンタナ": "Ｄ．サンタナ",
+};
+
 const KANA_LIST = [
   "a", "i", "u", "e", "o",
   "ka", "ki", "ku", "ke", "ko",
@@ -141,6 +149,14 @@ async function main() {
     let changed = false;
 
     for (const b of yearData.batters) {
+      const manualName = MANUAL_NAME_BY_SEASON_TEAM[`${b.year}_${b.teamId}_${b.name}`];
+      if (manualName) {
+        b.name = manualName;
+        changed = true;
+        updatedRows++;
+        continue;
+      }
+
       const lookup = resolutionByBare.get(b.name);
       if (!lookup) continue;
       const resolved = lookup.get(`${b.year}_${b.teamId as TeamId}`);
