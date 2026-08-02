@@ -9,7 +9,6 @@ import { fmtWrcPlus } from "@/lib/wrc";
 import CareerHistory from "@/app/components/CareerHistory";
 import PlayerInsights from "@/app/components/PlayerInsights";
 import PlayerBackLink from "@/app/components/PlayerBackLink";
-import WatchButton from "@/app/components/WatchButton";
 
 // 規定打席到達者のみビルド時に静的生成する（大半のアクセスがここに集中するため）。
 // それ以外（打席数フィルターを下げたときだけ現れる選手）はアクセス時にオンデマンドで生成する。
@@ -209,7 +208,6 @@ export default async function PlayerPage({
           >
             このシーズンを比較
           </Link>
-          <WatchButton item={{ year, rank, name: batter.name, teamName: batter.teamName, teamId: batter.teamId, wrcPlus: batter.wrcPlus, avg: batter.avg, hr: batter.hr, rbi: batter.rbi }} />
         </div>
 
         {/* wRC+ ヒーロー表示 */}

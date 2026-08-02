@@ -41,7 +41,6 @@ export default async function Home() {
     { href: "/team-wrc", label: "チーム比較", detail: "打線全体を比較" },
     { href: "/team-best-nine", label: "球団別ベスト9", detail: "歴代ベストオーダー" },
     { href: "/search", label: "選手検索", detail: "名前から探す" },
-    { href: "/watchlist", label: "ウォッチリスト", detail: "気になる選手を保存" },
   ];
 
   return (

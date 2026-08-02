@@ -19,7 +19,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/team-wrc`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/compare`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/search`, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${SITE_URL}/watchlist`, changeFrequency: "monthly", priority: 0.3 },
     { url: `${SITE_URL}/about`, changeFrequency: "monthly", priority: 0.4 },
   ];
 

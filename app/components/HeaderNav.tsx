@@ -10,7 +10,6 @@ const MORE_NAV_ITEMS = [
   { href: "/titles", label: "タイトル", matches: (pathname: string) => pathname === "/titles" },
   { href: "/team-best-nine", label: "ベスト9", matches: (pathname: string) => pathname === "/team-best-nine" },
   { href: "/search", label: "検索", matches: (pathname: string) => pathname === "/search" },
-  { href: "/watchlist", label: "ウォッチ", matches: (pathname: string) => pathname === "/watchlist" },
   { href: "/about", label: "このサイト", matches: (pathname: string) => pathname === "/about" },
 ];
 
