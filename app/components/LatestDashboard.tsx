@@ -106,48 +106,25 @@ type FocusGroupProps = {
   label: string;
   values: BatterChange[];
   format: (value: number) => string;
-  accent: "amber" | "sky" | "rose" | "violet";
 };
 
-const focusAccents = {
-  amber: {
-    panel: "border-amber-200/80 bg-amber-50/65",
-    marker: "bg-amber-400",
-    value: "text-amber-700",
-    badge: "bg-amber-100 text-amber-800",
-  },
-  sky: {
-    panel: "border-sky-200/80 bg-sky-50/65",
-    marker: "bg-sky-400",
-    value: "text-sky-700",
-    badge: "bg-sky-100 text-sky-800",
-  },
-  rose: {
-    panel: "border-rose-200/80 bg-rose-50/65",
-    marker: "bg-rose-400",
-    value: "text-rose-700",
-    badge: "bg-rose-100 text-rose-800",
-  },
-  violet: {
-    panel: "border-violet-200/80 bg-violet-50/65",
-    marker: "bg-violet-400",
-    value: "text-violet-700",
-    badge: "bg-violet-100 text-violet-800",
-  },
-} as const;
-
-function FocusGroup({ label, values, format, accent }: FocusGroupProps) {
+function FocusGroup({ label, values, format }: FocusGroupProps) {
   const [leader, ...followers] = values.slice(0, 5);
-  const tone = focusAccents[accent];
 
   if (!leader) return null;
 
   const leaderColor = teamColor(leader.batter.teamId);
 
   return (
-    <article className={`overflow-hidden rounded-xl border ${tone.panel}`}>
+    <article
+      style={{
+        borderColor: withAlpha(leaderColor.bg, 0.32),
+        backgroundColor: withAlpha(leaderColor.bg, 0.045),
+      }}
+      className="overflow-hidden rounded-xl border"
+    >
       <div className="flex items-center gap-2 px-3 pt-3">
-        <span className={`h-2 w-2 rounded-full ${tone.marker}`} />
+        <span style={{ backgroundColor: leaderColor.bg }} className="h-2 w-2 rounded-full" />
         <h3 className="text-xs font-extrabold tracking-tight text-zinc-700">{label}</h3>
       </div>
       <Link
@@ -165,7 +142,7 @@ function FocusGroup({ label, values, format, accent }: FocusGroupProps) {
             {leader.batter.teamName}
           </span>
         </span>
-        <span className={`shrink-0 text-right text-lg font-extrabold tabular-nums ${tone.value}`}>{format(leader.difference)}</span>
+        <span style={{ color: leaderColor.bg }} className="shrink-0 text-right text-lg font-extrabold tabular-nums">{format(leader.difference)}</span>
       </Link>
       <ol className="space-y-0.5 px-2.5 pb-2.5 pt-2">
         {followers.map(({ batter, difference }, index) => (
@@ -173,7 +150,7 @@ function FocusGroup({ label, values, format, accent }: FocusGroupProps) {
             <Link href={playerHref(batter)} className="flex items-center gap-2 rounded-md px-1.5 py-1.5 hover:bg-white/80">
               <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{index + 2}</span>
               <span className="min-w-0 flex-1 truncate text-xs font-semibold text-zinc-700">{batter.name}</span>
-              <span className={`text-xs font-extrabold tabular-nums ${tone.value}`}>{format(difference)}</span>
+              <span style={{ color: leaderColor.bg }} className="text-xs font-extrabold tabular-nums">{format(difference)}</span>
             </Link>
           </li>
         ))}
@@ -266,10 +243,10 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
         {weeklyMovement ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {([
-              { label: "wRC+急上昇", values: weeklyMovement.wrcPlus, format: (value: number) => `+${fmtWrcPlus(value)}`, accent: "amber" },
-              { label: "OPS急上昇", values: weeklyMovement.ops, format: (value: number) => `+${value.toFixed(3).replace(/^0\./, ".")}`, accent: "sky" },
-              { label: "本塁打を積み上げ", values: weeklyMovement.hr, format: (value: number) => `+${value}本`, accent: "rose" },
-              { label: "出場量", values: weeklyMovement.pa, format: (value: number) => `+${value}打席`, accent: "violet" },
+              { label: "wRC+急上昇", values: weeklyMovement.wrcPlus, format: (value: number) => `+${fmtWrcPlus(value)}` },
+              { label: "OPS急上昇", values: weeklyMovement.ops, format: (value: number) => `+${value.toFixed(3).replace(/^0\./, ".")}` },
+              { label: "本塁打を積み上げ", values: weeklyMovement.hr, format: (value: number) => `+${value}本` },
+              { label: "打点を積み上げ", values: weeklyMovement.rbi, format: (value: number) => `+${value}打点` },
             ] as FocusGroupProps[]).map((group) => (
               <FocusGroup key={group.label} {...group} />
             ))}

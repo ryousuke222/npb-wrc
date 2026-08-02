@@ -24,6 +24,7 @@ export type MvpCandidate = {
 export type WeeklyMovement = {
   wrcPlus: BatterChange[];
   hr: BatterChange[];
+  rbi: BatterChange[];
   pa: BatterChange[];
   ops: BatterChange[];
 };
@@ -106,6 +107,7 @@ async function getWeeklyMovement(current: YearData): Promise<{
     movement: {
       wrcPlus: topChanges(({ batter, old }) => batter.wrcPlus - old.wrcPlus),
       hr: topChanges(({ batter, old }) => batter.hr - old.hr),
+      rbi: topChanges(({ batter, old }) => batter.rbi - old.rbi),
       pa: topChanges(({ batter, old }) => batter.pa - old.pa),
       // 4打席以上増えた選手だけを対象にし、1打席だけの極端な変化を避ける。
       ops: topChanges(({ batter, old }) => (batter.pa - old.pa >= 4 ? batter.ops - old.ops : -Infinity)),
