@@ -32,6 +32,51 @@ import type {
   YearData,
 } from "../lib/types";
 
+type PersistentBatterDetails = Pick<
+  BatterRanking,
+  "age" | "bats" | "position" | "titles" | "bestNinePosition" | "nameKey"
+>;
+
+function batterDetailsKey(batter: BatterRanking): string {
+  // 同じ選手がシーズン途中に移籍した場合でも、球団ごとの成績行を区別する。
+  return `${batter.name}|${batter.teamId}`;
+}
+
+/**
+ * 日次更新で打撃成績を作り直しても、別の収集処理で付与した選手の属性を失わないようにする。
+ * 年齢・打席・守備位置・表彰は、それぞれ専用スクリプトが補完するためここでは引き継ぐだけにする。
+ */
+async function restorePersistentBatterDetails(data: YearData): Promise<YearData> {
+  try {
+    const previous: YearData = JSON.parse(
+      await readFile(path.join(DATA_DIR, `${data.year}.json`), "utf-8")
+    );
+    const detailsByKey = new Map<string, PersistentBatterDetails>(
+      previous.batters.map((batter) => [
+        batterDetailsKey(batter),
+        {
+          age: batter.age,
+          bats: batter.bats,
+          position: batter.position,
+          titles: batter.titles,
+          bestNinePosition: batter.bestNinePosition,
+          nameKey: batter.nameKey,
+        },
+      ])
+    );
+
+    return {
+      ...data,
+      batters: data.batters.map((batter) => ({
+        ...detailsByKey.get(batterDetailsKey(batter)),
+        ...batter,
+      })),
+    };
+  } catch {
+    return data;
+  }
+}
+
 function emptyCountingStats(): CountingStats {
   return {
     games: 0,
@@ -578,9 +623,10 @@ async function main() {
       console.log("no data, skip");
       continue;
     }
+    const enrichedData = await restorePersistentBatterDetails(data);
     await writeFile(
       path.join(DATA_DIR, `${year}.json`),
-      JSON.stringify(data, null, 0),
+      JSON.stringify(enrichedData, null, 0),
       "utf-8"
     );
     availableYears.add(year);

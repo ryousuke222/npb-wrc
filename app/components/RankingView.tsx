@@ -68,11 +68,6 @@ export default function RankingView({
     return TEAM_ID_DISPLAY_ORDER.filter((id) => present.has(id));
   }, [batters]);
 
-  const positionsInScope = useMemo(() => {
-    const present = new Set(batters.map((b) => b.position).filter((p): p is string => !!p));
-    return POSITION_ORDER.filter((p) => present.has(p));
-  }, [batters]);
-
   const presets = useMemo(() => {
     const values = [regulationPaThreshold, ...ROUND_PRESETS].filter(
       (v) => v <= regulationPaThreshold
@@ -88,6 +83,20 @@ export default function RankingView({
     const teamId = scope.slice("team:".length) as TeamId;
     return batters.filter((b) => b.teamId === teamId);
   }, [batters, scope]);
+
+  const positionsInScope = useMemo(() => {
+    const present = new Set(scoped.map((b) => b.position).filter((p): p is string => !!p));
+    return POSITION_ORDER.filter((p) => present.has(p));
+  }, [scoped]);
+
+  const detailDataAvailability = useMemo(
+    () => ({
+      age: scoped.some((batter) => batter.age !== undefined),
+      bats: scoped.some((batter) => batter.bats),
+      position: positionsInScope.length > 0,
+    }),
+    [scoped, positionsInScope]
+  );
 
   const filtered = useMemo(() => {
     let list = scoped.filter((b) => b.pa >= minPa);
@@ -197,60 +206,74 @@ export default function RankingView({
 
           {showAdvanced && (
             <>
-              <div>
-                <label className="mb-1 block text-[11px] font-medium text-zinc-400">年齢</label>
-                <div className="flex items-center gap-1.5">
-                  <input
-                    type="number"
-                    min={0}
-                    value={ageFilterInput}
-                    onChange={(e) => setAgeFilterInput(e.target.value)}
-                    placeholder="指定なし"
-                    className="min-w-0 flex-1 rounded-md border border-zinc-300 bg-white px-2 py-2 text-right text-sm tabular-nums"
-                  />
+              {detailDataAvailability.age && (
+                <div>
+                  <label className="mb-1 block text-[11px] font-medium text-zinc-400">年齢</label>
+                  <div className="flex items-center gap-1.5">
+                    <input
+                      type="number"
+                      min={0}
+                      value={ageFilterInput}
+                      onChange={(e) => setAgeFilterInput(e.target.value)}
+                      placeholder="指定なし"
+                      className="min-w-0 flex-1 rounded-md border border-zinc-300 bg-white px-2 py-2 text-right text-sm tabular-nums"
+                    />
+                    <select
+                      value={ageMode}
+                      onChange={(e) => setAgeMode(e.target.value as AgeMode)}
+                      className="rounded-md border border-zinc-300 bg-white px-2 py-2 text-sm font-medium"
+                    >
+                      <option value="eq">のみ</option>
+                      <option value="gte">以上</option>
+                      <option value="lte">以下</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {detailDataAvailability.bats && (
+                <div>
+                  <label className="mb-1 block text-[11px] font-medium text-zinc-400">打</label>
                   <select
-                    value={ageMode}
-                    onChange={(e) => setAgeMode(e.target.value as AgeMode)}
-                    className="rounded-md border border-zinc-300 bg-white px-2 py-2 text-sm font-medium"
+                    value={batsFilter}
+                    onChange={(e) => setBatsFilter(e.target.value)}
+                    className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium"
                   >
-                    <option value="eq">のみ</option>
-                    <option value="gte">以上</option>
-                    <option value="lte">以下</option>
+                    <option value="">指定なし</option>
+                    <option value="右">右打ち</option>
+                    <option value="左">左打ち</option>
+                    <option value="両">両打ち</option>
                   </select>
                 </div>
-              </div>
+              )}
 
-              <div>
-                <label className="mb-1 block text-[11px] font-medium text-zinc-400">打</label>
-                <select
-                  value={batsFilter}
-                  onChange={(e) => setBatsFilter(e.target.value)}
-                  className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium"
-                >
-                  <option value="">指定なし</option>
-                  <option value="右">右打ち</option>
-                  <option value="左">左打ち</option>
-                  <option value="両">両打ち</option>
-                </select>
-              </div>
+              {detailDataAvailability.position && (
+                <div>
+                  <label className="mb-1 block text-[11px] font-medium text-zinc-400">
+                    ポジション
+                  </label>
+                  <select
+                    value={positionFilter}
+                    onChange={(e) => setPositionFilter(e.target.value)}
+                    className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium"
+                  >
+                    <option value="">指定なし</option>
+                    {positionsInScope.map((p) => (
+                      <option key={p} value={p}>
+                        {p}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
-              <div>
-                <label className="mb-1 block text-[11px] font-medium text-zinc-400">
-                  ポジション
-                </label>
-                <select
-                  value={positionFilter}
-                  onChange={(e) => setPositionFilter(e.target.value)}
-                  className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium"
-                >
-                  <option value="">指定なし</option>
-                  {positionsInScope.map((p) => (
-                    <option key={p} value={p}>
-                      {p}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {!detailDataAvailability.age &&
+                !detailDataAvailability.bats &&
+                !detailDataAvailability.position && (
+                  <p className="text-xs leading-5 text-zinc-400">
+                    この年度・範囲では詳細条件用の選手属性データを準備中です。
+                  </p>
+                )}
             </>
           )}
         </div>
