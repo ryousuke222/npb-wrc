@@ -109,51 +109,68 @@ type FocusGroupProps = {
 };
 
 function FocusGroup({ label, values, format }: FocusGroupProps) {
-  const [leader, ...followers] = values.slice(0, 5);
+  const displayed = values.slice(0, 5);
+  const leader = displayed[0];
 
   if (!leader) return null;
 
+  const leaders = displayed.filter((entry) => entry.difference === leader.difference);
+  const followers = displayed.slice(leaders.length);
+  const tiedAtTop = leaders.length > 1;
   const leaderColor = teamColor(leader.batter.teamId);
+  const groupColor = tiedAtTop ? "#52525b" : leaderColor.bg;
 
   return (
     <article
       style={{
-        borderColor: withAlpha(leaderColor.bg, 0.32),
-        backgroundColor: withAlpha(leaderColor.bg, 0.045),
+        borderColor: tiedAtTop ? "#d4d4d8" : withAlpha(leaderColor.bg, 0.32),
+        backgroundColor: tiedAtTop ? "#fafafa" : withAlpha(leaderColor.bg, 0.045),
       }}
       className="overflow-hidden rounded-xl border"
     >
       <div className="flex items-center gap-2 px-3 pt-3">
-        <span style={{ backgroundColor: leaderColor.bg }} className="h-2 w-2 rounded-full" />
+        <span style={{ backgroundColor: groupColor }} className="h-2 w-2 rounded-full" />
         <h3 className="text-xs font-extrabold tracking-tight text-zinc-700">{label}</h3>
+        {tiedAtTop && <span className="rounded-full bg-zinc-200 px-1.5 py-0.5 text-[10px] font-bold text-zinc-600">同率1位</span>}
       </div>
-      <Link
-        href={playerHref(leader.batter)}
-        style={{ borderLeftColor: leaderColor.bg }}
-        className="mx-2.5 mt-2.5 flex items-center gap-2.5 rounded-lg border border-l-4 border-white/90 bg-white px-2.5 py-2.5 shadow-sm transition-transform hover:-translate-y-0.5 hover:shadow"
-      >
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-xs font-extrabold text-white">1</span>
-        <span className="min-w-0 flex-1">
-          <span className="block truncate text-sm font-extrabold text-zinc-900">{leader.batter.name}</span>
-          <span
-            style={{ backgroundColor: withAlpha(leaderColor.bg, 0.15), color: leaderColor.bg }}
-            className="mt-1 inline-block rounded-full px-1.5 py-0.5 text-[10px] font-bold"
-          >
-            {leader.batter.teamName}
-          </span>
-        </span>
-        <span style={{ color: leaderColor.bg }} className="shrink-0 text-right text-lg font-extrabold tabular-nums">{format(leader.difference)}</span>
-      </Link>
-      <ol className="space-y-0.5 px-2.5 pb-2.5 pt-2">
-        {followers.map(({ batter, difference }, index) => (
-          <li key={`${label}-${batter.teamId}-${batter.rank}`}>
-            <Link href={playerHref(batter)} className="flex items-center gap-2 rounded-md px-1.5 py-1.5 hover:bg-white/80">
-              <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{index + 2}</span>
-              <span className="min-w-0 flex-1 truncate text-xs font-semibold text-zinc-700">{batter.name}</span>
-              <span style={{ color: leaderColor.bg }} className="text-xs font-extrabold tabular-nums">{format(difference)}</span>
+      <div className="mx-2.5 mt-2.5 space-y-1.5">
+        {leaders.map(({ batter, difference }) => {
+          const color = teamColor(batter.teamId);
+          return (
+            <Link
+              key={`${label}-${batter.teamId}-${batter.rank}`}
+              href={playerHref(batter)}
+              style={{ borderLeftColor: color.bg }}
+              className="flex items-center gap-2.5 rounded-lg border border-l-4 border-white/90 bg-white px-2.5 py-2.5 shadow-sm transition-transform hover:-translate-y-0.5 hover:shadow"
+            >
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-xs font-extrabold text-white">1</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-extrabold text-zinc-900">{batter.name}</span>
+                <span
+                  style={{ backgroundColor: withAlpha(color.bg, 0.15), color: color.bg }}
+                  className="mt-1 inline-block rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                >
+                  {batter.teamName}
+                </span>
+              </span>
+              <span style={{ color: color.bg }} className="shrink-0 text-right text-lg font-extrabold tabular-nums">{format(difference)}</span>
             </Link>
-          </li>
-        ))}
+          );
+        })}
+      </div>
+      <ol className="space-y-0.5 px-2.5 pb-2.5 pt-2">
+        {followers.map(({ batter, difference }) => {
+          const rank = displayed.findIndex((entry) => entry.difference === difference) + 1;
+          return (
+            <li key={`${label}-${batter.teamId}-${batter.rank}`}>
+              <Link href={playerHref(batter)} className="flex items-center gap-2 rounded-md px-1.5 py-1.5 hover:bg-white/80">
+                <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{rank}</span>
+                <span className="min-w-0 flex-1 truncate text-xs font-semibold text-zinc-700">{batter.name}</span>
+                <span style={{ color: groupColor }} className="text-xs font-extrabold tabular-nums">{format(difference)}</span>
+              </Link>
+            </li>
+          );
+        })}
       </ol>
     </article>
   );
