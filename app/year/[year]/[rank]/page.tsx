@@ -184,9 +184,16 @@ export default async function PlayerPage({
             ? `規定打席内 ${batter.leagueRank}位`
             : "規定打席未到達（参考記録）"}
         </p>
-        <h1 className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">
-          {batter.name}
-        </h1>
+        <div className="mt-1 flex flex-wrap items-center gap-2.5">
+          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
+            {batter.name}
+          </h1>
+          {batter.age !== undefined && (
+            <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-sm font-bold tabular-nums text-zinc-600">
+              {batter.age}歳
+            </span>
+          )}
+        </div>
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <span
             style={{

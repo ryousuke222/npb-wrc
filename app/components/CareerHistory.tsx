@@ -54,7 +54,7 @@ export default function CareerHistory({
           {history.map((entry, index) => {
             const point = graphPoints[index];
             const color = teamColor(entry.teamId);
-            return <g key={`${entry.year}-${entry.teamId}-${entry.rank}`}><title>{`${entry.year}年 ${entry.teamName} wRC+ ${fmtWrcPlus(entry.wrcPlus)}`}</title><circle cx={point.x} cy={point.y} r="4" fill={color.bg} stroke="white" strokeWidth="2" /><text x={point.x} y={graphHeight - 5} textAnchor="middle" fill="#71717a" fontSize="10">{String(entry.year).slice(2)}</text></g>;
+            return <g key={`${entry.year}-${entry.teamId}-${entry.rank}`}><title>{`${entry.year}年${entry.age !== undefined ? `・${entry.age}歳` : ""} ${entry.teamName} wRC+ ${fmtWrcPlus(entry.wrcPlus)}`}</title><circle cx={point.x} cy={point.y} r="4" fill={color.bg} stroke="white" strokeWidth="2" /><text x={point.x} y={graphHeight - 5} textAnchor="middle" fill="#71717a" fontSize="10">{String(entry.year).slice(2)}</text></g>;
           })}
         </svg>
       </div>
@@ -78,6 +78,7 @@ export default function CareerHistory({
               <div className="flex min-w-0 items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-1.5">
                   <span className="font-bold">{h.year}</span>
+                  {h.age !== undefined && <span className="text-xs font-semibold tabular-nums text-zinc-400">{h.age}歳</span>}
                   <span
                     style={{
                       backgroundColor: withAlpha(color.bg, 0.16),
@@ -124,6 +125,7 @@ export default function CareerHistory({
           <thead>
             <tr className="text-center text-xs text-zinc-400">
               <th className="py-1.5 px-2 font-medium">年度</th>
+              <th className="py-1.5 px-2 font-medium">年齢</th>
               <th className="py-1.5 px-2 font-medium">球団</th>
               <th className="py-1.5 px-2 font-medium">打席</th>
               <th className="py-1.5 px-2 font-medium">打率</th>
@@ -152,6 +154,9 @@ export default function CareerHistory({
                     >
                       {h.year}
                     </Link>
+                  </td>
+                  <td className="py-2.5 px-2 text-center tabular-nums text-zinc-500">
+                    {h.age !== undefined ? `${h.age}歳` : "—"}
                   </td>
                   <td className="py-2.5 px-2 text-center">
                     <span

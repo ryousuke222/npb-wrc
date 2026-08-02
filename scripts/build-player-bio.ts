@@ -45,7 +45,16 @@ async function fetchCached(url: string, cacheKey: string): Promise<string> {
   try {
     return await readFile(cachePath, "utf-8");
   } catch {
-    // cache miss
+    // 過去年度のデータ構築時に同じ選手ページを player-{id}.html として取得済みなら
+    // そちらを再利用する。プロフィール用に二重取得しない。
+    const playerId = cacheKey.match(/^player-bio-(\d+)\.html$/)?.[1];
+    if (playerId) {
+      try {
+        return await readFile(path.join(CACHE_DIR, `player-${playerId}.html`), "utf-8");
+      } catch {
+        // profile cache miss
+      }
+    }
   }
   const res = await fetch(url, { headers: { "User-Agent": UA } });
   const html = await res.text();
