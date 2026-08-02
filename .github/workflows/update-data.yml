@@ -1,6 +1,7 @@
 name: Update NPB Data
 
-# 毎日(日本時間6:00頃)に自動でシーズン中の成績データを更新し、
+# 試合後の日本時間22:00〜翌1:00は毎時、加えて毎朝6:00頃に
+# 自動でシーズン中の成績データを更新し、
 # 変更があればコミット・pushする。pushされるとVercelが自動で再デプロイする。
 #
 # 過去年度(完成済みシーズン)のスクレイピング結果は .cache/raw に永続キャッシュし、
@@ -9,8 +10,14 @@ name: Update NPB Data
 
 on:
   schedule:
-    - cron: "0 21 * * *" # UTC 21:00 = JST 6:00、毎日
+    - cron: "0 13-16 * * *" # UTC 13:00〜16:00 = JST 22:00〜翌1:00、毎日
+    - cron: "0 21 * * *" # UTC 21:00 = JST 6:00、毎日（予備更新）
   workflow_dispatch: {} # 手動実行用（GitHubのActionsタブから「Run workflow」で実行可能）
+
+# 実行が遅延しても、データ更新処理を同時に走らせない。
+concurrency:
+  group: npb-data-update
+  cancel-in-progress: false
 
 jobs:
   update-data:
