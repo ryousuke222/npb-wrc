@@ -4,6 +4,7 @@ import type { LatestDashboardData, MvpCandidate } from "@/lib/latest";
 import { teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus } from "@/lib/wrc";
 import XRankingImageButton from "./XRankingImageButton";
+import RankingView from "./RankingView";
 
 function playerHref(batter: BatterRanking) {
   return `/year/${batter.year}/${batter.rank}`;
@@ -14,49 +15,6 @@ function RankingNumber({ value }: { value: number }) {
     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-sm font-extrabold tabular-nums text-zinc-600 sm:h-10 sm:w-10">
       {value}
     </span>
-  );
-}
-
-function PlayerRows({ players }: { players: BatterRanking[] }) {
-  return (
-    <ol className="space-y-2">
-      {players.map((player, index) => {
-        const color = teamColor(player.teamId);
-        return (
-          <li key={`${player.teamId}-${player.rank}`}>
-            <Link
-              href={playerHref(player)}
-              style={{ borderLeftColor: color.bg, backgroundColor: withAlpha(color.bg, 0.07) }}
-              className="flex items-center gap-3 rounded-xl border border-l-[5px] border-zinc-200/80 px-3 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-sm"
-            >
-              <RankingNumber value={index + 1} />
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-base font-bold tracking-tight text-zinc-900 sm:text-lg">
-                  {player.name}
-                </span>
-                <span className="mt-0.5 flex items-center gap-1.5">
-                  <span
-                    style={{ backgroundColor: withAlpha(color.bg, 0.16), color: color.bg }}
-                    className="rounded-full px-1.5 py-0.5 text-[10px] font-bold"
-                  >
-                    {player.teamName}
-                  </span>
-                  <span className="text-[10px] font-medium text-zinc-400">
-                    {player.avg.toFixed(3).replace(/^0\./, ".")}
-                  </span>
-                </span>
-              </span>
-              <span className="shrink-0 text-right">
-                <span className="block text-xl font-extrabold tabular-nums text-zinc-950 sm:text-2xl">
-                  {fmtWrcPlus(player.wrcPlus)}
-                </span>
-                <span className="block text-[10px] font-medium text-zinc-400">wRC+</span>
-              </span>
-            </Link>
-          </li>
-        );
-      })}
-    </ol>
   );
 }
 
@@ -101,10 +59,18 @@ function SectionTitle({ title, note }: { title: string; note?: string }) {
 }
 
 export default function LatestDashboard({ dashboard }: { dashboard: LatestDashboardData }) {
-  const { year, teams, leagueLeaders, mvpCandidates, weeklyMovement, comparisonLabel } = dashboard;
+  const { year, data, teams, mvpCandidates, weeklyMovement, comparisonLabel } = dashboard;
 
   return (
     <div className="space-y-5 sm:space-y-6">
+      <section>
+        <SectionTitle title={`${year}年 打者ランキング`} note="条件を選んで絞り込み" />
+        <RankingView
+          batters={data.batters}
+          regulationPaThreshold={data.regulationPaThreshold}
+        />
+      </section>
+
       <section className="rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <SectionTitle title={`${year}年 チームwRC+ランキング`} note="打線全体・全12球団" />
@@ -131,17 +97,6 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
             );
           })}
         </ol>
-      </section>
-
-      <section className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-xl border border-zinc-200 bg-white p-4">
-          <SectionTitle title="セ・リーグ 打者TOP10" note="規定打席・wRC+" />
-          <PlayerRows players={leagueLeaders.central} />
-        </div>
-        <div className="rounded-xl border border-zinc-200 bg-white p-4">
-          <SectionTitle title="パ・リーグ 打者TOP10" note="規定打席・wRC+" />
-          <PlayerRows players={leagueLeaders.pacific} />
-        </div>
       </section>
 
       <section className="grid gap-4 lg:grid-cols-2">
