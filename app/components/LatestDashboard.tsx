@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { BatterRanking } from "@/lib/types";
-import type { LatestDashboardData, MvpCandidate } from "@/lib/latest";
+import type { BatterChange, LatestDashboardData, MvpCandidate } from "@/lib/latest";
 import { teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus } from "@/lib/wrc";
 import XRankingImageButton from "./XRankingImageButton";
@@ -102,6 +102,86 @@ function SectionTitle({ title, note }: { title: string; note?: string }) {
   );
 }
 
+type FocusGroupProps = {
+  label: string;
+  values: BatterChange[];
+  format: (value: number) => string;
+  accent: "amber" | "sky" | "rose" | "violet";
+};
+
+const focusAccents = {
+  amber: {
+    panel: "border-amber-200/80 bg-amber-50/65",
+    marker: "bg-amber-400",
+    value: "text-amber-700",
+    badge: "bg-amber-100 text-amber-800",
+  },
+  sky: {
+    panel: "border-sky-200/80 bg-sky-50/65",
+    marker: "bg-sky-400",
+    value: "text-sky-700",
+    badge: "bg-sky-100 text-sky-800",
+  },
+  rose: {
+    panel: "border-rose-200/80 bg-rose-50/65",
+    marker: "bg-rose-400",
+    value: "text-rose-700",
+    badge: "bg-rose-100 text-rose-800",
+  },
+  violet: {
+    panel: "border-violet-200/80 bg-violet-50/65",
+    marker: "bg-violet-400",
+    value: "text-violet-700",
+    badge: "bg-violet-100 text-violet-800",
+  },
+} as const;
+
+function FocusGroup({ label, values, format, accent }: FocusGroupProps) {
+  const [leader, ...followers] = values.slice(0, 5);
+  const tone = focusAccents[accent];
+
+  if (!leader) return null;
+
+  const leaderColor = teamColor(leader.batter.teamId);
+
+  return (
+    <article className={`overflow-hidden rounded-xl border ${tone.panel}`}>
+      <div className="flex items-center gap-2 px-3 pt-3">
+        <span className={`h-2 w-2 rounded-full ${tone.marker}`} />
+        <h3 className="text-xs font-extrabold tracking-tight text-zinc-700">{label}</h3>
+      </div>
+      <Link
+        href={playerHref(leader.batter)}
+        style={{ borderLeftColor: leaderColor.bg }}
+        className="mx-2.5 mt-2.5 flex items-center gap-2.5 rounded-lg border border-l-4 border-white/90 bg-white px-2.5 py-2.5 shadow-sm transition-transform hover:-translate-y-0.5 hover:shadow"
+      >
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-xs font-extrabold text-white">1</span>
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-sm font-extrabold text-zinc-900">{leader.batter.name}</span>
+          <span
+            style={{ backgroundColor: withAlpha(leaderColor.bg, 0.15), color: leaderColor.bg }}
+            className="mt-1 inline-block rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+          >
+            {leader.batter.teamName}
+          </span>
+        </span>
+        <span className={`shrink-0 text-right text-lg font-extrabold tabular-nums ${tone.value}`}>{format(leader.difference)}</span>
+      </Link>
+      <ol className="space-y-0.5 px-2.5 pb-2.5 pt-2">
+        {followers.map(({ batter, difference }, index) => (
+          <li key={`${label}-${batter.teamId}-${batter.rank}`}>
+            <Link href={playerHref(batter)} className="flex items-center gap-2 rounded-md px-1.5 py-1.5 hover:bg-white/80">
+              <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{index + 2}</span>
+              <span className="min-w-0 flex-1 truncate text-xs font-semibold text-zinc-700">{batter.name}</span>
+              <span className={`text-xs font-extrabold tabular-nums ${tone.value}`}>{format(difference)}</span>
+            </Link>
+          </li>
+        ))}
+      </ol>
+    </article>
+  );
+}
+
 export default function LatestDashboard({ dashboard }: { dashboard: LatestDashboardData }) {
   const { year, teams, leagueLeaders, mvpCandidates, weeklyMovement, comparisonLabel } = dashboard;
 
@@ -168,36 +248,30 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
 
       <p className="order-6 text-xs leading-relaxed text-zinc-500">打撃MVP候補は規定打席到達者を対象に、リーグ首位を基準として wRC+ 65%・打点 12.5%・本塁打 12.5%・打率 10% で算出。守備・走塁・チーム成績は含みません。</p>
 
-      <section className="order-2 rounded-xl border border-zinc-200 bg-white p-4">
-        <div className="mb-3 flex items-baseline justify-between gap-3">
-          <SectionTitle title="今日の注目" note={comparisonLabel ?? "比較データを蓄積中"} />
-          <Link href="/monthly" className="shrink-0 text-xs font-bold text-zinc-600 hover:text-zinc-950">月間ランキング →</Link>
+      <section className="order-2 rounded-2xl border border-zinc-200 bg-gradient-to-br from-white via-amber-50/35 to-sky-50/45 p-3 sm:p-4">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-900 text-xs text-white">✦</span>
+              <h2 className="text-lg font-extrabold tracking-tight text-zinc-900">今日の注目</h2>
+              <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-bold text-zinc-500">前回更新比</span>
+            </div>
+            <p className="mt-1 text-xs text-zinc-500">数字が動いた打者を4つの切り口でピックアップ</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-[11px] text-zinc-400">{comparisonLabel ?? "比較データを蓄積中"}</span>
+            <Link href="/monthly" className="shrink-0 text-xs font-bold text-zinc-600 hover:text-zinc-950">月間ランキング →</Link>
+          </div>
         </div>
         {weeklyMovement ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { label: "wRC+急上昇", values: weeklyMovement.wrcPlus, format: (value: number) => `+${fmtWrcPlus(value)}` },
-              { label: "OPS急上昇", values: weeklyMovement.ops, format: (value: number) => `+${value.toFixed(3).replace(/^0\./, ".")}` },
-              { label: "本塁打を積み上げ", values: weeklyMovement.hr, format: (value: number) => `+${value}本` },
-              { label: "出場量", values: weeklyMovement.pa, format: (value: number) => `+${value}打席` },
-            ].map((group) => (
-              <div key={group.label} className="rounded-lg bg-zinc-50 p-2.5">
-                <h3 className="mb-2 text-xs font-bold text-zinc-500">{group.label}</h3>
-                <ol className="space-y-1">
-                  {group.values.slice(0, 5).map(({ batter, difference }, index) => (
-                    <li key={`${group.label}-${batter.teamId}-${batter.rank}`}>
-                      <Link
-                        href={playerHref(batter)}
-                        className="flex items-center gap-2 rounded-md bg-white px-2 py-1.5 hover:bg-zinc-100"
-                      >
-                        <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{index + 1}</span>
-                        <span className="min-w-0 flex-1 truncate text-xs font-semibold text-zinc-800">{batter.name}</span>
-                        <span className="text-xs font-extrabold tabular-nums text-emerald-600">{group.format(difference)}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ol>
-              </div>
+            {([
+              { label: "wRC+急上昇", values: weeklyMovement.wrcPlus, format: (value: number) => `+${fmtWrcPlus(value)}`, accent: "amber" },
+              { label: "OPS急上昇", values: weeklyMovement.ops, format: (value: number) => `+${value.toFixed(3).replace(/^0\./, ".")}`, accent: "sky" },
+              { label: "本塁打を積み上げ", values: weeklyMovement.hr, format: (value: number) => `+${value}本`, accent: "rose" },
+              { label: "出場量", values: weeklyMovement.pa, format: (value: number) => `+${value}打席`, accent: "violet" },
+            ] as FocusGroupProps[]).map((group) => (
+              <FocusGroup key={group.label} {...group} />
             ))}
           </div>
         ) : (
