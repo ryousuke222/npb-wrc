@@ -1,12 +1,9 @@
 /**
- * 同姓同名の日本人選手が別人なのに同じ表記でdata/*.jsonに混在している問題に対応するスクリプト。
+ * NPB公式の選手個別IDを、全打者行の内部識別キー(nameKey)として付与するスクリプト。
  *
- * 外国人選手（fix-ambiguous-batter-names.ts）と違い、日本人選手はもともとフルネーム
- * （姓＋名）表示のため、npb.jp側にも「Ｘ．」のような追加の区別表記が存在しない。
- * そのため表示名（name）はそのまま変更せず、npb.jpの選手個別ID（プロ野球在籍者名簿の
- * playerId）を使った内部識別キー（nameKey）だけを該当行に付与する。年度別成績の推移
- * （getPlayerHistory）等の名寄せ判定はnameKeyを優先して使うことで、無関係な同姓同名の
- * 選手同士が1人として混ざるのを防ぐ（表示上は今まで通りフルネームのみ）。
+ * 同姓同名の別人を分離するだけでなく、改名（例: 矢野 輝弘 → 矢野 燿大）で
+ * 表記が変わった同一選手を通算・年度推移でまとめるために使う。名簿の改名履歴と
+ * 在籍年度・球団が一致した場合だけIDを付与するため、名前だけで別人を結合しない。
  *
  * 実行: npx tsx scripts/fix-japanese-namesakes.ts
  */
@@ -61,6 +58,31 @@ async function fetchCached(url: string, cacheKey: string): Promise<string | null
   return html;
 }
 
+function normalizeName(name: string): string {
+  return name.normalize("NFKC").replace(/[\s　]/g, "");
+}
+
+/** 名簿の「［改名］～09旧名,10～新名」から歴代の登録名を取り出す。 */
+function aliasesForEntry(entry: RegistryEntry): string[] {
+  const aliases = new Set([entry.name]);
+  const renamed = entry.yearsText.split("［改名］")[1];
+  if (!renamed) return [...aliases];
+
+  for (const part of renamed.split(",")) {
+    const name = part
+      .trim()
+      .replace(/^(?:\d{2}(?:[～~]\d{2})?|[～~]\d{2})[^\p{Script=Han}々ヶァ-ヶＡ-ＺA-Z]*/u, "")
+      .trim();
+    if (name) aliases.add(name);
+  }
+  return [...aliases];
+}
+
+type IdentityCandidate = {
+  playerId: string;
+  seasonTeams: Set<string>;
+};
+
 async function main() {
   console.log("[1/3] プロ野球在籍者名簿(50音順)を取得中...");
   const allEntries: RegistryEntry[] = [];
@@ -74,7 +96,28 @@ async function main() {
   }
   console.log(`  登録選手数: ${allEntries.length}`);
 
-  console.log("[2/3] 同姓同名の日本人選手を特定し年度別チーム所属テキストを解決中...");
+  console.log("[2/3] 改名履歴・在籍年度・球団から選手IDの解決表を構築中...");
+  const candidatesByAlias = new Map<string, IdentityCandidate[]>();
+  for (const entry of allEntries) {
+    const seasonTeams = new Set<string>();
+    const careerText = entry.yearsText.split("［改名］")[0];
+    for (const { years, teamText } of parseYearsTeamText(careerText)) {
+      const teamId = teamIdFromGameName(teamText);
+      if (!teamId) continue;
+      for (const year of years) seasonTeams.add(`${year}_${teamId}`);
+    }
+    if (seasonTeams.size === 0) continue;
+
+    for (const alias of aliasesForEntry(entry)) {
+      const key = normalizeName(alias);
+      const candidates = candidatesByAlias.get(key) ?? [];
+      candidates.push({ playerId: entry.playerId, seasonTeams });
+      candidatesByAlias.set(key, candidates);
+    }
+  }
+
+  // 従来の同姓同名判定も残す。改名履歴が記載されていない古いデータを
+  // 取りこぼさず、同一表記の別人も確実に分離するため。
   const byName = new Map<string, RegistryEntry[]>();
   for (const e of allEntries) {
     if (!e.name.includes("　")) continue; // 日本人名（全角スペース区切り）のみ対象
@@ -119,6 +162,7 @@ async function main() {
   const files = (await readdir(DATA_DIR)).filter((f) => /^\d{4}\.json$/.test(f));
   let taggedRows = 0;
   let stillUnresolvedRows = 0;
+  let conflicts = 0;
 
   for (const file of files) {
     const filePath = path.join(DATA_DIR, file);
@@ -126,13 +170,33 @@ async function main() {
     let changed = false;
 
     for (const b of yearData.batters) {
+      const seasonTeam = `${b.year}_${b.teamId}`;
+      const matches = (candidatesByAlias.get(normalizeName(b.name)) ?? []).filter((candidate) =>
+        candidate.seasonTeams.has(seasonTeam)
+      );
+      const ids = [...new Set(matches.map((candidate) => candidate.playerId))];
+      if (ids.length === 1) {
+        if (b.nameKey && b.nameKey !== ids[0]) {
+          conflicts++;
+          continue;
+        }
+        if (b.nameKey !== ids[0]) {
+          b.nameKey = ids[0];
+          changed = true;
+          taggedRows++;
+        }
+        continue;
+      }
+
       const lookup = resolutionByName.get(b.name);
       if (!lookup) continue;
       const playerId = lookup.get(`${b.year}_${b.teamId as TeamId}`);
       if (playerId) {
-        b.nameKey = playerId;
-        changed = true;
-        taggedRows++;
+        if (!b.nameKey) {
+          b.nameKey = playerId;
+          changed = true;
+          taggedRows++;
+        }
       } else {
         stillUnresolvedRows++;
       }
@@ -144,7 +208,7 @@ async function main() {
   }
 
   console.log(
-    `完了。識別キーを付与した行: ${taggedRows}件、解決できず未対応のまま残った行: ${stillUnresolvedRows}件`
+    `完了。識別キーを付与した行: ${taggedRows}件、解決できず未対応のまま残った行: ${stillUnresolvedRows}件、既存IDとの不一致: ${conflicts}件`
   );
 }
 

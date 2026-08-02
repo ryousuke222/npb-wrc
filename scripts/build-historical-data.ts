@@ -240,6 +240,7 @@ async function main() {
 
       allBatters.push({
         name: playerNameById.get(row.playerId) ?? "",
+        nameKey: row.playerId,
         teamId,
         teamName: row.teamName,
         league,

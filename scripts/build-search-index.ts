@@ -6,7 +6,11 @@ const DATA_DIR = path.join(process.cwd(), "data");
 const OUT_PATH = path.join(process.cwd(), "public", "search-index.json");
 
 export interface SearchEntry {
+  /** NPB公式の選手個別ID。旧登録名と現登録名を同じ検索結果にまとめるために使う。 */
+  id: string;
   name: string;
+  /** 検索用の別名（改名前の登録名など）。表示はnameのみ。 */
+  aliases?: string[];
   year: number;
   rank: number;
   teamName: string;
@@ -19,13 +23,14 @@ async function main() {
     await readFile(path.join(DATA_DIR, "years.json"), "utf-8")
   ) as number[];
 
-  // 選手名ごとに最新の出場エントリを残す。同一年度内の重複（トレード等）は
+  // 選手IDごとに最新の出場エントリを残す。同一年度内の重複（トレード等）は
   // その年度でwRC+が最も高い方（配列の先頭側）を優先する。
-  const latestByName = new Map<
+  const latestById = new Map<
     string,
-    { year: number; rank: number; teamName: string }
+    { name: string; year: number; rank: number; teamName: string }
   >();
-  const seasonCountByName = new Map<string, Set<number>>();
+  const seasonCountById = new Map<string, Set<number>>();
+  const aliasesById = new Map<string, Set<string>>();
 
   for (const year of years) {
     const raw = await readFile(
@@ -36,13 +41,18 @@ async function main() {
     const data = JSON.parse(raw) as YearData;
 
     for (const b of data.batters) {
-      const seasons = seasonCountByName.get(b.name) ?? new Set<number>();
+      const id = b.nameKey ?? `name:${b.name}`;
+      const seasons = seasonCountById.get(id) ?? new Set<number>();
       seasons.add(b.year);
-      seasonCountByName.set(b.name, seasons);
+      seasonCountById.set(id, seasons);
+      const aliases = aliasesById.get(id) ?? new Set<string>();
+      aliases.add(b.name);
+      aliasesById.set(id, aliases);
 
-      const existing = latestByName.get(b.name);
+      const existing = latestById.get(id);
       if (!existing || existing.year < b.year) {
-        latestByName.set(b.name, {
+        latestById.set(id, {
+          name: b.name,
           year: b.year,
           rank: b.rank,
           teamName: b.teamName,
@@ -51,13 +61,15 @@ async function main() {
     }
   }
 
-  const entries: SearchEntry[] = [...latestByName.entries()].map(
-    ([name, v]) => ({
-      name,
+  const entries: SearchEntry[] = [...latestById.entries()].map(
+    ([id, v]) => ({
+      id,
+      name: v.name,
+      aliases: [...(aliasesById.get(id) ?? [])].filter((name) => name !== v.name),
       year: v.year,
       rank: v.rank,
       teamName: v.teamName,
-      seasons: seasonCountByName.get(name)?.size ?? 1,
+      seasons: seasonCountById.get(id)?.size ?? 1,
     })
   );
 

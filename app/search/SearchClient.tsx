@@ -19,7 +19,10 @@ export default function SearchClient() {
     if (!entries) return [];
     const q = query.trim();
     if (!q) return [];
-    return entries.filter((e) => e.name.replace(/\s|　/g, "").includes(q.replace(/\s|　/g, ""))).slice(0, 50);
+    const normalizedQuery = q.replace(/\s|　/g, "");
+    return entries
+      .filter((e) => [e.name, ...(e.aliases ?? [])].some((name) => name.replace(/\s|　/g, "").includes(normalizedQuery)))
+      .slice(0, 50);
   }, [entries, query]);
 
   return (
@@ -45,7 +48,7 @@ export default function SearchClient() {
 
       <ul className="mt-4 flex flex-col gap-2">
         {results.map((r) => (
-          <li key={r.name}>
+          <li key={r.id}>
             <Link
               href={`/year/${r.year}/${r.rank}`}
               className="flex items-center justify-between rounded-lg border border-zinc-200 bg-white px-4 py-3 hover:border-zinc-300 hover:bg-zinc-50"

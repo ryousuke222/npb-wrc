@@ -249,6 +249,10 @@ async function main() {
         continue;
       }
 
+      // NPB公式の選手個別IDを恒久的な内部識別子として保存する。改名・表記ゆれが
+      // 起きても、通算成績や年度推移は同じ選手として追跡できる。
+      b.nameKey = playerId;
+
       const bio = await getBio(playerId);
       if (!bio) {
         unresolved++;

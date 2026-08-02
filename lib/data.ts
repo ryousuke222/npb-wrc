@@ -119,8 +119,8 @@ export async function getActiveRosterNames(): Promise<string[]> {
 /**
  * 選手の識別キー（nameKeyがあればそれを、なければ名前をそのまま）をキーにした
  * 全打者エントリの索引。初回アクセス時に一度だけ構築する。
- * nameKeyは同姓同名の別人が存在する選手のみ、npb.jpの選手個別IDベースで
- * scripts/fix-japanese-namesakes.ts が付与する（表示名は変えず内部識別のみに使う）。
+ * nameKeyは、npb.jpの選手個別IDをもとにscripts/fix-japanese-namesakes.tsが付与する。
+ * 改名前後の登録名も同一IDとして扱い、表示名は各年度の登録名をそのまま維持する。
  */
 let identityIndexPromise: Promise<Map<string, BatterRanking[]>> | null = null;
 
