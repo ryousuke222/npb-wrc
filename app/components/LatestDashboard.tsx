@@ -7,7 +7,7 @@ import { fmtWrcPlus } from "@/lib/wrc";
 import XRankingImageButton from "./XRankingImageButton";
 
 function playerHref(batter: BatterRanking) {
-  return `/year/${batter.year}/${batter.rank}`;
+  return `/year/${batter.year}/${batter.rank}?from=latest`;
 }
 
 function RankingNumber({ value }: { value: number }) {

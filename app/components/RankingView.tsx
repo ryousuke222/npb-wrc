@@ -319,7 +319,7 @@ export default function RankingView({
               onClick={() => selectMinPa(p)}
               className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
                 minPa === p
-                  ? "bg-zinc-900 text-white"
+                  ? "bg-sky-700 text-white"
                   : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
               }`}
             >

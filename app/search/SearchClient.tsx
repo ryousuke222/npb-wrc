@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import type { SearchEntry } from "@/scripts/build-search-index";
 
@@ -24,6 +25,7 @@ function matchScore(entry: SearchEntry, query: string) {
 }
 
 export default function SearchClient() {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [entries, setEntries] = useState<SearchEntry[] | null>(null);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -66,7 +68,9 @@ export default function SearchClient() {
       setActiveIndex(-1);
     } else if (event.key === "Enter" && activeIndex >= 0 && results[activeIndex]) {
       event.preventDefault();
-      window.location.assign(`/year/${results[activeIndex].year}/${results[activeIndex].rank}`);
+      const result = results[activeIndex];
+      window.sessionStorage.setItem(`player-return:${result.year}:${result.rank}`, "history");
+      router.push(`/year/${result.year}/${result.rank}?from=search`);
     }
   }
 
@@ -138,7 +142,7 @@ export default function SearchClient() {
               return (
                 <li key={result.id} id={`search-result-${index}`}>
                   <Link
-                    href={`/year/${result.year}/${result.rank}`}
+                    href={`/year/${result.year}/${result.rank}?from=search`}
                     className={`flex items-center justify-between gap-3 rounded-xl border bg-white px-4 py-3.5 transition ${
                       index === activeIndex
                         ? "border-zinc-900 ring-2 ring-zinc-200"

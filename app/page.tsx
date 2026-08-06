@@ -22,7 +22,7 @@ export default async function Home() {
     ...(["central", "pacific"] as const).flatMap((league) => {
       const batter = dashboard.leagueLeaders[league][0];
       return batter ? [{
-        href: `/year/${batter.year}/${batter.rank}`,
+        href: `/year/${batter.year}/${batter.rank}?from=home`,
         eyebrow: league === "central" ? "セ・打者1位" : "パ・打者1位",
         name: batter.name,
         value: fmtWrcPlus(batter.wrcPlus),
@@ -85,7 +85,7 @@ export default async function Home() {
           <h2 className="text-lg font-extrabold tracking-tight text-zinc-950">まず見るなら</h2>
           <span className="text-xs text-zinc-500">よく使う入口</span>
         </div>
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-3">
           <Link
             href="/latest"
             className="group rounded-2xl border border-amber-200 bg-amber-50 p-5 transition hover:-translate-y-0.5 hover:border-amber-300 hover:shadow-lg sm:p-6"
@@ -110,6 +110,19 @@ export default async function Home() {
                 <p className="mt-1.5 text-sm leading-relaxed text-zinc-600">球団・リーグ・打席数・指標で、全打者を絞り込む。</p>
               </div>
               <span className="mb-0.5 text-2xl text-sky-600 transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </Link>
+          <Link
+            href="/all-time"
+            className="group rounded-2xl border border-violet-200 bg-violet-50 p-5 transition hover:-translate-y-0.5 hover:border-violet-300 hover:shadow-lg sm:p-6"
+          >
+            <p className="text-xs font-bold tracking-wider text-violet-600">ALL-TIME</p>
+            <div className="mt-7 flex items-end justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-extrabold tracking-tight text-zinc-900">歴代ランキング</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-zinc-600">名シーズンと通算wRC+を、時代をまたいで比べる。</p>
+              </div>
+              <span className="mb-0.5 text-2xl text-violet-600 transition-transform group-hover:translate-x-1">→</span>
             </div>
           </Link>
         </div>

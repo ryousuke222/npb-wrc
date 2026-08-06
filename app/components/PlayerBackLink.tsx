@@ -68,6 +68,26 @@ export default function PlayerBackLink({ year, rank }: { year: number; rank: num
     label = "← 選手比較に戻る";
   }
 
+  if (from === "latest") {
+    href = "/latest";
+    label = "← 最新ランキングに戻る";
+  }
+
+  if (from === "monthly") {
+    href = "/monthly";
+    label = "← 月間ランキングに戻る";
+  }
+
+  if (from === "search") {
+    href = "/search";
+    label = "← 選手検索に戻る";
+  }
+
+  if (from === "home") {
+    href = "/";
+    label = "← ホームに戻る";
+  }
+
   const handleBack = () => {
     if (window.sessionStorage.getItem(returnKey) === "history") {
       window.sessionStorage.removeItem(returnKey);

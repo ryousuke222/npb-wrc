@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import "./globals.css";
 import HeaderNav from "./components/HeaderNav";
+import ScrollRestoration from "./components/ScrollRestoration";
 import { getLatestYear } from "@/lib/data";
 import { SITE_URL } from "@/lib/site";
 
@@ -33,6 +35,9 @@ export default async function RootLayout({
   return (
     <html lang="ja" className="h-full antialiased" data-scroll-behavior="smooth">
       <body className="flex min-h-full flex-col overflow-x-hidden bg-zinc-50 pb-16 text-zinc-900 lg:pb-0">
+        <Suspense fallback={null}>
+          <ScrollRestoration />
+        </Suspense>
         <a href="#main-content" className="skip-link">本文へ移動</a>
         <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/95">
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">

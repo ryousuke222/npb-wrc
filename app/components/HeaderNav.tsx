@@ -25,8 +25,8 @@ export default function HeaderNav({ latestYear }: { latestYear: number }) {
   const primaryNavItems = [
     { href: "/latest", label: "最新", matches: (path: string) => path === "/latest" },
     { href: `/year/${latestYear}`, label: "年度別", matches: (path: string) => path.startsWith("/year/") },
-    { href: "/monthly", label: "月間", matches: (path: string) => path === "/monthly" },
     { href: "/all-time", label: "歴代", matches: (path: string) => path === "/all-time" },
+    { href: "/monthly", label: "月間", matches: (path: string) => path === "/monthly" },
     { href: "/team-wrc", label: "チーム", matches: (path: string) => path === "/team-wrc" },
     { href: "/search", label: "選手検索", matches: (path: string) => path === "/search" },
   ];
@@ -34,7 +34,7 @@ export default function HeaderNav({ latestYear }: { latestYear: number }) {
     { href: "/", label: "ホーム", symbol: "⌂", matches: (path: string) => path === "/" },
     { href: "/latest", label: "最新", symbol: "●", matches: (path: string) => path === "/latest" },
     { href: `/year/${latestYear}`, label: "年度別", symbol: "年", matches: (path: string) => path.startsWith("/year/") },
-    { href: "/search", label: "検索", symbol: "⌕", matches: (path: string) => path === "/search" },
+    { href: "/all-time", label: "歴代", symbol: "史", matches: (path: string) => path === "/all-time" },
   ];
   const moreIsActive = MORE_NAV_ITEMS.some((item) => item.matches(pathname));
   const mobileMoreIsActive = !mobileNavItems.some((item) => item.matches(pathname));

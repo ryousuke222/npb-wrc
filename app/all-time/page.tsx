@@ -6,6 +6,7 @@ import {
 } from "@/lib/data";
 import AllTimeView from "@/app/components/AllTimeView";
 import PageIntro from "@/app/components/PageIntro";
+import RankingHubNav from "@/app/components/RankingHubNav";
 
 export const metadata = {
   title: "歴代最強打者ランキング | NPB最強打者ランキング",
@@ -29,9 +30,9 @@ export default async function AllTimePage() {
       <PageIntro
         title="歴代最強打者ランキング"
         description={`${oldestYear}〜${newestYear}年。単年と通算wRC+を切り替えて見られます。`}
-        backHref={`/year/${latestYear}`}
-        backLabel="年度別ランキング"
       />
+
+      <RankingHubNav current="all-time" year={latestYear} />
 
       <AllTimeView batters={batters} activeRosterNames={activeRosterNames} />
     </div>

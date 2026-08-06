@@ -5,6 +5,7 @@ import { formatGeneratedAtJa } from "@/lib/date";
 import YearNav from "@/app/components/YearNav";
 import RankingView from "@/app/components/RankingView";
 import PageIntro from "@/app/components/PageIntro";
+import RankingHubNav from "@/app/components/RankingHubNav";
 import Link from "next/link";
 
 export async function generateStaticParams() {
@@ -59,6 +60,7 @@ export default async function YearPage({
         }
         actions={<YearNav years={years} currentYear={year} />}
       />
+      <RankingHubNav current="year" year={year} />
       {isLatestYear && (
         <div className="mb-4 grid gap-2 sm:grid-cols-3">
           <Link href="/latest" className="rounded-xl border border-amber-200 bg-amber-50/70 px-4 py-3 text-sm transition-colors hover:bg-amber-100/70">
