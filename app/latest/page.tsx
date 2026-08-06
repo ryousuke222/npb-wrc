@@ -6,7 +6,7 @@ import { formatGeneratedAtJa } from "@/lib/date";
 
 export const metadata = {
   title: "最新ランキング | NPB最強打者ランキング",
-  description: "最新シーズンのチームwRC+、セ・パ別打者ランキング、MVP候補、週次で伸びた打者をまとめて確認できます。",
+  description: "最新シーズンのチームwRC+、セ・パ別打者ランキング、MVP候補、前回更新から伸びた打者をまとめて確認できます。",
 };
 
 export default async function LatestPage() {

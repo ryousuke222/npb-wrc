@@ -40,3 +40,17 @@ export function withAlpha(hex: string, alpha: number): string {
     .padStart(2, "0");
   return `${hex}${a}`;
 }
+
+/** 白系の背景でも4.5:1以上のコントラストを確保したチーム系アクセント色。 */
+export function readableOnLight(hex: string): string {
+  const rgb = [1, 3, 5].map((index) => Number.parseInt(hex.slice(index, index + 2), 16));
+  const luminance = (channels: number[]) => channels
+    .map((channel) => channel / 255)
+    .map((channel) => channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4)
+    .reduce((sum, channel, index) => sum + channel * [0.2126, 0.7152, 0.0722][index], 0);
+  let adjusted = rgb;
+  while (1.05 / (luminance(adjusted) + 0.05) < 4.5) {
+    adjusted = adjusted.map((channel) => Math.max(0, Math.floor(channel * 0.86)));
+  }
+  return `#${adjusted.map((channel) => channel.toString(16).padStart(2, "0")).join("")}`;
+}

@@ -1,10 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAvailableYears, getYearData } from "@/lib/data";
-
-// 実際のデプロイ先ドメインで環境変数を設定すること（未設定時のプレースホルダーのままでは
-// sitemap上のURLが正しくならない）
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+import { SITE_URL } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const years = await getAvailableYears();
@@ -17,6 +13,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/team-best-nine`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/park-factors`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/team-wrc`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${SITE_URL}/titles`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${SITE_URL}/records`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/compare`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/search`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/about`, changeFrequency: "monthly", priority: 0.4 },

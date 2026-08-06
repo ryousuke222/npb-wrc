@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { BatterRanking } from "@/lib/types";
 import type { BatterChange, LatestDashboardData, MvpCandidate } from "@/lib/latest";
 import type { TeamWrc } from "@/lib/wrc";
-import { teamColor, withAlpha } from "@/lib/teamColors";
+import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus } from "@/lib/wrc";
 import XRankingImageButton from "./XRankingImageButton";
 
@@ -37,13 +37,13 @@ function PlayerRows({ players }: { players: BatterRanking[] }) {
                 </span>
                 <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
                   <span
-                    style={{ backgroundColor: withAlpha(color.bg, 0.16), color: color.bg }}
-                    className="rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                    style={{ backgroundColor: "#fff", color: "#3f3f46", boxShadow: `inset 3px 0 0 ${color.bg}` }}
+                    className="rounded-full px-2 py-0.5 text-[10px] font-bold"
                   >
                     {player.teamName}
                   </span>
                   {player.titles?.map((title) => (
-                    <span key={title} style={{ color: color.bg }} className="text-[10px] font-bold">
+                    <span key={title} className="rounded bg-white/80 px-1 py-0.5 text-[10px] font-bold text-zinc-700">
                       {title}
                     </span>
                   ))}
@@ -53,7 +53,7 @@ function PlayerRows({ players }: { players: BatterRanking[] }) {
                 <span className="block text-xl font-extrabold tabular-nums text-zinc-950 sm:text-2xl">
                   {fmtWrcPlus(player.wrcPlus)}
                 </span>
-                <span className="block text-[10px] font-medium text-zinc-400">wRC+</span>
+                <span className="block text-[10px] font-medium text-zinc-600">wRC+</span>
               </span>
             </Link>
           </li>
@@ -79,7 +79,7 @@ function TeamRows({ year, teams }: { year: number; teams: TeamWrc[] }) {
               <span className="min-w-0 flex-1 text-sm font-bold text-zinc-800">{team.teamName}</span>
               <span className="text-right">
                 <span className="block text-xl font-extrabold tabular-nums text-zinc-950">{fmtWrcPlus(team.wrcPlus)}</span>
-                <span className="block text-[10px] font-medium text-zinc-400">wRC+</span>
+                <span className="block text-[10px] font-medium text-zinc-600">wRC+</span>
               </span>
             </Link>
           </li>
@@ -104,13 +104,13 @@ function MvpRows({ candidates }: { candidates: MvpCandidate[] }) {
               <RankingNumber value={index + 1} />
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-base font-bold tracking-tight text-zinc-900 sm:text-lg">{player.name}</span>
-                <span className="mt-0.5 block truncate text-[10px] font-medium text-zinc-400 sm:text-[11px]">
+                <span className="mt-0.5 block truncate text-[10px] font-medium text-zinc-600 sm:text-[11px]">
                   wRC+{fmtWrcPlus(player.wrcPlus)}・{player.hr}本・{player.rbi}打点・{player.avg.toFixed(3).replace(/^0\./, ".")}
                 </span>
               </span>
               <span className="shrink-0 text-right">
                 <span className="block text-xl font-extrabold tabular-nums text-zinc-950 sm:text-2xl">{score.toFixed(1)}</span>
-                <span className="block text-[10px] font-medium text-zinc-400">score</span>
+                <span className="block text-[10px] font-medium text-zinc-600">score</span>
               </span>
             </Link>
           </li>
@@ -124,7 +124,7 @@ function SectionTitle({ title, note }: { title: string; note?: string }) {
   return (
     <div className="mb-3 flex items-baseline justify-between gap-3">
       <h2 className="text-base font-bold tracking-tight text-zinc-900">{title}</h2>
-      {note && <span className="text-[11px] text-zinc-400">{note}</span>}
+      {note && <span className="text-[11px] text-zinc-600">{note}</span>}
     </div>
   );
 }
@@ -146,6 +146,7 @@ function FocusGroup({ label, values, format }: FocusGroupProps) {
   const tiedAtTop = leaders.length > 1;
   const leaderColor = teamColor(leader.batter.teamId);
   const groupColor = tiedAtTop ? "#52525b" : leaderColor.bg;
+  const readableGroupColor = readableOnLight(groupColor);
 
   return (
     <article
@@ -174,13 +175,13 @@ function FocusGroup({ label, values, format }: FocusGroupProps) {
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-extrabold text-zinc-900">{batter.name}</span>
                 <span
-                  style={{ backgroundColor: withAlpha(color.bg, 0.15), color: color.bg }}
-                  className="mt-1 inline-block rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                  style={{ backgroundColor: "#fff", color: "#3f3f46", boxShadow: `inset 3px 0 0 ${color.bg}` }}
+                  className="mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold"
                 >
                   {batter.teamName}
                 </span>
               </span>
-              <span style={{ color: color.bg }} className="shrink-0 text-right text-lg font-extrabold tabular-nums">{format(difference)}</span>
+              <span style={{ color: readableOnLight(color.bg) }} className="shrink-0 text-right text-lg font-extrabold tabular-nums">{format(difference)}</span>
             </Link>
           );
         })}
@@ -191,9 +192,9 @@ function FocusGroup({ label, values, format }: FocusGroupProps) {
           return (
             <li key={`${label}-${batter.teamId}-${batter.rank}`}>
               <Link href={playerHref(batter)} className="flex items-center gap-2 rounded-md px-1.5 py-1.5 hover:bg-white/80">
-                <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{rank}</span>
+                <span className="w-4 text-center text-[10px] font-bold text-zinc-600">{rank}</span>
                 <span className="min-w-0 flex-1 truncate text-xs font-semibold text-zinc-700">{batter.name}</span>
-                <span style={{ color: groupColor }} className="text-xs font-extrabold tabular-nums">{format(difference)}</span>
+                <span style={{ color: readableGroupColor }} className="text-xs font-extrabold tabular-nums">{format(difference)}</span>
               </Link>
             </li>
           );
@@ -211,16 +212,20 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
 
   return (
     <div className="flex flex-col gap-5 sm:gap-6">
-      <div className="order-1 flex justify-end">
-        <Link
-          href={`/year/${year}`}
-          className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-bold text-zinc-600 transition-colors hover:bg-zinc-50 hover:text-zinc-950"
-        >
-          全打者を条件で絞り込む →
-        </Link>
-      </div>
+      <nav aria-label="最新ランキング内のメニュー" className="order-1 sticky top-[3.35rem] z-20 -mx-4 overflow-x-auto border-y border-zinc-200 bg-zinc-50/95 px-4 py-2 backdrop-blur sm:mx-0 sm:rounded-xl sm:border sm:bg-white sm:px-3">
+        <div className="flex min-w-max items-center gap-1.5">
+          {[
+            { href: "#today", label: "今日の注目" },
+            { href: "#teams", label: "チーム" },
+            { href: "#batters", label: "打者TOP10" },
+            { href: "#mvp", label: "MVP候補" },
+          ].map((item) => <a key={item.href} href={item.href} className="rounded-full px-3 py-1.5 text-xs font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950">{item.label}</a>)}
+          <span className="mx-1 h-5 w-px bg-zinc-200" />
+          <Link href={`/year/${year}`} className="rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-700">全打者を絞り込む →</Link>
+        </div>
+      </nav>
 
-      <section className="order-3 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
+      <section id="teams" className="page-section order-3 rounded-xl border border-zinc-200 bg-white p-3 sm:p-4">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <SectionTitle title={`${year}年 チームwRC+ランキング`} note="リーグ内順位・全12球団" />
           <XRankingImageButton year={year} teams={teams} />
@@ -237,7 +242,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
         </div>
       </section>
 
-      <section className="order-4 grid gap-4 lg:grid-cols-2">
+      <section id="batters" className="page-section order-4 grid gap-4 lg:grid-cols-2">
         <div className="rounded-xl border border-zinc-200 bg-white p-4">
           <SectionTitle title="セ・リーグ 打者TOP10" note="規定打席・wRC+" />
           <PlayerRows players={leagueLeaders.central} />
@@ -248,7 +253,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
         </div>
       </section>
 
-      <section className="order-5 grid gap-4 lg:grid-cols-2">
+      <section id="mvp" className="page-section order-5 grid gap-4 lg:grid-cols-2">
         <div className="rounded-xl border border-zinc-200 bg-white p-4">
           <SectionTitle title="打撃MVP候補 セ" note="総合スコア" />
           <MvpRows candidates={mvpCandidates.central.slice(0, 5)} />
@@ -261,18 +266,18 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
 
       <p className="order-6 text-xs leading-relaxed text-zinc-500">打撃MVP候補は規定打席到達者を対象に、リーグ首位を基準として wRC+ 65%・打点 12.5%・本塁打 12.5%・打率 10% で算出。守備・走塁・チーム成績は含みません。</p>
 
-      <section className="order-2 rounded-2xl border border-zinc-200 bg-gradient-to-br from-white via-amber-50/35 to-sky-50/45 p-3 sm:p-4">
+      <section id="today" className="page-section order-2 rounded-2xl border border-zinc-200 bg-gradient-to-br from-white via-amber-50/35 to-sky-50/45 p-3 sm:p-4">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
           <div>
             <div className="flex items-center gap-2">
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-900 text-xs text-white">✦</span>
               <h2 className="text-lg font-extrabold tracking-tight text-zinc-900">今日の注目</h2>
-              <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-bold text-zinc-500">前回更新比</span>
+              <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-bold text-zinc-700">前回更新比</span>
             </div>
             <p className="mt-1 text-xs text-zinc-500">数字が動いた打者を4つの切り口でピックアップ</p>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-[11px] text-zinc-400">{comparisonLabel ?? "比較データを蓄積中"}</span>
+            <span className="text-[11px] text-zinc-600">{comparisonLabel ?? "比較データを蓄積中"}</span>
             <Link href="/monthly" className="shrink-0 text-xs font-bold text-zinc-600 hover:text-zinc-950">月間ランキング →</Link>
           </div>
         </div>

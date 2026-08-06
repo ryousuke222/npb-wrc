@@ -1,29 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import HeaderNav from "./components/HeaderNav";
 import { getLatestYear } from "@/lib/data";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-// 実際のデプロイ先ドメインで環境変数を設定すること（未設定時のプレースホルダーのままでは
-// OG画像等の絶対URLが正しくならない。app/sitemap.tsのSITE_URLと同じ変数）
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "NPB最強打者ランキング(wRC+)",
   description:
     "wRC+をもとにしたNPB(日本プロ野球)の年度別・最強打者ランキング。データはNPB公式サイトの公開成績を元に独自算出しています。",
+  openGraph: {
+    type: "website",
+    locale: "ja_JP",
+    url: SITE_URL,
+    siteName: "NPB最強打者ランキング",
+    title: "NPB最強打者ランキング(wRC+)",
+    description: "最新シーズンから歴代まで、NPB打者の得点創出力をwRC+で比較。",
+  },
   twitter: {
     card: "summary_large_image",
   },
@@ -37,13 +31,11 @@ export default async function RootLayout({
   const latestYear = await getLatestYear();
 
   return (
-    <html
-      lang="ja"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col overflow-x-hidden bg-zinc-50 text-zinc-900">
-        <header className="border-b border-zinc-200 bg-white/80 backdrop-blur sticky top-0 z-10">
-          <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+    <html lang="ja" className="h-full antialiased" data-scroll-behavior="smooth">
+      <body className="flex min-h-full flex-col overflow-x-hidden bg-zinc-50 pb-16 text-zinc-900 lg:pb-0">
+        <a href="#main-content" className="skip-link">本文へ移動</a>
+        <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/95">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
             <Link href="/" className="flex min-w-0 items-baseline gap-1.5">
               <span className="truncate text-base font-bold tracking-tight sm:text-lg">
                 NPB最強打者ランキング
@@ -55,8 +47,8 @@ export default async function RootLayout({
             <HeaderNav latestYear={latestYear} />
           </div>
         </header>
-        <main className="flex-1">{children}</main>
-        <footer className="border-t border-zinc-200 py-6 text-center text-xs text-zinc-500">
+        <main id="main-content" className="flex-1">{children}</main>
+        <footer className="border-t border-zinc-200 bg-white px-4 py-6 text-center text-xs text-zinc-500">
           <p>
             成績データ出典:{" "}
             <a

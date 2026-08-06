@@ -36,7 +36,7 @@ export default function PageIntro({
           {description && (
             <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">{description}</p>
           )}
-          {meta && <div className="mt-1.5 text-xs font-medium text-zinc-400">{meta}</div>}
+          {meta && <div className="mt-1.5 text-xs font-medium text-zinc-500">{meta}</div>}
         </div>
         {actions && <div className="shrink-0">{actions}</div>}
       </div>

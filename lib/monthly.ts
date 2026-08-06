@@ -25,6 +25,8 @@ export type MonthlyPeriod = {
 export type MonthlyRanking = {
   period: MonthlyPeriod;
   label: string | null;
+  coverageNote: string | null;
+  qualifiedCounts: Record<"central" | "pacific", number>;
   central: MonthlyBatter[];
   pacific: MonthlyBatter[];
   availablePeriods: MonthlyPeriod[];
@@ -86,9 +88,18 @@ function rankPeriod(period: MonthlyPeriod, baseline: YearData, end: YearData, av
     .filter((row) => row.batter.league === league)
     .sort((a, b) => b.ops - a.ops || b.pa - a.pa)
     .slice(0, 10);
+  const baselinePeriod = periodFromDate(baseline.generatedAt);
+  const hasPreviousMonthBaseline = baselinePeriod.key < period.key;
   return {
     period,
     label: `${monthLabel(baseline.generatedAt)} → ${monthLabel(end.generatedAt)}`,
+    coverageNote: hasPreviousMonthBaseline
+      ? "前月末に最も近い保存値を基準"
+      : `${monthLabel(baseline.generatedAt)}の保存開始以降を集計`,
+    qualifiedCounts: {
+      central: rows.filter((row) => row.batter.league === "central").length,
+      pacific: rows.filter((row) => row.batter.league === "pacific").length,
+    },
     central: rank("central"),
     pacific: rank("pacific"),
     availablePeriods,
@@ -131,9 +142,25 @@ export async function getMonthlyRanking(selectedKey?: string): Promise<MonthlyRa
     (a, b) => new Date(a.generatedAt).getTime() - new Date(b.generatedAt).getTime()
   );
   const end = period.key === currentPeriod.key ? current : periodSnapshots.at(-1);
-  const baseline = periodSnapshots[0];
+  const sortedSnapshots = snapshots.sort(
+    (a, b) => new Date(a.generatedAt).getTime() - new Date(b.generatedAt).getTime()
+  );
+  // 月初の最初の保存値を引くと、その保存時点までの当月成績が消えてしまう。
+  // 前月末以前の最新保存値がある場合は、そちらを月間差分の基準にする。
+  const beforePeriod = sortedSnapshots
+    .filter((snapshot) => periodFromDate(snapshot.generatedAt).key < period.key)
+    .at(-1);
+  const baseline = beforePeriod ?? periodSnapshots[0];
   if (!baseline || !end || new Date(baseline.generatedAt).getTime() >= new Date(end.generatedAt).getTime()) {
-    return { period, label: null, central: [], pacific: [], availablePeriods };
+    return {
+      period,
+      label: null,
+      coverageNote: null,
+      qualifiedCounts: { central: 0, pacific: 0 },
+      central: [],
+      pacific: [],
+      availablePeriods,
+    };
   }
   return rankPeriod(period, baseline, end, availablePeriods);
 }

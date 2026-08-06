@@ -170,6 +170,43 @@ const MAX_FETCH_RETRIES = 3;
 const CURRENT_YEAR_CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000; // 6時間
 const SEASON_MONTHS = [3, 4, 5, 6, 7, 8, 9, 10, 11];
 
+function currentJstYear(): number {
+  return Number(new Intl.DateTimeFormat("en", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+  }).format(new Date()));
+}
+
+function currentJstDateParts(): { year: number; month: number; day: number } {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  return {
+    year: Number(parts.find((part) => part.type === "year")?.value),
+    month: Number(parts.find((part) => part.type === "month")?.value),
+    day: Number(parts.find((part) => part.type === "day")?.value),
+  };
+}
+
+async function preserveGeneratedAtWhenUnchanged(data: YearData): Promise<YearData> {
+  try {
+    const previous = JSON.parse(
+      await readFile(path.join(DATA_DIR, `${data.year}.json`), "utf-8")
+    ) as YearData;
+    const previousContent = { ...previous, generatedAt: "" };
+    const nextContent = { ...data, generatedAt: "" };
+    if (JSON.stringify(previousContent) === JSON.stringify(nextContent)) {
+      return { ...data, generatedAt: previous.generatedAt };
+    }
+  } catch {
+    // 初回生成時は比較対象がないため、新しい更新日時のまま保存する。
+  }
+  return data;
+}
+
 const LEAGUE_PATH: Record<LeagueKey, "c" | "p"> = {
   central: "c",
   pacific: "p",
@@ -224,9 +261,9 @@ async function fetchCached(
 }
 
 function formatDate(d: Date): string {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
   return `${y}${m}${day}`;
 }
 
@@ -237,7 +274,7 @@ function formatDate(d: Date): string {
  * 1日ずつ総当たりするフォールバックを使う。
  */
 async function fetchYearGameDates(year: number): Promise<string[]> {
-  if (year < START_YEAR || year > new Date().getFullYear()) return [];
+  if (year < START_YEAR || year > currentJstYear()) return [];
 
   const dateSet = new Set<string>();
 
@@ -252,15 +289,18 @@ async function fetchYearGameDates(year: number): Promise<string[]> {
   }
 
   if (dateSet.size === 0) {
-    const today = new Date();
+    const today = currentJstDateParts();
     const rangeEnd =
-      year < today.getFullYear()
-        ? new Date(year, 10, 30)
-        : new Date(Math.min(today.getTime(), new Date(year, 10, 30).getTime()));
+      year < today.year
+        ? new Date(Date.UTC(year, 10, 30))
+        : new Date(Math.min(
+            Date.UTC(today.year, today.month - 1, today.day),
+            Date.UTC(year, 10, 30)
+          ));
     for (
-      let d = new Date(year, 2, 1);
+      let d = new Date(Date.UTC(year, 2, 1));
       d <= rangeEnd;
-      d.setDate(d.getDate() + 1)
+      d.setUTCDate(d.getUTCDate() + 1)
     ) {
       dateSet.add(formatDate(d));
     }
@@ -424,7 +464,7 @@ async function getYearGameResultsCached(year: number) {
 async function computeWeightedParkFactors(
   year: number
 ): Promise<Partial<Record<TeamId, ParkFactor>>> {
-  const currentYear = new Date().getFullYear();
+  const currentYear = currentJstYear();
   const hasData = (y: number) => y >= START_YEAR && y <= currentYear;
 
   const neededYears = new Set<number>();
@@ -480,7 +520,7 @@ async function buildYear(year: number): Promise<YearData | null> {
   }
   const personalPfMap = await computePersonalParkFactors(year, rawPfByTeam);
 
-  const isCurrentYear = year === new Date().getFullYear();
+  const isCurrentYear = year === currentJstYear();
   const statsMaxAgeMs = isCurrentYear ? CURRENT_YEAR_CACHE_MAX_AGE_MS : undefined;
 
   for (const league of leagues) {
@@ -608,7 +648,7 @@ async function buildYear(year: number): Promise<YearData | null> {
     return { ...b, rank: i + 1, leagueRank };
   });
 
-  const currentYear = new Date().getFullYear();
+  const currentYear = currentJstYear();
   const seasonComplete = year < currentYear;
 
   regThresholds.sort((a, b) => a - b);
@@ -630,7 +670,7 @@ async function buildYear(year: number): Promise<YearData | null> {
 }
 
 async function main() {
-  const currentYear = new Date().getFullYear();
+  const currentYear = currentJstYear();
   const onlyYear = process.env.BUILD_YEAR
     ? Number(process.env.BUILD_YEAR)
     : null;
@@ -663,7 +703,9 @@ async function main() {
       console.log("no data, skip");
       continue;
     }
-    const enrichedData = await restorePersistentBatterDetails(data);
+    const enrichedData = await preserveGeneratedAtWhenUnchanged(
+      await restorePersistentBatterDetails(data)
+    );
     await writeFile(
       path.join(DATA_DIR, `${year}.json`),
       JSON.stringify(enrichedData, null, 0),
