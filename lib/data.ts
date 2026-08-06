@@ -7,6 +7,7 @@ import {
   type TeamId,
 } from "./teams";
 import { calcTeamWrc, type TeamWrc } from "./wrc";
+import { playerIdentityKey } from "./playerIdentity";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
@@ -117,7 +118,7 @@ export async function getActiveRosterNames(): Promise<string[]> {
 }
 
 /**
- * 選手の識別キー（nameKeyがあればそれを、なければ名前をそのまま）をキーにした
+ * 選手の識別キーをキーにした
  * 全打者エントリの索引。初回アクセス時に一度だけ構築する。
  * nameKeyは、npb.jpの選手個別IDをもとにscripts/fix-japanese-namesakes.tsが付与する。
  * 改名前後の登録名も同一IDとして扱い、表示名は各年度の登録名をそのまま維持する。
@@ -130,7 +131,7 @@ async function getIdentityIndex(): Promise<Map<string, BatterRanking[]>> {
       const all = await getAllBatters();
       const index = new Map<string, BatterRanking[]>();
       for (const b of all) {
-        const key = b.nameKey ?? b.name;
+        const key = playerIdentityKey(b);
         const list = index.get(key);
         if (list) list.push(b);
         else index.set(key, [b]);
@@ -147,10 +148,12 @@ async function getIdentityIndex(): Promise<Map<string, BatterRanking[]>> {
  */
 export async function getPlayerHistory(
   name: string,
-  nameKey?: string
+  nameKey: string | undefined,
+  year: number,
+  teamId: TeamId
 ): Promise<BatterRanking[]> {
   const index = await getIdentityIndex();
-  const history = [...(index.get(nameKey ?? name) ?? [])];
+  const history = [...(index.get(playerIdentityKey({ name, nameKey, year, teamId })) ?? [])];
   history.sort((a, b) => a.year - b.year || a.teamId.localeCompare(b.teamId));
   return history;
 }

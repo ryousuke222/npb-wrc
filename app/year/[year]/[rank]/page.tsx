@@ -66,7 +66,7 @@ export default async function PlayerPage({
 
   const color = teamColor(batter.teamId);
   const [history, similar] = await Promise.all([
-    getPlayerHistory(batter.name, batter.nameKey),
+    getPlayerHistory(batter.name, batter.nameKey, batter.year, batter.teamId),
     getSimilarSeasons(batter),
   ]);
 

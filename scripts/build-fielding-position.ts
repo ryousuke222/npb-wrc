@@ -21,6 +21,7 @@ import {
   type FieldingPosition,
 } from "../lib/npb2689";
 import type { BatterRanking, YearData } from "../lib/types";
+import { playerIdentityKey } from "../lib/playerIdentity";
 
 const CACHE_DIR = path.join(process.cwd(), ".cache", "2689web");
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -127,7 +128,7 @@ async function main() {
     const yearData: YearData = JSON.parse(await readFile(path.join(DATA_DIR, file), "utf-8"));
     yearDataByFile.set(file, yearData);
     for (const b of yearData.batters) {
-      const groupKey = b.nameKey ?? b.name;
+      const groupKey = playerIdentityKey(b);
       const years = groupYears.get(groupKey) ?? new Set<number>();
       years.add(b.year);
       groupYears.set(groupKey, years);
@@ -145,7 +146,7 @@ async function main() {
   const groupSampleName = new Map<string, string>();
   for (const yearData of yearDataByFile.values()) {
     for (const b of yearData.batters) {
-      const groupKey = b.nameKey ?? b.name;
+      const groupKey = playerIdentityKey(b);
       if (!groupSampleName.has(groupKey)) groupSampleName.set(groupKey, b.name);
     }
   }
@@ -201,7 +202,7 @@ async function main() {
   for (const [file, yearData] of yearDataByFile) {
     let changed = false;
     for (const b of yearData.batters as (BatterRanking & { position?: string })[]) {
-      const groupKey = b.nameKey ?? b.name;
+      const groupKey = playerIdentityKey(b);
       const yearMap = positionByGroupYear.get(groupKey);
       const pos = yearMap?.get(b.year);
       if (pos) {

@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { YearData } from "../lib/types";
+import { playerIdentityKey } from "../lib/playerIdentity";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const OUT_PATH = path.join(process.cwd(), "public", "search-index.json");
@@ -41,7 +42,7 @@ async function main() {
     const data = JSON.parse(raw) as YearData;
 
     for (const b of data.batters) {
-      const id = b.nameKey ?? `name:${b.name}`;
+      const id = playerIdentityKey(b);
       const seasons = seasonCountById.get(id) ?? new Set<number>();
       seasons.add(b.year);
       seasonCountById.set(id, seasons);

@@ -1,4 +1,5 @@
 import type { BatterRanking } from "./types";
+import { playerIdentityKey } from "./playerIdentity";
 
 export interface CareerBatter {
   /** nameKeyがある場合はそれを使い、同姓同名の別選手を分離する */
@@ -25,7 +26,7 @@ export function aggregateCareerBatters(batters: BatterRanking[]): CareerBatter[]
   const groups = new Map<string, BatterRanking[]>();
 
   for (const batter of batters) {
-    const id = batter.nameKey ?? batter.name;
+    const id = playerIdentityKey(batter);
     const group = groups.get(id);
     if (group) group.push(batter);
     else groups.set(id, [batter]);
