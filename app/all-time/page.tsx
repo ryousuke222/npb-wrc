@@ -2,11 +2,9 @@ import {
   getActiveRosterNames,
   getAllBatters,
   getAvailableYears,
-  getLatestYear,
 } from "@/lib/data";
 import AllTimeView from "@/app/components/AllTimeView";
 import PageIntro from "@/app/components/PageIntro";
-import RankingHubNav from "@/app/components/RankingHubNav";
 
 export const metadata = {
   title: "歴代最強打者ランキング | NPB最強打者ランキング",
@@ -15,10 +13,9 @@ export const metadata = {
 };
 
 export default async function AllTimePage() {
-  const [batters, years, latestYear, activeRosterNames] = await Promise.all([
+  const [batters, years, activeRosterNames] = await Promise.all([
     getAllBatters(),
     getAvailableYears(),
-    getLatestYear(),
     getActiveRosterNames(),
   ]);
 
@@ -31,9 +28,6 @@ export default async function AllTimePage() {
         title="歴代最強打者ランキング"
         description={`${oldestYear}〜${newestYear}年。単年と通算wRC+を切り替えて見られます。`}
       />
-
-      <RankingHubNav current="all-time" year={latestYear} />
-
       <AllTimeView batters={batters} activeRosterNames={activeRosterNames} />
     </div>
   );

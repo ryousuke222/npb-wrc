@@ -10,8 +10,8 @@ import {
   TEAM_ID_DEFAULT_NAME,
   type TeamId,
 } from "@/lib/teams";
-import { teamColor, withAlpha } from "@/lib/teamColors";
-import { fmtWrcPlus } from "@/lib/wrc";
+import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
+import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
 import { fmtRate } from "@/lib/statOptions";
 import YearRangeSlider from "./YearRangeSlider";
 
@@ -40,12 +40,7 @@ const TEAM_STAT_OPTIONS: {
     label: "チームwRC+",
     getValue: (e) => e.wrcPlus,
     formatValue: fmtWrcPlus,
-    getColor: (v) => {
-      if (v >= 130) return "text-red-600";
-      if (v >= 115) return "text-orange-600";
-      if (v >= 85) return "text-zinc-900";
-      return "text-zinc-500";
-    },
+    getColor: wrcPlusTextColor,
   },
   {
     key: "avg",
@@ -241,22 +236,36 @@ export default function TeamWrcView({ entries }: { entries: TeamWrcEntry[] }) {
                 href={`/year/${e.year}/team/${e.teamId}?${backQs}`}
                 style={{
                   borderLeftColor: color.bg,
-                  backgroundColor: withAlpha(color.bg, 0.07),
+                  backgroundColor: withAlpha(color.bg, 0.1),
                 }}
-                className="flex items-center gap-3 rounded-xl border border-l-[6px] border-zinc-200/70 py-3 pr-4 pl-3 transition-transform hover:-translate-y-0.5 hover:shadow-md sm:gap-4 sm:py-4 sm:pr-5"
+                className="flex items-center gap-3 rounded-xl border border-l-[6px] border-zinc-200/80 px-3 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-sm sm:py-3"
               >
                 <span
-                  style={{ backgroundColor: color.bg, color: color.on }}
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-extrabold tabular-nums shadow-sm sm:h-11 sm:w-11 sm:text-lg"
+                  style={{
+                    backgroundColor: withAlpha(color.bg, 0.14),
+                    color: readableOnLight(color.bg),
+                    boxShadow: `inset 0 0 0 2px ${withAlpha(color.bg, 0.38)}`,
+                  }}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-extrabold tabular-nums sm:h-11 sm:w-11 sm:text-lg"
                 >
                   {displayPos}
                 </span>
 
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-lg font-bold tracking-tight sm:text-xl">
-                    {e.year}年 {e.teamName}
+                  <span className="block truncate text-base font-bold tracking-tight text-zinc-950 sm:text-lg">
+                    {e.teamName}
                   </span>
-                  <span className="mt-1 flex items-center gap-1.5">
+                  <span className="mt-1 flex flex-wrap items-center gap-1.5">
+                    <span
+                      style={{
+                        backgroundColor: withAlpha(color.bg, 0.1),
+                        color: readableOnLight(color.bg),
+                        boxShadow: `inset 0 0 0 1px ${withAlpha(color.bg, 0.42)}`,
+                      }}
+                      className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                    >
+                      {e.year}年
+                    </span>
                     <span className="text-[11px] font-medium text-zinc-400">
                       {e.league === "central" ? "セ・リーグ" : "パ・リーグ"}
                     </span>
@@ -272,7 +281,7 @@ export default function TeamWrcView({ entries }: { entries: TeamWrcEntry[] }) {
                   >
                     {stat.formatValue(stat.getValue(e))}
                   </span>
-                  <span className="block text-[10px] font-medium tracking-wide text-zinc-400">
+                  <span className="mt-0.5 block text-[10px] font-medium tracking-wide text-zinc-600">
                     {stat.label}
                   </span>
                 </span>

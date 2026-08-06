@@ -5,7 +5,8 @@ import { useMemo, useState } from "react";
 import type { BatterRanking } from "@/lib/types";
 import { teamColor, withAlpha } from "@/lib/teamColors";
 import { ALL_TEAM_IDS, TEAM_ID_DEFAULT_NAME, type TeamId } from "@/lib/teams";
-import { fmtWrcPlus } from "@/lib/wrc";
+import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
+import TeamBadge from "./TeamBadge";
 
 const POSITIONS = [
   { key: "捕手", label: "捕手", slots: 1 },
@@ -122,11 +123,11 @@ export default function TeamBestNineView({ batters }: { batters: BatterRanking[]
                     <span className="block truncate text-base font-bold tracking-tight">{batter.name}</span>
                     <span className="mt-0.5 flex items-center gap-1.5 text-[11px] text-zinc-400">
                       <span>{batter.year}年</span>
-                      <span>{batter.teamName}</span>
+                      <TeamBadge teamId={batter.teamId} name={batter.teamName} />
                     </span>
                   </span>
                   <span className="shrink-0 text-right">
-                    <span className="block text-xl font-extrabold tabular-nums text-red-600">
+                    <span className={`block text-xl font-extrabold tabular-nums ${wrcPlusTextColor(batter.wrcPlus)}`}>
                       {fmtWrcPlus(batter.wrcPlus)}
                     </span>
                     <span className="block text-[10px] font-medium text-zinc-400">wRC+</span>

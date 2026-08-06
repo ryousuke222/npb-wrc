@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import type { BatterRanking, LeagueKey } from "@/lib/types";
 import { teamColor, withAlpha } from "@/lib/teamColors";
 import RankingList from "./RankingList";
+import TeamBadge from "./TeamBadge";
 
 function fmtRate(n: number): string {
   return n.toFixed(3).replace(/^0\./, ".");
@@ -195,15 +196,7 @@ export default function TitleRankingView({
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-sm font-bold">{b.name}</span>
-                          <span
-                            style={{
-                              backgroundColor: withAlpha(color.bg, 0.16),
-                              color: color.bg,
-                            }}
-                            className="mt-0.5 inline-block rounded-full px-1.5 py-0.5 text-[10px] font-bold"
-                          >
-                            {b.teamName}
-                          </span>
+                          <TeamBadge teamId={b.teamId} name={b.teamName} className="mt-0.5" />
                         </span>
                       </Link>
                     );

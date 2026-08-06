@@ -10,7 +10,8 @@ import type {
 import { teamColor, withAlpha } from "@/lib/teamColors";
 import type { TeamId } from "@/lib/teams";
 import type { LeagueKey } from "@/lib/types";
-import { fmtWrcPlus } from "@/lib/wrc";
+import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
+import TeamBadge from "@/app/components/TeamBadge";
 
 interface CompareBatter {
   year: number;
@@ -442,22 +443,14 @@ export default function CompareClient() {
                 {batter.name}
               </h2>
               <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                <span
-                  style={{
-                    backgroundColor: withAlpha(color.bg, 0.16),
-                    color: color.bg,
-                  }}
-                  className="rounded-full px-2 py-0.5 text-[11px] font-bold"
-                >
-                  {batter.teamName}
-                </span>
+                <TeamBadge teamId={batter.teamId} name={batter.teamName} />
                 <span className="text-[11px] text-zinc-400">
                   {batter.league === "central" ? "セ" : "パ"}・
                   {batter.qualified ? "規定到達" : "規定未満"}
                 </span>
               </div>
               <div className="mt-5 flex items-end gap-1.5">
-                <span className="text-4xl font-extrabold tabular-nums text-red-600">
+                <span className={`text-4xl font-extrabold tabular-nums ${wrcPlusTextColor(batter.wrcPlus)}`}>
                   {fmtWrcPlus(batter.wrcPlus)}
                 </span>
                 <span className="pb-1 text-xs font-bold text-zinc-400">wRC+</span>

@@ -205,3 +205,20 @@ export function calcTeamWrc(data: YearData, teamId: TeamId): TeamWrc | null {
 export function fmtWrcPlus(v: number): string {
   return String(Math.round(v));
 }
+
+/**
+ * wRC+の文字色。リーグ平均の100付近を中立色とし、
+ * 平均より高いほど赤、低いほど青を強くする。
+ */
+export function wrcPlusTextColor(value: number): string {
+  if (value >= 200) return "text-red-700";
+  if (value >= 180) return "text-red-600";
+  if (value >= 160) return "text-red-500";
+  if (value >= 140) return "text-rose-600";
+  if (value >= 120) return "text-rose-500";
+  if (value >= 105) return "text-rose-400";
+  if (value >= 95) return "text-zinc-950";
+  if (value >= 80) return "text-sky-500";
+  if (value >= 60) return "text-blue-600";
+  return "text-blue-800";
+}

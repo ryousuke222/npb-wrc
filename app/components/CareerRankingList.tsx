@@ -2,21 +2,9 @@
 
 import Link from "next/link";
 import type { CareerBatter } from "@/lib/career";
-import { teamColor, withAlpha } from "@/lib/teamColors";
-import { fmtWrcPlus } from "@/lib/wrc";
-
-const MEDAL_RING: Record<number, string> = {
-  1: "ring-2 ring-yellow-400",
-  2: "ring-2 ring-zinc-400",
-  3: "ring-2 ring-amber-600",
-};
-
-function wrcColor(value: number): string {
-  if (value >= 160) return "text-red-600";
-  if (value >= 130) return "text-orange-600";
-  if (value >= 100) return "text-zinc-900";
-  return "text-zinc-500";
-}
+import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
+import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
+import TeamBadge from "./TeamBadge";
 
 export default function CareerRankingList({ careers }: { careers: CareerBatter[] }) {
   if (careers.length === 0) {
@@ -49,31 +37,27 @@ export default function CareerRankingList({ careers }: { careers: CareerBatter[]
               }}
               style={{
                 borderLeftColor: color.bg,
-                backgroundColor: withAlpha(color.bg, 0.07),
+                backgroundColor: withAlpha(color.bg, 0.1),
               }}
-              className="flex items-center gap-3 rounded-xl border border-l-[6px] border-zinc-200/70 py-3 pr-4 pl-3 transition-transform hover:-translate-y-0.5 hover:shadow-md sm:gap-4 sm:py-4 sm:pr-5"
+              className="flex items-center gap-3 rounded-xl border border-l-[6px] border-zinc-200/80 px-3 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-sm sm:py-3"
             >
               <span
-                style={{ backgroundColor: color.bg, color: color.on }}
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-extrabold tabular-nums shadow-sm sm:h-11 sm:w-11 sm:text-lg ${MEDAL_RING[displayPos] ?? ""}`}
+                style={{
+                  backgroundColor: withAlpha(color.bg, 0.14),
+                  color: readableOnLight(color.bg),
+                  boxShadow: `inset 0 0 0 2px ${withAlpha(color.bg, 0.38)}`,
+                }}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-extrabold tabular-nums sm:h-11 sm:w-11 sm:text-lg"
               >
                 {displayPos}
               </span>
 
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-lg font-bold tracking-tight sm:text-xl">
+                <span className="block truncate text-base font-bold tracking-tight text-zinc-950 sm:text-lg">
                   {career.name}
                 </span>
                 <span className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] font-medium text-zinc-400">
-                  <span
-                    style={{
-                      backgroundColor: withAlpha(color.bg, 0.16),
-                      color: color.bg,
-                    }}
-                    className="rounded-full px-2 py-0.5 font-bold"
-                  >
-                    {highlightSeason.teamName}
-                  </span>
+                  <TeamBadge teamId={highlightSeason.teamId} name={highlightSeason.teamName} />
                   <span>{career.firstYear}〜{career.lastYear}</span>
                   <span>{career.seasons}年</span>
                   <span>通算 {career.pa.toLocaleString()}打席</span>
@@ -87,10 +71,10 @@ export default function CareerRankingList({ careers }: { careers: CareerBatter[]
               </span>
 
               <span className="shrink-0 text-right">
-                <span className={`block text-2xl font-extrabold tabular-nums sm:text-3xl ${wrcColor(career.wrcPlus)}`}>
+                <span className={`block text-2xl font-extrabold leading-none tabular-nums sm:text-3xl ${wrcPlusTextColor(career.wrcPlus)}`}>
                   {fmtWrcPlus(career.wrcPlus)}
                 </span>
-                <span className="block text-[10px] font-medium tracking-wide text-zinc-400">
+                <span className="mt-0.5 block text-[10px] font-medium tracking-wide text-zinc-600">
                   通算wRC+
                 </span>
               </span>

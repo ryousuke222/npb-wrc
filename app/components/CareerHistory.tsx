@@ -1,17 +1,11 @@
 import Link from "next/link";
 import type { BatterRanking } from "@/lib/types";
-import { teamColor, withAlpha } from "@/lib/teamColors";
-import { fmtWrcPlus } from "@/lib/wrc";
+import { teamColor } from "@/lib/teamColors";
+import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
+import TeamBadge from "./TeamBadge";
 
 function fmtRate(n: number): string {
   return n.toFixed(3).replace(/^0\./, ".");
-}
-
-function wrcTextColor(v: number): string {
-  if (v >= 160) return "text-red-600";
-  if (v >= 130) return "text-orange-600";
-  if (v >= 100) return "text-zinc-900";
-  return "text-zinc-500";
 }
 
 export default function CareerHistory({
@@ -79,15 +73,7 @@ export default function CareerHistory({
                 <div className="flex min-w-0 items-center gap-1.5">
                   <span className="font-bold">{h.year}</span>
                   {h.age !== undefined && <span className="text-xs font-semibold tabular-nums text-zinc-400">{h.age}歳</span>}
-                  <span
-                    style={{
-                      backgroundColor: withAlpha(color.bg, 0.16),
-                      color: color.bg,
-                    }}
-                    className="inline-block rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap"
-                  >
-                    {h.teamName}
-                  </span>
+                  <TeamBadge teamId={h.teamId} name={h.teamName} />
                   {!h.qualified && (
                     <span className="text-[10px] whitespace-nowrap text-zinc-400">
                       規定未満
@@ -95,7 +81,7 @@ export default function CareerHistory({
                   )}
                 </div>
                 <span
-                  className={`shrink-0 text-lg font-extrabold tabular-nums ${wrcTextColor(h.wrcPlus)}`}
+                  className={`shrink-0 text-lg font-extrabold tabular-nums ${wrcPlusTextColor(h.wrcPlus)}`}
                 >
                   {fmtWrcPlus(h.wrcPlus)}
                 </span>
@@ -159,15 +145,7 @@ export default function CareerHistory({
                     {h.age !== undefined ? `${h.age}歳` : "—"}
                   </td>
                   <td className="py-2.5 px-2 text-center">
-                    <span
-                      style={{
-                        backgroundColor: withAlpha(color.bg, 0.16),
-                        color: color.bg,
-                      }}
-                      className="inline-block rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap"
-                    >
-                      {h.teamName}
-                    </span>
+                    <TeamBadge teamId={h.teamId} name={h.teamName} />
                     {!h.qualified && (
                       <span className="ml-1 text-[11px] text-zinc-400">
                         規定未満
@@ -198,7 +176,7 @@ export default function CareerHistory({
                         />
                       </div>
                       <span
-                        className={`font-bold tabular-nums ${wrcTextColor(h.wrcPlus)}`}
+                        className={`font-bold tabular-nums ${wrcPlusTextColor(h.wrcPlus)}`}
                       >
                         {fmtWrcPlus(h.wrcPlus)}
                       </span>

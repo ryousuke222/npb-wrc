@@ -5,10 +5,11 @@ import { notFound } from "next/navigation";
 import { getAvailableYears, getPlayerHistory, getYearData } from "@/lib/data";
 import { getSimilarSeasons } from "@/lib/playerInsights";
 import { teamColor, withAlpha } from "@/lib/teamColors";
-import { fmtWrcPlus } from "@/lib/wrc";
+import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
 import CareerHistory from "@/app/components/CareerHistory";
 import PlayerInsights from "@/app/components/PlayerInsights";
 import PlayerBackLink from "@/app/components/PlayerBackLink";
+import TeamBadge from "@/app/components/TeamBadge";
 
 // 規定打席到達者のみビルド時に静的生成する（大半のアクセスがここに集中するため）。
 // それ以外（打席数フィルターを下げたときだけ現れる選手）はアクセス時にオンデマンドで生成する。
@@ -197,15 +198,7 @@ export default async function PlayerPage({
           )}
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <span
-            style={{
-              backgroundColor: withAlpha(color.bg, 0.16),
-              color: color.bg,
-            }}
-            className="inline-block rounded-full px-2.5 py-1 text-sm font-bold"
-          >
-            {batter.teamName}
-          </span>
+          <TeamBadge teamId={batter.teamId} name={batter.teamName} size="sm" />
           {!batter.qualified && (
             <span className="inline-block rounded-full bg-zinc-100 px-2.5 py-1 text-sm font-bold text-zinc-500">
               規定打席未到達
@@ -221,7 +214,7 @@ export default async function PlayerPage({
 
         {/* wRC+ ヒーロー表示 */}
         <div className="mt-6 flex items-end gap-2">
-          <span className="text-5xl font-extrabold tabular-nums text-red-600 sm:text-6xl">
+          <span className={`text-5xl font-extrabold tabular-nums sm:text-6xl ${wrcPlusTextColor(batter.wrcPlus)}`}>
             {fmtWrcPlus(batter.wrcPlus)}
           </span>
           <span className="pb-1.5 text-sm font-semibold text-zinc-400">

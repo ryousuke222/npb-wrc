@@ -2,21 +2,11 @@
 
 import Link from "next/link";
 import type { BatterRanking } from "@/lib/types";
-import { teamColor, withAlpha } from "@/lib/teamColors";
-import { fmtWrcPlus } from "@/lib/wrc";
+import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
+import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
+import TeamBadge from "./TeamBadge";
 
-const MEDAL_RING: Record<number, string> = {
-  1: "ring-2 ring-yellow-400",
-  2: "ring-2 ring-zinc-400",
-  3: "ring-2 ring-amber-600",
-};
-
-function wrcColor(v: number): string {
-  if (v >= 160) return "text-red-600";
-  if (v >= 130) return "text-orange-600";
-  if (v >= 100) return "text-zinc-900";
-  return "text-zinc-500";
-}
+const defaultValueColor = wrcPlusTextColor;
 
 export default function RankingList({
   batters,
@@ -25,7 +15,7 @@ export default function RankingList({
   valueLabel = "wRC+",
   getValue = (b) => b.wrcPlus,
   formatValue = fmtWrcPlus,
-  getValueColor = wrcColor,
+  getValueColor = defaultValueColor,
   showTitles = true,
 }: {
   batters: BatterRanking[];
@@ -60,8 +50,6 @@ export default function RankingList({
       {batters.map((b, i) => {
         const displayPos = i + 1;
         const color = teamColor(b.teamId);
-        const ring = MEDAL_RING[displayPos] ?? "";
-
         return (
           <li key={`${b.year}-${b.league}-${b.name}-${b.teamId}-${b.rank}`}>
             <Link
@@ -74,56 +62,59 @@ export default function RankingList({
               }}
               style={{
                 borderLeftColor: color.bg,
-                backgroundColor: withAlpha(color.bg, 0.07),
+                backgroundColor: withAlpha(color.bg, 0.1),
               }}
-              className="flex items-center gap-3 rounded-xl border border-l-[6px] border-zinc-200/70 py-3 pr-4 pl-3 transition-transform hover:-translate-y-0.5 hover:shadow-md sm:gap-4 sm:py-4 sm:pr-5"
+              className="flex items-center gap-3 rounded-xl border border-l-[6px] border-zinc-200/80 px-3 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-sm sm:py-3"
             >
               <span
-                style={{ backgroundColor: color.bg, color: color.on }}
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-extrabold tabular-nums shadow-sm sm:h-11 sm:w-11 sm:text-lg ${ring}`}
+                style={{
+                  backgroundColor: withAlpha(color.bg, 0.14),
+                  color: readableOnLight(color.bg),
+                  boxShadow: `inset 0 0 0 2px ${withAlpha(color.bg, 0.38)}`,
+                }}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-extrabold tabular-nums sm:h-11 sm:w-11 sm:text-lg"
               >
                 {displayPos}
               </span>
 
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-lg font-bold tracking-tight sm:text-xl">
+                <span className="block truncate text-base font-bold tracking-tight text-zinc-950 sm:text-lg">
                   {b.name}
                   {b.age !== undefined && (
-                    <span className="ml-1 text-sm font-medium text-zinc-400">
+                    <span className="ml-1 text-xs font-medium text-zinc-500 sm:text-sm">
                       ({b.age})
                     </span>
                   )}
                 </span>
                 <span className="mt-1 flex flex-wrap items-center gap-1.5">
                   {showYear && (
-                    <span className="text-[11px] font-bold text-zinc-500">
-                      {b.year}
+                    <span
+                      style={{
+                        backgroundColor: withAlpha(color.bg, 0.1),
+                        color: readableOnLight(color.bg),
+                        boxShadow: `inset 0 0 0 1px ${withAlpha(color.bg, 0.42)}`,
+                      }}
+                      className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                    >
+                      {b.year}年
                     </span>
                   )}
-                  <span
-                    style={{
-                      backgroundColor: withAlpha(color.bg, 0.16),
-                      color: color.bg,
-                    }}
-                    className="rounded-full px-2 py-0.5 text-[11px] font-bold"
-                  >
-                    {b.teamName}
-                  </span>
-                  <span className="text-[11px] font-medium text-zinc-400">
+                  <TeamBadge teamId={b.teamId} name={b.teamName} />
+                  <span className="text-[10px] font-medium text-zinc-500">
                     {b.league === "central" ? "セ" : "パ"}
                   </span>
                   {b.bats && (
-                    <span className="text-[11px] font-medium text-zinc-400">
+                    <span className="text-[10px] font-medium text-zinc-500">
                       {b.bats}打
                     </span>
                   )}
                   {b.position && (
-                    <span className="text-[11px] font-medium text-zinc-400">
+                    <span className="text-[10px] font-medium text-zinc-500">
                       {b.position}
                     </span>
                   )}
                   {!b.qualified && (
-                    <span className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-400">
+                    <span className="rounded bg-white/80 px-2 py-0.5 text-[10px] font-medium text-zinc-500">
                       規定未満
                     </span>
                   )}
@@ -131,8 +122,12 @@ export default function RankingList({
                     b.titles?.map((title) => (
                       <span
                         key={title}
-                        style={{ color: color.bg }}
-                        className="text-[11px] font-bold whitespace-nowrap"
+                        style={{
+                          backgroundColor: withAlpha(color.bg, 0.23),
+                          color: readableOnLight(color.bg),
+                          boxShadow: `inset 0 0 0 1px ${withAlpha(color.bg, 0.32)}`,
+                        }}
+                        className="rounded-full px-2 py-0.5 text-[10px] font-bold whitespace-nowrap"
                       >
                         {title}
                       </span>
@@ -142,11 +137,13 @@ export default function RankingList({
 
               <span className="shrink-0 text-right">
                 <span
-                  className={`block text-2xl font-extrabold tabular-nums sm:text-3xl ${getValueColor(getValue(b))}`}
+                  className={`block font-extrabold leading-none tabular-nums ${
+                    valueLabel === "wRC+" ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl"
+                  } ${getValueColor(getValue(b))}`}
                 >
                   {formatValue(getValue(b))}
                 </span>
-                <span className="block text-[10px] font-medium tracking-wide text-zinc-400">
+                <span className="mt-0.5 block text-[10px] font-medium tracking-wide text-zinc-600">
                   {valueLabel}
                 </span>
               </span>

@@ -3,8 +3,9 @@ import type { BatterRanking } from "@/lib/types";
 import type { BatterChange, LatestDashboardData, MvpCandidate } from "@/lib/latest";
 import type { TeamWrc } from "@/lib/wrc";
 import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
-import { fmtWrcPlus } from "@/lib/wrc";
+import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
 import XRankingImageButton from "./XRankingImageButton";
+import TeamBadge from "./TeamBadge";
 
 function playerHref(batter: BatterRanking) {
   return `/year/${batter.year}/${batter.rank}?from=latest`;
@@ -27,7 +28,7 @@ function PlayerRows({ players }: { players: BatterRanking[] }) {
           <li key={`${player.teamId}-${player.rank}`}>
             <Link
               href={playerHref(player)}
-              style={{ borderLeftColor: color.bg, backgroundColor: withAlpha(color.bg, 0.07) }}
+              style={{ borderLeftColor: color.bg, backgroundColor: withAlpha(color.bg, 0.1) }}
               className="flex items-center gap-3 rounded-xl border border-l-[5px] border-zinc-200/80 px-3 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-sm"
             >
               <RankingNumber value={index + 1} />
@@ -36,14 +37,17 @@ function PlayerRows({ players }: { players: BatterRanking[] }) {
                   {player.name}
                 </span>
                 <span className="mt-0.5 flex flex-wrap items-center gap-1.5">
-                  <span
-                    style={{ backgroundColor: "#fff", color: "#3f3f46", boxShadow: `inset 3px 0 0 ${color.bg}` }}
-                    className="rounded-full px-2 py-0.5 text-[10px] font-bold"
-                  >
-                    {player.teamName}
-                  </span>
+                  <TeamBadge teamId={player.teamId} name={player.teamName} />
                   {player.titles?.map((title) => (
-                    <span key={title} className="rounded bg-white/80 px-1 py-0.5 text-[10px] font-bold text-zinc-700">
+                    <span
+                      key={title}
+                      style={{
+                        backgroundColor: withAlpha(color.bg, 0.23),
+                        color: readableOnLight(color.bg),
+                        boxShadow: `inset 0 0 0 1px ${withAlpha(color.bg, 0.32)}`,
+                      }}
+                      className="rounded-full px-2 py-0.5 text-[10px] font-bold whitespace-nowrap"
+                    >
                       {title}
                     </span>
                   ))}
@@ -78,7 +82,7 @@ function TeamRows({ year, teams }: { year: number; teams: TeamWrc[] }) {
               <RankingNumber value={index + 1} />
               <span className="min-w-0 flex-1 text-sm font-bold text-zinc-800">{team.teamName}</span>
               <span className="text-right">
-                <span className="block text-xl font-extrabold tabular-nums text-zinc-950">{fmtWrcPlus(team.wrcPlus)}</span>
+                <span className={`block text-xl font-extrabold tabular-nums ${wrcPlusTextColor(team.wrcPlus)}`}>{fmtWrcPlus(team.wrcPlus)}</span>
                 <span className="block text-[10px] font-medium text-zinc-600">wRC+</span>
               </span>
             </Link>
@@ -174,12 +178,7 @@ function FocusGroup({ label, values, format }: FocusGroupProps) {
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-xs font-extrabold text-white">1</span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-extrabold text-zinc-900">{batter.name}</span>
-                <span
-                  style={{ backgroundColor: "#fff", color: "#3f3f46", boxShadow: `inset 3px 0 0 ${color.bg}` }}
-                  className="mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold"
-                >
-                  {batter.teamName}
-                </span>
+                <TeamBadge teamId={batter.teamId} name={batter.teamName} className="mt-1" />
               </span>
               <span style={{ color: readableOnLight(color.bg) }} className="shrink-0 text-right text-lg font-extrabold tabular-nums">{format(difference)}</span>
             </Link>
