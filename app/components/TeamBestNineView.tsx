@@ -38,7 +38,7 @@ function bestSeasonsForPosition(
   for (const batter of batters) {
     const matchesPosition = position === "DH"
       ? batter.bestNinePosition === "DH"
-      : batter.position === position;
+      : batter.position === position || batter.bestNinePosition === position;
     if (!matchesPosition || !batter.qualified) continue;
     const current = bestByPlayer.get(batter.name);
     if (!current || batter.wrcPlus > current.wrcPlus || (batter.wrcPlus === current.wrcPlus && batter.pa > current.pa)) {

@@ -101,7 +101,7 @@ export default function PlayerBackLink({ year, rank }: { year: number; rank: num
     <button
       type="button"
       onClick={handleBack}
-      className="text-sm text-zinc-500 hover:text-zinc-800"
+      className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-bold text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:text-zinc-950"
     >
       {label}
     </button>

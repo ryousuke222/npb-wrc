@@ -119,7 +119,7 @@ export default function RankingList({
                     </span>
                   )}
                   {showTitles &&
-                    b.titles?.map((title) => (
+                    b.titles?.map((title, titleIndex) => (
                       <span
                         key={title}
                         style={{
@@ -127,11 +127,26 @@ export default function RankingList({
                           color: readableOnLight(color.bg),
                           boxShadow: `inset 0 0 0 1px ${withAlpha(color.bg, 0.32)}`,
                         }}
-                        className="rounded-full px-2 py-0.5 text-[10px] font-bold whitespace-nowrap"
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold whitespace-nowrap ${
+                          titleIndex > 1 ? "hidden sm:inline-flex" : ""
+                        }`}
                       >
                         {title}
                       </span>
                     ))}
+                  {showTitles && (b.titles?.length ?? 0) > 2 && (
+                    <span
+                      style={{
+                        backgroundColor: withAlpha(color.bg, 0.12),
+                        color: readableOnLight(color.bg),
+                        boxShadow: `inset 0 0 0 1px ${withAlpha(color.bg, 0.28)}`,
+                      }}
+                      title={`ほか${b.titles!.length - 2}件の獲得タイトル`}
+                      className="rounded-full px-2 py-0.5 text-[10px] font-bold whitespace-nowrap sm:hidden"
+                    >
+                      +{b.titles!.length - 2}
+                    </span>
+                  )}
                 </span>
               </span>
 

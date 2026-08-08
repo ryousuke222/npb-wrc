@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getAvailableYears, getPlayerHistory, getYearData } from "@/lib/data";
 import { getSimilarSeasons } from "@/lib/playerInsights";
-import { teamColor, withAlpha } from "@/lib/teamColors";
+import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
 import CareerHistory from "@/app/components/CareerHistory";
 import PlayerInsights from "@/app/components/PlayerInsights";
@@ -66,6 +66,7 @@ export default async function PlayerPage({
   if (!batter) notFound();
 
   const color = teamColor(batter.teamId);
+  const accent = readableOnLight(color.bg);
   const [history, similar] = await Promise.all([
     getPlayerHistory(batter.name, batter.nameKey, batter.year, batter.teamId),
     getSimilarSeasons(batter),
@@ -163,7 +164,7 @@ export default async function PlayerPage({
   ];
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
       <Suspense
         fallback={
           <span className="text-sm text-zinc-500">
@@ -176,73 +177,107 @@ export default async function PlayerPage({
 
       <div
         style={{
-          borderTopColor: color.bg,
-          backgroundImage: `linear-gradient(180deg, ${withAlpha(color.bg, 0.1)}, transparent 140px)`,
+          borderLeftColor: color.bg,
+          backgroundImage: `linear-gradient(135deg, ${withAlpha(color.bg, 0.14)}, transparent 46%)`,
         }}
-        className="mt-4 rounded-2xl border border-t-[6px] border-zinc-200 bg-white p-6 sm:p-8"
+        className="mt-4 overflow-hidden rounded-2xl border border-l-[8px] border-zinc-200 bg-white p-5 sm:p-7 lg:p-8"
       >
-        <p className="text-sm font-medium text-zinc-500">
-          {year}年 {batter.league === "central" ? "セ・リーグ" : "パ・リーグ"}{" "}
-          {batter.leagueRank !== null
-            ? `規定打席内 ${batter.leagueRank}位`
-            : "規定打席未到達（参考記録）"}
-        </p>
-        <div className="mt-1 flex flex-wrap items-center gap-2.5">
-          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-            {batter.name}
-          </h1>
-          {batter.age !== undefined && (
-            <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-sm font-bold tabular-nums text-zinc-600">
-              {batter.age}歳
-            </span>
-          )}
-        </div>
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <TeamBadge teamId={batter.teamId} name={batter.teamName} size="sm" />
-          {!batter.qualified && (
-            <span className="inline-block rounded-full bg-zinc-100 px-2.5 py-1 text-sm font-bold text-zinc-500">
-              規定打席未到達
-            </span>
-          )}
-          <Link
-            href={`/compare?players=${year}-${rank}`}
-            className="inline-block rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-sm font-bold text-zinc-600 hover:border-zinc-300 hover:text-zinc-900"
-          >
-            このシーズンを比較
-          </Link>
-        </div>
-
-        {/* wRC+ ヒーロー表示 */}
-        <div className="mt-6 flex items-end gap-2">
-          <span className={`text-5xl font-extrabold tabular-nums sm:text-6xl ${wrcPlusTextColor(batter.wrcPlus)}`}>
-            {fmtWrcPlus(batter.wrcPlus)}
-          </span>
-          <span className="pb-1.5 text-sm font-semibold text-zinc-400">
-            wRC+
-          </span>
-        </div>
-        {wrcTopPercent !== null && (
-          <p className="mt-1 text-xs font-medium text-zinc-500">
-            {batter.league === "central" ? "セ・リーグ" : "パ・リーグ"}規定打席到達者の上位{wrcTopPercent}%
-          </p>
-        )}
-
-        <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
-          {[
-            { label: "打率", value: fmtRate(batter.avg) },
-            { label: "OPS", value: batter.ops.toFixed(3) },
-            { label: "本塁打", value: `${batter.hr}本` },
-            { label: "打席", value: `${batter.pa}` },
-          ].map((stat) => (
-            <div key={stat.label} className="rounded-xl bg-zinc-50 px-3 py-2.5 text-center">
-              <div className="text-lg font-extrabold tabular-nums text-zinc-900 sm:text-xl">{stat.value}</div>
-              <div className="mt-0.5 text-[10px] font-medium text-zinc-400">{stat.label}</div>
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_15rem] lg:items-start">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-zinc-500">
+              <span
+                style={{ backgroundColor: withAlpha(color.bg, 0.13), color: accent }}
+                className="rounded-full px-2.5 py-1"
+              >
+                {year}年
+              </span>
+              <span>{batter.league === "central" ? "セ・リーグ" : "パ・リーグ"}</span>
+              <span className="text-zinc-300">/</span>
+              <span>
+                {batter.leagueRank !== null
+                  ? `規定打席内 ${batter.leagueRank}位`
+                  : "規定打席未到達・参考記録"}
+              </span>
             </div>
-          ))}
+
+            <div className="mt-3 flex flex-wrap items-center gap-2.5">
+              <h1 className="text-3xl font-black tracking-tight text-zinc-950 sm:text-4xl">
+                {batter.name}
+              </h1>
+              {batter.age !== undefined && (
+                <span className="rounded-full border border-zinc-200 bg-white/80 px-2.5 py-1 text-sm font-bold tabular-nums text-zinc-600">
+                  {batter.age}歳
+                </span>
+              )}
+            </div>
+
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <TeamBadge teamId={batter.teamId} name={batter.teamName} size="sm" />
+              {batter.bats && <span className="text-xs font-semibold text-zinc-500">{batter.bats}打</span>}
+              {batter.position && <span className="text-xs font-semibold text-zinc-500">{batter.position}</span>}
+              {!batter.qualified && (
+                <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-bold text-zinc-500">
+                  規定打席未到達
+                </span>
+              )}
+            </div>
+
+            {(batter.titles?.length ?? 0) > 0 && (
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {batter.titles?.map((title) => (
+                  <span
+                    key={title}
+                    style={{
+                      backgroundColor: withAlpha(color.bg, 0.15),
+                      color: accent,
+                      boxShadow: `inset 0 0 0 1px ${withAlpha(color.bg, 0.28)}`,
+                    }}
+                    className="rounded-full px-2.5 py-1 text-xs font-bold"
+                  >
+                    {title}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <Link
+              href={`/compare?players=${year}-${rank}`}
+              className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-bold text-zinc-600 transition hover:border-zinc-300 hover:text-zinc-950"
+            >
+              このシーズンを比較 <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+
+          <div
+            style={{
+              backgroundColor: withAlpha(color.bg, 0.1),
+              boxShadow: `inset 0 0 0 1px ${withAlpha(color.bg, 0.22)}`,
+            }}
+            className="rounded-2xl px-5 py-5 lg:text-right"
+          >
+            <div className="flex items-end gap-2 lg:justify-end">
+              <span className={`text-6xl font-black leading-none tabular-nums ${wrcPlusTextColor(batter.wrcPlus)}`}>
+                {fmtWrcPlus(batter.wrcPlus)}
+              </span>
+              <span className="pb-1 text-sm font-bold text-zinc-500">wRC+</span>
+            </div>
+            {wrcTopPercent !== null && (
+              <p className="mt-2 text-xs font-semibold text-zinc-500">
+                リーグ規定到達者の上位{wrcTopPercent}%
+              </p>
+            )}
+          </div>
         </div>
 
         {/* スラッシュライン＋OPS（リーグ平均位置を目盛り上の縦線で示すバー付き） */}
-        <div className="mt-5 rounded-xl bg-zinc-50 px-4 py-4">
+        <div className="mt-7 rounded-2xl border border-zinc-200 bg-zinc-50/80 px-4 py-4 sm:px-5">
+          <div className="mb-4 flex items-end justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-bold tracking-[0.14em] text-zinc-400">RATE STATS</p>
+              <h2 className="mt-0.5 text-sm font-extrabold text-zinc-800">率成績とリーグ平均</h2>
+            </div>
+            <span className="text-[10px] font-medium text-zinc-400">縦線＝リーグ平均</span>
+          </div>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             {rateStats.map((s) => {
               const displayValue =
@@ -260,7 +295,7 @@ export default async function PlayerPage({
                       <span
                         style={{
                           backgroundColor: withAlpha(color.bg, 0.16),
-                          color: color.bg,
+                          color: accent,
                         }}
                         className="rounded px-1 py-0.5 text-[10px] font-bold"
                       >
@@ -288,65 +323,118 @@ export default async function PlayerPage({
               );
             })}
           </div>
-          <p className="mt-3.5 border-t border-zinc-200 pt-2.5 text-[11px] text-zinc-400">
-            縦線はリーグ平均
-          </p>
         </div>
 
         {/* 主要成績（本塁打・打点など、注目される数字を大きく） */}
-        <div className="mt-6 grid grid-cols-4 gap-2.5">
-          {primaryStats.map((s) => (
-            <div
-              key={s.label}
-              className="relative rounded-xl bg-zinc-50 py-3.5 text-center"
-            >
-              {s.rank !== null && (
-                <span
-                  style={{ backgroundColor: color.bg, color: color.on }}
-                  className="absolute top-1.5 right-1.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold"
-                >
-                  {s.rank}位
-                </span>
-              )}
-              <div className="text-2xl font-extrabold tabular-nums">
-                {s.value}
-              </div>
-              <div className="mt-0.5 text-[11px] text-zinc-400">
-                {s.label}
-              </div>
+        <section
+          style={{
+            borderLeftColor: color.bg,
+            backgroundImage: `linear-gradient(135deg, ${withAlpha(color.bg, 0.09)}, white 55%)`,
+          }}
+          className="mt-6 rounded-2xl border border-l-[5px] border-zinc-200 p-4 sm:p-5"
+        >
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-bold tracking-[0.14em] text-zinc-400">打撃の結果</p>
+              <h2 className="mt-0.5 text-sm font-extrabold text-zinc-800">主要成績</h2>
             </div>
-          ))}
-        </div>
-
-        {/* 詳細成績 */}
-        <div className="mt-6">
-          <h2 className="text-xs font-bold tracking-wide text-zinc-400">
-            詳細成績
-          </h2>
-          <div className="mt-3 grid grid-cols-3 gap-2.5 sm:grid-cols-5">
-            {[...secondaryStats, ...advancedStats].map((s) => (
+            <span className="text-[10px] font-medium text-zinc-400">順位はリーグ内</span>
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+            {primaryStats.map((s) => (
               <div
                 key={s.label}
-                className="relative rounded-lg bg-zinc-50 py-2.5 text-center"
+                style={{
+                  backgroundColor: withAlpha(color.bg, 0.06),
+                  boxShadow: `inset 0 3px 0 ${withAlpha(color.bg, 0.72)}`,
+                }}
+                className="relative rounded-xl border border-zinc-200/80 px-3 py-4 text-center shadow-sm"
               >
                 {s.rank !== null && (
                   <span
-                    style={{ backgroundColor: color.bg, color: color.on }}
-                    className="absolute top-1 right-1 rounded-full px-1 py-0.5 text-[8px] font-bold"
+                    style={{
+                      backgroundColor: withAlpha(color.bg, 0.16),
+                      color: accent,
+                    }}
+                    className="absolute top-2 right-2 rounded-full px-2 py-0.5 text-[9px] font-extrabold"
                   >
                     {s.rank}位
                   </span>
                 )}
-                <div className="text-base font-bold tabular-nums text-zinc-700">
+                <div className="text-3xl font-black tabular-nums text-zinc-950">
                   {s.value}
                 </div>
-                <div className="mt-0.5 text-[10px] text-zinc-400">
+                <div className="mt-1 text-[11px] font-bold text-zinc-500">
                   {s.label}
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
+
+        {/* 詳細成績 */}
+        <section className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+          <div
+            style={{ backgroundColor: withAlpha(color.bg, 0.08) }}
+            className="flex items-end justify-between gap-3 border-b border-zinc-200 px-4 py-3.5 sm:px-5"
+          >
+            <div>
+              <p className="text-[10px] font-bold tracking-[0.14em] text-zinc-400">成績内訳</p>
+              <h2 className="mt-0.5 text-sm font-extrabold text-zinc-800">詳細成績</h2>
+            </div>
+            <span
+              style={{ backgroundColor: withAlpha(color.bg, 0.14), color: accent }}
+              className="rounded-full px-2.5 py-1 text-[10px] font-bold"
+            >
+              {batter.pa}打席
+            </span>
+          </div>
+
+          <div className="space-y-5 p-4 sm:p-5">
+            <div>
+              <h3 className="text-[11px] font-extrabold text-zinc-500">基本成績</h3>
+              <div className="mt-2.5 grid grid-cols-3 gap-2 sm:grid-cols-5 lg:grid-cols-9">
+                {secondaryStats.map((s) => (
+                  <div
+                    key={s.label}
+                    style={{ boxShadow: `inset 0 2px 0 ${withAlpha(color.bg, 0.45)}` }}
+                    className="relative rounded-lg border border-zinc-200 bg-zinc-50/70 px-1.5 py-3 text-center"
+                  >
+                    {s.rank !== null && (
+                      <span
+                        style={{ backgroundColor: withAlpha(color.bg, 0.16), color: accent }}
+                        className="absolute top-1 right-1 rounded px-1.5 py-0.5 text-[8px] font-extrabold"
+                      >
+                        {s.rank}位
+                      </span>
+                    )}
+                    <div className="text-lg font-black tabular-nums text-zinc-800">{s.value}</div>
+                    <div className="mt-0.5 text-[10px] font-semibold text-zinc-400">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-t border-zinc-200 pt-4">
+              <h3 className="text-[11px] font-extrabold text-zinc-500">選球・打撃指標</h3>
+              <div className="mt-2.5 grid grid-cols-3 gap-2 sm:grid-cols-5">
+                {advancedStats.map((s) => (
+                  <div
+                    key={s.label}
+                    style={{
+                      backgroundColor: withAlpha(color.bg, 0.06),
+                      boxShadow: `inset 0 2px 0 ${withAlpha(color.bg, 0.45)}`,
+                    }}
+                    className="relative rounded-lg border border-zinc-200 px-2 py-3 text-center"
+                  >
+                    <div className="text-lg font-black tabular-nums text-zinc-800">{s.value}</div>
+                    <div className="mt-0.5 text-[10px] font-semibold text-zinc-400">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
 
       </div>
 

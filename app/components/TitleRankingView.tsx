@@ -212,7 +212,7 @@ export default function TitleRankingView({
         <p className="text-xs text-zinc-400">
           {year === initialYear && !latestSeasonComplete
             ? "今シーズンのベストナインは、シーズン終了後の発表にあわせて反映します。"
-            : "この年度のベストナインデータはありません（2002年以降のみ対応）。"}
+            : "この年度のベストナインデータはありません（1955年以降のみ対応）。"}
         </p>
       )}
     </div>

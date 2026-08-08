@@ -42,14 +42,22 @@ function monthLabel(date: string) {
   return new Intl.DateTimeFormat("ja-JP", { timeZone: "Asia/Tokyo", month: "numeric", day: "numeric" }).format(new Date(date));
 }
 
-function periodFromDate(date: string): MonthlyPeriod {
+function datePartsInJapan(date: string) {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Tokyo",
     year: "numeric",
     month: "2-digit",
+    day: "2-digit",
   }).formatToParts(new Date(date));
-  const year = Number(parts.find((part) => part.type === "year")?.value);
-  const month = Number(parts.find((part) => part.type === "month")?.value);
+  return {
+    year: Number(parts.find((part) => part.type === "year")?.value),
+    month: Number(parts.find((part) => part.type === "month")?.value),
+    day: Number(parts.find((part) => part.type === "day")?.value),
+  };
+}
+
+function periodFromDate(date: string): MonthlyPeriod {
+  const { year, month } = datePartsInJapan(date);
   return { key: `${year}-${String(month).padStart(2, "0")}`, year, month, label: `${year}年${month}月` };
 }
 
@@ -88,14 +96,10 @@ function rankPeriod(period: MonthlyPeriod, baseline: YearData, end: YearData, av
     .filter((row) => row.batter.league === league)
     .sort((a, b) => b.ops - a.ops || b.pa - a.pa)
     .slice(0, 10);
-  const baselinePeriod = periodFromDate(baseline.generatedAt);
-  const hasPreviousMonthBaseline = baselinePeriod.key < period.key;
   return {
     period,
     label: `${monthLabel(baseline.generatedAt)} → ${monthLabel(end.generatedAt)}`,
-    coverageNote: hasPreviousMonthBaseline
-      ? "前月末に最も近い保存値を基準"
-      : `${monthLabel(baseline.generatedAt)}の保存開始以降を集計`,
+    coverageNote: `${monthLabel(baseline.generatedAt)}の保存値`,
     qualifiedCounts: {
       central: rows.filter((row) => row.batter.league === "central").length,
       pacific: rows.filter((row) => row.batter.league === "pacific").length,
@@ -130,8 +134,15 @@ export async function getMonthlyRanking(selectedKey?: string): Promise<MonthlyRa
     group.push(snapshot);
     grouped.set(period.key, group);
   }
+  // 月初からの差分を作れる月だけを過去月の選択肢に出す。
+  // 2026年7月のように月途中からしか保存値がない月は、月間成績として誤解を招くため除外する。
+  const completePeriodKeys = [...grouped.entries()]
+    .filter(([, periodSnapshots]) =>
+      periodSnapshots.some((snapshot) => datePartsInJapan(snapshot.generatedAt).day === 1)
+    )
+    .map(([periodKey]) => periodKey);
   const availablePeriods = [...new Map(
-    [...grouped.keys(), currentPeriod.key].map((periodKey) => {
+    [...completePeriodKeys, currentPeriod.key].map((periodKey) => {
       const snapshot = grouped.get(periodKey)?.[0];
       const period = snapshot ? periodFromDate(snapshot.generatedAt) : currentPeriod;
       return [period.key, period] as const;
@@ -142,15 +153,11 @@ export async function getMonthlyRanking(selectedKey?: string): Promise<MonthlyRa
     (a, b) => new Date(a.generatedAt).getTime() - new Date(b.generatedAt).getTime()
   );
   const end = period.key === currentPeriod.key ? current : periodSnapshots.at(-1);
-  const sortedSnapshots = snapshots.sort(
-    (a, b) => new Date(a.generatedAt).getTime() - new Date(b.generatedAt).getTime()
+  // その月の1日に保存した累計値を差し引く。これにより前月最終日の試合を混ぜず、
+  // かつ月初の試合前に保存された値から当月分だけを集計できる。
+  const baseline = periodSnapshots.find(
+    (snapshot) => datePartsInJapan(snapshot.generatedAt).day === 1
   );
-  // 月初の最初の保存値を引くと、その保存時点までの当月成績が消えてしまう。
-  // 前月末以前の最新保存値がある場合は、そちらを月間差分の基準にする。
-  const beforePeriod = sortedSnapshots
-    .filter((snapshot) => periodFromDate(snapshot.generatedAt).key < period.key)
-    .at(-1);
-  const baseline = beforePeriod ?? periodSnapshots[0];
   if (!baseline || !end || new Date(baseline.generatedAt).getTime() >= new Date(end.generatedAt).getTime()) {
     return {
       period,

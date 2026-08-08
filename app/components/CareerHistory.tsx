@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { BatterRanking } from "@/lib/types";
-import { teamColor } from "@/lib/teamColors";
+import { teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
 import TeamBadge from "./TeamBadge";
 
@@ -16,6 +16,9 @@ export default function CareerHistory({
   currentYear: number;
 }) {
   if (history.length <= 1) return null;
+
+  const currentEntry = history.find((entry) => entry.year === currentYear) ?? history.at(-1)!;
+  const currentColor = teamColor(currentEntry.teamId);
 
   // 1打席だけの年などwRC+が極端な値（数百）になりうるため、選手自身の最大値ではなく
   // 固定スケールを使う（そうしないと1シーズンの外れ値に他の全シーズンの棒グラフが
@@ -33,18 +36,50 @@ export default function CareerHistory({
     return { x, y };
   };
   const graphPoints = history.map(pointFor);
+  // 点だけでなく線も「到着した年の球団色」にする。移籍した箇所で色が変わるため、
+  // キャリアの所属球団の変化もグラフ上で自然に追える。
+  const graphSegments = history.slice(1).map((entry, index) => ({
+    from: graphPoints[index],
+    to: graphPoints[index + 1],
+    color: teamColor(entry.teamId),
+    key: `${history[index].year}-${entry.year}-${entry.teamId}`,
+  }));
 
   return (
-    <div className="mt-6 rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8">
-      <h2 className="text-sm font-bold text-zinc-500">年度別成績の推移</h2>
-      <div className="mt-4 rounded-xl bg-zinc-50 px-2 py-3 sm:px-4">
+    <section
+      style={{
+        borderLeftColor: currentColor.bg,
+        backgroundImage: `linear-gradient(135deg, ${withAlpha(currentColor.bg, 0.07)}, white 34%)`,
+      }}
+      className="mt-6 rounded-2xl border border-l-[6px] border-zinc-200 bg-white p-5 sm:p-7"
+    >
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <p className="text-[10px] font-bold tracking-[0.14em] text-zinc-400">キャリア推移</p>
+          <h2 className="mt-0.5 text-lg font-extrabold text-zinc-900">年度別成績</h2>
+        </div>
+        <span className="text-xs font-semibold text-zinc-400">{history.length}シーズン</span>
+      </div>
+      <div className="mt-4 rounded-xl border border-zinc-200 bg-white/75 px-2 py-3 shadow-sm sm:px-4">
         <div className="mb-1 flex items-center justify-between text-[11px] text-zinc-400"><span>wRC+</span><span>年度推移</span></div>
         <svg viewBox={`0 0 ${graphWidth} ${graphHeight}`} role="img" aria-label="年度別wRC+推移" className="h-36 w-full overflow-visible">
           {[100, 150, 200].filter((value) => value <= graphMax).map((value) => {
             const y = graphPadding.top + (1 - (value - graphMin) / (graphMax - graphMin)) * (graphHeight - graphPadding.top - graphPadding.bottom);
             return <g key={value}><line x1={graphPadding.left} x2={graphWidth - graphPadding.right} y1={y} y2={y} stroke="#e4e4e7" strokeDasharray="3 3" /><text x="0" y={y + 4} fill="#a1a1aa" fontSize="10">{value}</text></g>;
           })}
-          <polyline points={graphPoints.map(({ x, y }) => `${x},${y}`).join(" ")} fill="none" stroke="#18181b" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+          {graphSegments.map((segment) => (
+            <line
+              key={segment.key}
+              x1={segment.from.x}
+              y1={segment.from.y}
+              x2={segment.to.x}
+              y2={segment.to.y}
+              stroke={segment.color.bg}
+              strokeWidth="3"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+          ))}
           {history.map((entry, index) => {
             const point = graphPoints[index];
             const color = teamColor(entry.teamId);
@@ -55,7 +90,7 @@ export default function CareerHistory({
 
       {/* モバイル幅では列数の多いテーブルが横スクロール必須になるため、
           年度ごとのカード積み重ねに切り替える（PC幅はテーブル表示） */}
-      <div className="mt-4 flex flex-col sm:hidden">
+      <div className="mt-4 flex flex-col gap-2 sm:hidden">
         {history.map((h) => {
           const isCurrent = h.year === currentYear;
           const color = teamColor(h.teamId);
@@ -67,7 +102,8 @@ export default function CareerHistory({
             <Link
               key={`${h.year}-${h.teamId}-${h.rank}`}
               href={`/year/${h.year}/${h.rank}`}
-              className={`flex flex-col gap-1.5 border-t border-zinc-100 py-3 first:border-t-0 ${isCurrent ? "bg-zinc-50" : ""}`}
+              style={isCurrent ? { backgroundColor: withAlpha(color.bg, 0.1), borderColor: withAlpha(color.bg, 0.25) } : undefined}
+              className="flex flex-col gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-3 transition hover:-translate-y-px"
             >
               <div className="flex min-w-0 items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-1.5">
@@ -106,7 +142,7 @@ export default function CareerHistory({
         })}
       </div>
 
-      <div className="mt-4 hidden overflow-x-auto sm:block">
+      <div className="mt-5 hidden overflow-x-auto rounded-xl border border-zinc-200 sm:block">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="text-center text-xs text-zinc-400">
@@ -131,7 +167,8 @@ export default function CareerHistory({
               return (
                 <tr
                   key={`${h.year}-${h.teamId}-${h.rank}`}
-                  className={`border-t border-zinc-100 ${isCurrent ? "bg-zinc-50" : ""}`}
+                  style={isCurrent ? { backgroundColor: withAlpha(color.bg, 0.08) } : undefined}
+                  className="border-t border-zinc-100 first:border-t-0"
                 >
                   <td className="py-2.5 px-2 text-center font-bold">
                     <Link
@@ -188,6 +225,6 @@ export default function CareerHistory({
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
   );
 }

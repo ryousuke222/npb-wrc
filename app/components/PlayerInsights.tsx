@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { BatterRanking } from "@/lib/types";
-import { teamColor, withAlpha } from "@/lib/teamColors";
+import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus } from "@/lib/wrc";
 
 function fmtRate(value: number) { return value.toFixed(3).replace(/^0\./, "."); }
@@ -23,8 +23,23 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
   const lastYear = Math.max(...history.map((entry) => entry.year));
   const careerYears = new Set(history.map((entry) => entry.year)).size;
   const qualifiedYears = new Set(qualified.map((entry) => entry.year)).size;
-  const titleEvents = history.flatMap((entry) => (entry.titles ?? []).map((title) => ({ entry, title }))).filter(({ title }) => title !== "—");
+  const titlesByYear = Array.from(
+    history.reduce((grouped, entry) => {
+      const titles = (entry.titles ?? []).filter((title) => title !== "—");
+      if (titles.length === 0) return grouped;
+      const current = grouped.get(entry.year);
+      if (current) {
+        titles.forEach((title) => current.titles.add(title));
+      } else {
+        grouped.set(entry.year, { entry, titles: new Set(titles) });
+      }
+      return grouped;
+    }, new Map<number, { entry: BatterRanking; titles: Set<string> }>()).values()
+  )
+    .map(({ entry, titles }) => ({ entry, titles: Array.from(titles) }))
+    .sort((a, b) => b.entry.year - a.entry.year);
   const color = teamColor(batter.teamId);
+  const accent = readableOnLight(color.bg);
   const highlights = [
     { label: "最高wRC+", season: bestWrc, value: bestWrc ? fmtWrcPlus(bestWrc.wrcPlus) : "—" },
     { label: "最高OPS", season: bestOps, value: bestOps ? fmtRate(bestOps.ops) : "—" },
@@ -34,18 +49,18 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
   return <div className="mt-6 space-y-6">
     <section
       style={{
-        borderTopColor: color.bg,
-        backgroundImage: `linear-gradient(135deg, ${withAlpha(color.bg, 0.13)}, transparent 52%)`,
+        borderLeftColor: color.bg,
+        backgroundImage: `linear-gradient(135deg, ${withAlpha(color.bg, 0.12)}, transparent 58%)`,
       }}
-      className="overflow-hidden rounded-2xl border border-t-[5px] border-zinc-200 bg-white p-5 sm:p-6"
+      className="overflow-hidden rounded-2xl border border-l-[6px] border-zinc-200 bg-white p-5 sm:p-6"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <p className="text-[10px] font-bold tracking-[0.18em] text-zinc-400">SEASON POSITION</p>
+          <p className="text-[10px] font-bold tracking-[0.14em] text-zinc-400">シーズン評価</p>
           <h2 className="mt-1 text-lg font-extrabold tracking-tight">この年の立ち位置</h2>
         </div>
         <span
-          style={{ backgroundColor: withAlpha(color.bg, 0.14), color: color.bg }}
+          style={{ backgroundColor: withAlpha(color.bg, 0.14), color: accent }}
           className="rounded-full px-3 py-1 text-xs font-bold"
         >
           {batter.age ? `${batter.age}歳シーズン` : `${batter.year}年`}
@@ -53,8 +68,12 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
       </div>
       <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
         <div
-          style={{ backgroundColor: withAlpha(color.bg, 0.12), color: color.bg }}
-          className="col-span-2 rounded-2xl border border-white p-4 sm:col-span-1"
+          style={{
+            backgroundColor: withAlpha(color.bg, 0.13),
+            color: accent,
+            boxShadow: `inset 0 0 0 1px ${withAlpha(color.bg, 0.22)}`,
+          }}
+          className="col-span-2 rounded-2xl p-4 sm:col-span-1"
         >
           <div className="text-[10px] font-bold tracking-wide opacity-70">リーグ wRC+</div>
           <div className="mt-2 flex items-end gap-1">
@@ -77,19 +96,19 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
 
     <section
       style={{
-        borderTopColor: color.bg,
-        backgroundImage: `linear-gradient(135deg, ${withAlpha(color.bg, 0.11)}, white 48%)`,
+        borderLeftColor: color.bg,
+        backgroundImage: `linear-gradient(135deg, ${withAlpha(color.bg, 0.09)}, white 42%)`,
       }}
-      className="overflow-hidden rounded-2xl border border-t-[5px] border-zinc-200 bg-white shadow-sm"
+      className="overflow-hidden rounded-2xl border border-l-[6px] border-zinc-200 bg-white shadow-sm"
     >
       <div className="grid sm:grid-cols-[1.05fr_1.45fr]">
         <div className="border-b border-zinc-200 p-5 sm:border-r sm:border-b-0 sm:p-6">
-          <p className="text-[10px] font-bold tracking-[0.18em] text-zinc-400">CAREER SUMMARY</p>
+          <p className="text-[10px] font-bold tracking-[0.14em] text-zinc-400">通算成績</p>
           <h2 className="mt-1 text-lg font-extrabold text-zinc-950">キャリア要約</h2>
           <p className="mt-1 text-xs text-zinc-500">{firstYear}–{lastYear}・{careerYears}シーズン</p>
           <div className="mt-6">
             <div className="text-[11px] font-bold text-zinc-500">通算 wRC+</div>
-            <div style={{ color: color.bg }} className="mt-1 text-5xl font-black tabular-nums tracking-tight">
+            <div style={{ color: accent }} className="mt-1 text-5xl font-black tabular-nums tracking-tight">
               {total.pa ? fmtWrcPlus(total.weightedWrc / total.pa) : "—"}
             </div>
             <div className="mt-1 text-[11px] text-zinc-500">年度別wRC+を打席数で加重平均</div>
@@ -112,13 +131,24 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
       </div>
     </section>
 
-    <section className="rounded-2xl border border-amber-200/80 bg-gradient-to-br from-amber-50 via-white to-white p-5 sm:p-6">
+    <section
+      style={{
+        borderLeftColor: color.bg,
+        backgroundImage: `linear-gradient(135deg, ${withAlpha(color.bg, 0.1)}, white 54%)`,
+      }}
+      className="rounded-2xl border border-l-[6px] border-zinc-200 bg-white p-5 sm:p-6"
+    >
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-[10px] font-bold tracking-[0.18em] text-amber-600">BEST SEASONS</p>
+          <p style={{ color: accent }} className="text-[10px] font-bold tracking-[0.14em]">自己最高記録</p>
           <h2 className="mt-1 text-lg font-extrabold tracking-tight">キャリアハイ</h2>
         </div>
-        <span className="rounded-full border border-amber-200 bg-white px-3 py-1 text-[10px] font-bold text-amber-700">自己最高記録</span>
+        <span
+          style={{ backgroundColor: withAlpha(color.bg, 0.12), color: accent }}
+          className="rounded-full px-3 py-1 text-[10px] font-bold"
+        >
+          キャリアベスト
+        </span>
       </div>
       <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
         {highlights.map(({ label, season, value }) => {
@@ -147,9 +177,84 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
       </div>
     </section>
 
-    {(titleEvents.length > 0 || similar.length > 0) && <section className="grid gap-4 sm:grid-cols-2">
-      <div className="rounded-2xl border border-zinc-200 bg-white p-5"><h2 className="text-base font-bold">タイトル・ベストナイン</h2>{titleEvents.length ? <ol className="mt-3 space-y-1.5">{titleEvents.map(({ entry, title }) => <li key={`${entry.year}-${title}`}><Link href={href(entry)} style={{ borderLeftColor: teamColor(entry.teamId).bg, backgroundColor: withAlpha(teamColor(entry.teamId).bg, .06) }} className="flex items-center gap-2 rounded-lg border border-l-4 border-zinc-200 px-2.5 py-2"><span className="w-10 text-xs font-bold text-zinc-500">{entry.year}</span><span className="text-sm font-semibold text-zinc-800">{title}</span></Link></li>)}</ol> : <p className="mt-3 text-sm text-zinc-500">記録なし</p>}</div>
-      <div className="rounded-2xl border border-zinc-200 bg-white p-5"><h2 className="text-base font-bold">似たシーズン</h2><p className="mt-1 text-[11px] text-zinc-400">wRC+・OPS・本塁打・打席数から近い年度を抽出</p><ol className="mt-3 space-y-1.5">{similar.map((entry) => <li key={`${entry.year}-${entry.rank}`}><Link href={href(entry)} style={{ borderLeftColor: teamColor(entry.teamId).bg }} className="flex items-center gap-2 rounded-lg border border-l-4 border-zinc-200 px-2.5 py-2 hover:bg-zinc-50"><span className="text-xs font-bold text-zinc-500">{entry.year}</span><span className="min-w-0 flex-1 truncate text-sm font-semibold">{entry.name}</span><span className="text-sm font-extrabold">{fmtWrcPlus(entry.wrcPlus)}</span></Link></li>)}</ol></div>
-    </section>}
+    {(titlesByYear.length > 0 || similar.length > 0) && (
+      <section className="grid gap-4 lg:grid-cols-2">
+        <div
+          style={{ borderTopColor: color.bg }}
+          className="rounded-2xl border border-t-4 border-zinc-200 bg-white p-5"
+        >
+          <h2 className="text-base font-extrabold">タイトル・ベストナイン</h2>
+          <p className="mt-1 text-[11px] text-zinc-400">年度ごとに獲得タイトルを表示</p>
+          {titlesByYear.length ? (
+            <ol className="mt-4 space-y-2">
+              {titlesByYear.map(({ entry, titles }) => {
+                const entryColor = teamColor(entry.teamId);
+                const entryAccent = readableOnLight(entryColor.bg);
+                return (
+                  <li key={entry.year}>
+                    <Link
+                      href={href(entry)}
+                      style={{
+                        borderLeftColor: entryColor.bg,
+                        backgroundColor: withAlpha(entryColor.bg, 0.06),
+                      }}
+                      className="flex items-start gap-3 rounded-xl border border-l-4 border-zinc-200 px-3 py-3 transition hover:-translate-y-px"
+                    >
+                      <span className="shrink-0 pt-0.5 text-sm font-extrabold text-zinc-700">
+                        {entry.year}年
+                      </span>
+                      <span className="flex min-w-0 flex-1 flex-wrap gap-1.5">
+                        {titles.map((title) => (
+                          <span
+                            key={title}
+                            style={{
+                              backgroundColor: withAlpha(entryColor.bg, 0.15),
+                              color: entryAccent,
+                            }}
+                            className="rounded-full px-2 py-0.5 text-[11px] font-bold"
+                          >
+                            {title}
+                          </span>
+                        ))}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ol>
+          ) : (
+            <p className="mt-3 text-sm text-zinc-500">記録なし</p>
+          )}
+        </div>
+
+        <div
+          style={{ borderTopColor: color.bg }}
+          className="rounded-2xl border border-t-4 border-zinc-200 bg-white p-5"
+        >
+          <h2 className="text-base font-extrabold">似たシーズン</h2>
+          <p className="mt-1 text-[11px] text-zinc-400">
+            wRC+・OPS・本塁打・打席数から近い年度を抽出
+          </p>
+          <ol className="mt-4 space-y-1.5">
+            {similar.map((entry) => (
+              <li key={`${entry.year}-${entry.rank}`}>
+                <Link
+                  href={href(entry)}
+                  style={{
+                    borderLeftColor: teamColor(entry.teamId).bg,
+                    backgroundColor: withAlpha(teamColor(entry.teamId).bg, 0.04),
+                  }}
+                  className="flex items-center gap-2 rounded-lg border border-l-4 border-zinc-200 px-2.5 py-2 transition hover:-translate-y-px"
+                >
+                  <span className="text-xs font-bold text-zinc-500">{entry.year}</span>
+                  <span className="min-w-0 flex-1 truncate text-sm font-semibold">{entry.name}</span>
+                  <span className="text-sm font-extrabold">{fmtWrcPlus(entry.wrcPlus)}</span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    )}
   </div>;
 }

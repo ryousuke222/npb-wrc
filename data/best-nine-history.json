@@ -1,0 +1,5455 @@
+[
+  {
+    "year": 2001,
+    "league": "central",
+    "position": "捕手",
+    "name": "古田敦也",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 2001,
+    "league": "central",
+    "position": "一塁手",
+    "name": "R.ペタジーニ",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 2001,
+    "league": "central",
+    "position": "二塁手",
+    "name": "E.ディアス",
+    "teamText": "広島"
+  },
+  {
+    "year": 2001,
+    "league": "central",
+    "position": "三塁手",
+    "name": "江藤智",
+    "teamText": "巨人"
+  },
+  {
+    "year": 2001,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "石井琢朗",
+    "teamText": "横浜"
+  },
+  {
+    "year": 2001,
+    "league": "central",
+    "position": "外野手",
+    "name": "松井秀喜",
+    "teamText": "巨人"
+  },
+  {
+    "year": 2001,
+    "league": "central",
+    "position": "外野手",
+    "name": "金本知憲",
+    "teamText": "広島"
+  },
+  {
+    "year": 2001,
+    "league": "central",
+    "position": "外野手",
+    "name": "稲葉篤紀",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 2000,
+    "league": "central",
+    "position": "捕手",
+    "name": "古田敦也",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 2000,
+    "league": "central",
+    "position": "一塁手",
+    "name": "R.ペタジーニ",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 2000,
+    "league": "central",
+    "position": "二塁手",
+    "name": "R.ローズ",
+    "teamText": "横浜"
+  },
+  {
+    "year": 2000,
+    "league": "central",
+    "position": "三塁手",
+    "name": "江藤智",
+    "teamText": "巨人"
+  },
+  {
+    "year": 2000,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "石井琢朗",
+    "teamText": "横浜"
+  },
+  {
+    "year": 2000,
+    "league": "central",
+    "position": "外野手",
+    "name": "新庄剛志",
+    "teamText": "阪神"
+  },
+  {
+    "year": 2000,
+    "league": "central",
+    "position": "外野手",
+    "name": "松井秀喜",
+    "teamText": "巨人"
+  },
+  {
+    "year": 2000,
+    "league": "central",
+    "position": "外野手",
+    "name": "金本知憲",
+    "teamText": "広島"
+  },
+  {
+    "year": 1999,
+    "league": "central",
+    "position": "捕手",
+    "name": "古田敦也",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1999,
+    "league": "central",
+    "position": "一塁手",
+    "name": "R.ペタジーニ",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1999,
+    "league": "central",
+    "position": "二塁手",
+    "name": "R.ローズ",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1999,
+    "league": "central",
+    "position": "三塁手",
+    "name": "L.ゴメス",
+    "teamText": "中日"
+  },
+  {
+    "year": 1999,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "石井琢朗",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1999,
+    "league": "central",
+    "position": "外野手",
+    "name": "関川浩一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1999,
+    "league": "central",
+    "position": "外野手",
+    "name": "高橋由伸",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1999,
+    "league": "central",
+    "position": "外野手",
+    "name": "松井秀喜",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1998,
+    "league": "central",
+    "position": "捕手",
+    "name": "谷繁元信",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1998,
+    "league": "central",
+    "position": "一塁手",
+    "name": "駒田徳広",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1998,
+    "league": "central",
+    "position": "二塁手",
+    "name": "R.ローズ",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1998,
+    "league": "central",
+    "position": "三塁手",
+    "name": "江藤智",
+    "teamText": "広島"
+  },
+  {
+    "year": 1998,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "石井琢朗",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1998,
+    "league": "central",
+    "position": "外野手",
+    "name": "鈴木尚典",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1998,
+    "league": "central",
+    "position": "外野手",
+    "name": "松井秀喜",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1998,
+    "league": "central",
+    "position": "外野手",
+    "name": "前田智徳",
+    "teamText": "広島"
+  },
+  {
+    "year": 1997,
+    "league": "central",
+    "position": "捕手",
+    "name": "古田敦也",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1997,
+    "league": "central",
+    "position": "一塁手",
+    "name": "L.ロペス",
+    "teamText": "広島"
+  },
+  {
+    "year": 1997,
+    "league": "central",
+    "position": "二塁手",
+    "name": "R.ローズ",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1997,
+    "league": "central",
+    "position": "三塁手",
+    "name": "L.ゴメス",
+    "teamText": "中日"
+  },
+  {
+    "year": 1997,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "石井琢朗",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1997,
+    "league": "central",
+    "position": "外野手",
+    "name": "鈴木尚典",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1997,
+    "league": "central",
+    "position": "外野手",
+    "name": "松井秀喜",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1997,
+    "league": "central",
+    "position": "外野手",
+    "name": "D.ホージー",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1996,
+    "league": "central",
+    "position": "捕手",
+    "name": "西山秀二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1996,
+    "league": "central",
+    "position": "一塁手",
+    "name": "L.ロペス",
+    "teamText": "広島"
+  },
+  {
+    "year": 1996,
+    "league": "central",
+    "position": "二塁手",
+    "name": "立浪和義",
+    "teamText": "中日"
+  },
+  {
+    "year": 1996,
+    "league": "central",
+    "position": "三塁手",
+    "name": "江藤智",
+    "teamText": "広島"
+  },
+  {
+    "year": 1996,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "野村謙二郎",
+    "teamText": "広島"
+  },
+  {
+    "year": 1996,
+    "league": "central",
+    "position": "外野手",
+    "name": "松井秀喜",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1996,
+    "league": "central",
+    "position": "外野手",
+    "name": "A.パウエル",
+    "teamText": "中日"
+  },
+  {
+    "year": 1996,
+    "league": "central",
+    "position": "外野手",
+    "name": "山崎武司",
+    "teamText": "中日"
+  },
+  {
+    "year": 1995,
+    "league": "central",
+    "position": "捕手",
+    "name": "古田敦也",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1995,
+    "league": "central",
+    "position": "一塁手",
+    "name": "T.オマリー",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1995,
+    "league": "central",
+    "position": "二塁手",
+    "name": "R.ローズ",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1995,
+    "league": "central",
+    "position": "三塁手",
+    "name": "江藤智",
+    "teamText": "広島"
+  },
+  {
+    "year": 1995,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "野村謙二郎",
+    "teamText": "広島"
+  },
+  {
+    "year": 1995,
+    "league": "central",
+    "position": "外野手",
+    "name": "松井秀喜",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1995,
+    "league": "central",
+    "position": "外野手",
+    "name": "金本知憲",
+    "teamText": "広島"
+  },
+  {
+    "year": 1995,
+    "league": "central",
+    "position": "外野手",
+    "name": "A.パウエル",
+    "teamText": "中日"
+  },
+  {
+    "year": 1994,
+    "league": "central",
+    "position": "捕手",
+    "name": "西山秀二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1994,
+    "league": "central",
+    "position": "一塁手",
+    "name": "大豊泰昭",
+    "teamText": "中日"
+  },
+  {
+    "year": 1994,
+    "league": "central",
+    "position": "二塁手",
+    "name": "和田豊",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1994,
+    "league": "central",
+    "position": "三塁手",
+    "name": "江藤智",
+    "teamText": "広島"
+  },
+  {
+    "year": 1994,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "川相昌弘",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1994,
+    "league": "central",
+    "position": "外野手",
+    "name": "A.パウエル",
+    "teamText": "中日"
+  },
+  {
+    "year": 1994,
+    "league": "central",
+    "position": "外野手",
+    "name": "G.ブラッグス",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1994,
+    "league": "central",
+    "position": "外野手",
+    "name": "前田智徳",
+    "teamText": "広島"
+  },
+  {
+    "year": 1993,
+    "league": "central",
+    "position": "捕手",
+    "name": "古田敦也",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1993,
+    "league": "central",
+    "position": "一塁手",
+    "name": "広沢克己",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1993,
+    "league": "central",
+    "position": "二塁手",
+    "name": "R.ローズ",
+    "teamText": "横浜"
+  },
+  {
+    "year": 1993,
+    "league": "central",
+    "position": "三塁手",
+    "name": "江藤智",
+    "teamText": "広島"
+  },
+  {
+    "year": 1993,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "池山隆寛",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1993,
+    "league": "central",
+    "position": "外野手",
+    "name": "新庄剛志",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1993,
+    "league": "central",
+    "position": "外野手",
+    "name": "A.パウエル",
+    "teamText": "中日"
+  },
+  {
+    "year": 1993,
+    "league": "central",
+    "position": "外野手",
+    "name": "前田智徳",
+    "teamText": "広島"
+  },
+  {
+    "year": 1992,
+    "league": "central",
+    "position": "捕手",
+    "name": "古田敦也",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1992,
+    "league": "central",
+    "position": "一塁手",
+    "name": "J.パチョレック",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1992,
+    "league": "central",
+    "position": "二塁手",
+    "name": "和田豊",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1992,
+    "league": "central",
+    "position": "三塁手",
+    "name": "J.ハウエル",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1992,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "池山隆寛",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1992,
+    "league": "central",
+    "position": "外野手",
+    "name": "L.シーツ",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1992,
+    "league": "central",
+    "position": "外野手",
+    "name": "前田智徳",
+    "teamText": "広島"
+  },
+  {
+    "year": 1992,
+    "league": "central",
+    "position": "外野手",
+    "name": "飯田哲也",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1991,
+    "league": "central",
+    "position": "捕手",
+    "name": "古田敦也",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1991,
+    "league": "central",
+    "position": "一塁手",
+    "name": "落合博満",
+    "teamText": "中日"
+  },
+  {
+    "year": 1991,
+    "league": "central",
+    "position": "二塁手",
+    "name": "高木豊",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1991,
+    "league": "central",
+    "position": "三塁手",
+    "name": "山崎隆造",
+    "teamText": "広島"
+  },
+  {
+    "year": 1991,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "野村謙二郎",
+    "teamText": "広島"
+  },
+  {
+    "year": 1991,
+    "league": "central",
+    "position": "外野手",
+    "name": "原辰徳",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1991,
+    "league": "central",
+    "position": "外野手",
+    "name": "R.J.レイノルズ",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1991,
+    "league": "central",
+    "position": "外野手",
+    "name": "広沢克己",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1990,
+    "league": "central",
+    "position": "捕手",
+    "name": "村田真一",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1990,
+    "league": "central",
+    "position": "一塁手",
+    "name": "落合博満",
+    "teamText": "中日"
+  },
+  {
+    "year": 1990,
+    "league": "central",
+    "position": "二塁手",
+    "name": "高木豊",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1990,
+    "league": "central",
+    "position": "三塁手",
+    "name": "バンスロー",
+    "teamText": "中日"
+  },
+  {
+    "year": 1990,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "池山隆寛",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1990,
+    "league": "central",
+    "position": "外野手",
+    "name": "原辰徳",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1990,
+    "league": "central",
+    "position": "外野手",
+    "name": "J.パチョレック",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1990,
+    "league": "central",
+    "position": "外野手",
+    "name": "広沢克己",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1989,
+    "league": "central",
+    "position": "捕手",
+    "name": "中尾孝義",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1989,
+    "league": "central",
+    "position": "一塁手",
+    "name": "L.パリッシュ",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1989,
+    "league": "central",
+    "position": "二塁手",
+    "name": "正田耕三",
+    "teamText": "広島"
+  },
+  {
+    "year": 1989,
+    "league": "central",
+    "position": "三塁手",
+    "name": "落合博満",
+    "teamText": "中日"
+  },
+  {
+    "year": 1989,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "池山隆寛",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1989,
+    "league": "central",
+    "position": "外野手",
+    "name": "W.クロマティ",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1989,
+    "league": "central",
+    "position": "外野手",
+    "name": "彦野利勝",
+    "teamText": "中日"
+  },
+  {
+    "year": 1989,
+    "league": "central",
+    "position": "外野手",
+    "name": "山崎賢一",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1988,
+    "league": "central",
+    "position": "捕手",
+    "name": "達川光男",
+    "teamText": "広島"
+  },
+  {
+    "year": 1988,
+    "league": "central",
+    "position": "一塁手",
+    "name": "落合博満",
+    "teamText": "中日"
+  },
+  {
+    "year": 1988,
+    "league": "central",
+    "position": "二塁手",
+    "name": "正田耕三",
+    "teamText": "広島"
+  },
+  {
+    "year": 1988,
+    "league": "central",
+    "position": "三塁手",
+    "name": "原辰徳",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1988,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "池山隆寛",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1988,
+    "league": "central",
+    "position": "外野手",
+    "name": "J.パチョレック",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1988,
+    "league": "central",
+    "position": "外野手",
+    "name": "C.ポンセ",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1988,
+    "league": "central",
+    "position": "外野手",
+    "name": "広沢克己",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1987,
+    "league": "central",
+    "position": "捕手",
+    "name": "山倉和博",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1987,
+    "league": "central",
+    "position": "一塁手",
+    "name": "R.バース",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1987,
+    "league": "central",
+    "position": "二塁手",
+    "name": "篠塚利夫",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1987,
+    "league": "central",
+    "position": "三塁手",
+    "name": "原辰徳",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1987,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "宇野勝",
+    "teamText": "中日"
+  },
+  {
+    "year": 1987,
+    "league": "central",
+    "position": "外野手",
+    "name": "W.クロマティ",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1987,
+    "league": "central",
+    "position": "外野手",
+    "name": "吉村禎章",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1987,
+    "league": "central",
+    "position": "外野手",
+    "name": "C.ポンセ",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1986,
+    "league": "central",
+    "position": "捕手",
+    "name": "達川光男",
+    "teamText": "広島"
+  },
+  {
+    "year": 1986,
+    "league": "central",
+    "position": "一塁手",
+    "name": "R.バース",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1986,
+    "league": "central",
+    "position": "二塁手",
+    "name": "篠塚利夫",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1986,
+    "league": "central",
+    "position": "三塁手",
+    "name": "レオン",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1986,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "高橋慶彦",
+    "teamText": "広島"
+  },
+  {
+    "year": 1986,
+    "league": "central",
+    "position": "外野手",
+    "name": "W.クロマティ",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1986,
+    "league": "central",
+    "position": "外野手",
+    "name": "吉村禎章",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1986,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本浩二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1985,
+    "league": "central",
+    "position": "捕手",
+    "name": "八重樫幸雄",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1985,
+    "league": "central",
+    "position": "一塁手",
+    "name": "R.バース",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1985,
+    "league": "central",
+    "position": "二塁手",
+    "name": "岡田彰布",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1985,
+    "league": "central",
+    "position": "三塁手",
+    "name": "掛布雅之",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1985,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "高木豊",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1985,
+    "league": "central",
+    "position": "外野手",
+    "name": "真弓明信",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1985,
+    "league": "central",
+    "position": "外野手",
+    "name": "山崎隆造",
+    "teamText": "広島"
+  },
+  {
+    "year": 1985,
+    "league": "central",
+    "position": "外野手",
+    "name": "杉浦享",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1984,
+    "league": "central",
+    "position": "捕手",
+    "name": "達川光男",
+    "teamText": "広島"
+  },
+  {
+    "year": 1984,
+    "league": "central",
+    "position": "一塁手",
+    "name": "谷沢健一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1984,
+    "league": "central",
+    "position": "二塁手",
+    "name": "篠塚利夫",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1984,
+    "league": "central",
+    "position": "三塁手",
+    "name": "衣笠祥雄",
+    "teamText": "広島"
+  },
+  {
+    "year": 1984,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "宇野勝",
+    "teamText": "中日"
+  },
+  {
+    "year": 1984,
+    "league": "central",
+    "position": "外野手",
+    "name": "山崎隆造",
+    "teamText": "広島"
+  },
+  {
+    "year": 1984,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本浩二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1984,
+    "league": "central",
+    "position": "外野手",
+    "name": "若松勉",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1983,
+    "league": "central",
+    "position": "捕手",
+    "name": "山倉和博",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1983,
+    "league": "central",
+    "position": "一塁手",
+    "name": "谷沢健一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1983,
+    "league": "central",
+    "position": "二塁手",
+    "name": "真弓明信",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1983,
+    "league": "central",
+    "position": "三塁手",
+    "name": "原辰徳",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1983,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "高橋慶彦",
+    "teamText": "広島"
+  },
+  {
+    "year": 1983,
+    "league": "central",
+    "position": "外野手",
+    "name": "松本匡史",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1983,
+    "league": "central",
+    "position": "外野手",
+    "name": "田尾安志",
+    "teamText": "中日"
+  },
+  {
+    "year": 1983,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本浩二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1982,
+    "league": "central",
+    "position": "捕手",
+    "name": "中尾孝義",
+    "teamText": "中日"
+  },
+  {
+    "year": 1982,
+    "league": "central",
+    "position": "一塁手",
+    "name": "谷沢健一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1982,
+    "league": "central",
+    "position": "二塁手",
+    "name": "篠塚利夫",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1982,
+    "league": "central",
+    "position": "三塁手",
+    "name": "掛布雅之",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1982,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "宇野勝",
+    "teamText": "中日"
+  },
+  {
+    "year": 1982,
+    "league": "central",
+    "position": "外野手",
+    "name": "田尾安志",
+    "teamText": "中日"
+  },
+  {
+    "year": 1982,
+    "league": "central",
+    "position": "外野手",
+    "name": "長崎啓二",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1982,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本浩二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1981,
+    "league": "central",
+    "position": "捕手",
+    "name": "山倉和博",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1981,
+    "league": "central",
+    "position": "一塁手",
+    "name": "藤田平",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1981,
+    "league": "central",
+    "position": "二塁手",
+    "name": "篠塚利夫",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1981,
+    "league": "central",
+    "position": "三塁手",
+    "name": "掛布雅之",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1981,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "山下大輔",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1981,
+    "league": "central",
+    "position": "外野手",
+    "name": "田尾安志",
+    "teamText": "中日"
+  },
+  {
+    "year": 1981,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本浩二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1981,
+    "league": "central",
+    "position": "外野手",
+    "name": "J.ライトル",
+    "teamText": "広島"
+  },
+  {
+    "year": 1980,
+    "league": "central",
+    "position": "捕手",
+    "name": "大矢明彦",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1980,
+    "league": "central",
+    "position": "一塁手",
+    "name": "谷沢健一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1980,
+    "league": "central",
+    "position": "二塁手",
+    "name": "基満男",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1980,
+    "league": "central",
+    "position": "三塁手",
+    "name": "衣笠祥雄",
+    "teamText": "広島"
+  },
+  {
+    "year": 1980,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "高橋慶彦",
+    "teamText": "広島"
+  },
+  {
+    "year": 1980,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本浩二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1980,
+    "league": "central",
+    "position": "外野手",
+    "name": "杉浦亨",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1980,
+    "league": "central",
+    "position": "外野手",
+    "name": "若松勉",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1979,
+    "league": "central",
+    "position": "捕手",
+    "name": "木俣達彦",
+    "teamText": "中日"
+  },
+  {
+    "year": 1979,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1979,
+    "league": "central",
+    "position": "二塁手",
+    "name": "F.ミヤーン",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1979,
+    "league": "central",
+    "position": "三塁手",
+    "name": "掛布雅之",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1979,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "高橋慶彦",
+    "teamText": "広島"
+  },
+  {
+    "year": 1979,
+    "league": "central",
+    "position": "外野手",
+    "name": "M.ラインバック",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1979,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本浩二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1979,
+    "league": "central",
+    "position": "外野手",
+    "name": "若松勉",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1978,
+    "league": "central",
+    "position": "捕手",
+    "name": "大矢明彦",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1978,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1978,
+    "league": "central",
+    "position": "二塁手",
+    "name": "D.ヒルトン",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1978,
+    "league": "central",
+    "position": "三塁手",
+    "name": "掛布雅之",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1978,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "高橋慶彦",
+    "teamText": "広島"
+  },
+  {
+    "year": 1978,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本浩二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1978,
+    "league": "central",
+    "position": "外野手",
+    "name": "C.マニエル",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1978,
+    "league": "central",
+    "position": "外野手",
+    "name": "若松勉",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1977,
+    "league": "central",
+    "position": "捕手",
+    "name": "木俣達彦",
+    "teamText": "中日"
+  },
+  {
+    "year": 1977,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1977,
+    "league": "central",
+    "position": "二塁手",
+    "name": "高木守道",
+    "teamText": "中日"
+  },
+  {
+    "year": 1977,
+    "league": "central",
+    "position": "三塁手",
+    "name": "掛布雅之",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1977,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "河埜和正",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1977,
+    "league": "central",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1977,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本浩二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1977,
+    "league": "central",
+    "position": "外野手",
+    "name": "若松勉",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1976,
+    "league": "central",
+    "position": "捕手",
+    "name": "田淵幸一",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1976,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1976,
+    "league": "central",
+    "position": "二塁手",
+    "name": "D.ジョンソン",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1976,
+    "league": "central",
+    "position": "三塁手",
+    "name": "掛布雅之",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1976,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "三村敏之",
+    "teamText": "広島"
+  },
+  {
+    "year": 1976,
+    "league": "central",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1976,
+    "league": "central",
+    "position": "外野手",
+    "name": "谷沢健一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1976,
+    "league": "central",
+    "position": "外野手",
+    "name": "若松勉",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1975,
+    "league": "central",
+    "position": "捕手",
+    "name": "田淵幸一",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1975,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1975,
+    "league": "central",
+    "position": "二塁手",
+    "name": "大下剛史",
+    "teamText": "広島"
+  },
+  {
+    "year": 1975,
+    "league": "central",
+    "position": "三塁手",
+    "name": "衣笠祥雄",
+    "teamText": "広島"
+  },
+  {
+    "year": 1975,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "三村敏之",
+    "teamText": "広島"
+  },
+  {
+    "year": 1975,
+    "league": "central",
+    "position": "外野手",
+    "name": "井上弘昭",
+    "teamText": "中日"
+  },
+  {
+    "year": 1975,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本浩二",
+    "teamText": "広島"
+  },
+  {
+    "year": 1975,
+    "league": "central",
+    "position": "外野手",
+    "name": "ロジャー",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1974,
+    "league": "central",
+    "position": "捕手",
+    "name": "田淵幸一",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1974,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1974,
+    "league": "central",
+    "position": "二塁手",
+    "name": "高木守道",
+    "teamText": "中日"
+  },
+  {
+    "year": 1974,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1974,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "藤田平",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1974,
+    "league": "central",
+    "position": "外野手",
+    "name": "末次利光",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1974,
+    "league": "central",
+    "position": "外野手",
+    "name": "G.マーチン",
+    "teamText": "中日"
+  },
+  {
+    "year": 1974,
+    "league": "central",
+    "position": "外野手",
+    "name": "若松勉",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1973,
+    "league": "central",
+    "position": "捕手",
+    "name": "田淵幸一",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1973,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1973,
+    "league": "central",
+    "position": "二塁手",
+    "name": "J.シピン",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1973,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1973,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "藤田平",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1973,
+    "league": "central",
+    "position": "外野手",
+    "name": "柴田勲",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1973,
+    "league": "central",
+    "position": "外野手",
+    "name": "江尻亮",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1973,
+    "league": "central",
+    "position": "外野手",
+    "name": "若松勉",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1972,
+    "league": "central",
+    "position": "捕手",
+    "name": "田淵幸一",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1972,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1972,
+    "league": "central",
+    "position": "二塁手",
+    "name": "J.シピン",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1972,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1972,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "三村敏之",
+    "teamText": "広島"
+  },
+  {
+    "year": 1972,
+    "league": "central",
+    "position": "外野手",
+    "name": "柴田勲",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1972,
+    "league": "central",
+    "position": "外野手",
+    "name": "高田繁",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1972,
+    "league": "central",
+    "position": "外野手",
+    "name": "若松勉",
+    "teamText": "ヤクルト"
+  },
+  {
+    "year": 1971,
+    "league": "central",
+    "position": "捕手",
+    "name": "木俣達彦",
+    "teamText": "中日"
+  },
+  {
+    "year": 1971,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1971,
+    "league": "central",
+    "position": "二塁手",
+    "name": "国貞泰汎",
+    "teamText": "広島"
+  },
+  {
+    "year": 1971,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1971,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "藤田平",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1971,
+    "league": "central",
+    "position": "外野手",
+    "name": "柴田勲",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1971,
+    "league": "central",
+    "position": "外野手",
+    "name": "高田繁",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1971,
+    "league": "central",
+    "position": "外野手",
+    "name": "水谷実雄",
+    "teamText": "広島"
+  },
+  {
+    "year": 1970,
+    "league": "central",
+    "position": "捕手",
+    "name": "木俣達彦",
+    "teamText": "中日"
+  },
+  {
+    "year": 1970,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1970,
+    "league": "central",
+    "position": "二塁手",
+    "name": "安藤統夫",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1970,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1970,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "藤田平",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1970,
+    "league": "central",
+    "position": "外野手",
+    "name": "高田繁",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1970,
+    "league": "central",
+    "position": "外野手",
+    "name": "中暁生",
+    "teamText": "中日"
+  },
+  {
+    "year": 1970,
+    "league": "central",
+    "position": "外野手",
+    "name": "江尻亮",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1969,
+    "league": "central",
+    "position": "捕手",
+    "name": "木俣達彦",
+    "teamText": "中日"
+  },
+  {
+    "year": 1969,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1969,
+    "league": "central",
+    "position": "二塁手",
+    "name": "土井正三",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1969,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1969,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "藤田平",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1969,
+    "league": "central",
+    "position": "外野手",
+    "name": "高田繁",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1969,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本一義",
+    "teamText": "広島"
+  },
+  {
+    "year": 1969,
+    "league": "central",
+    "position": "外野手",
+    "name": "D.ロバーツ",
+    "teamText": "アトムズ"
+  },
+  {
+    "year": 1968,
+    "league": "central",
+    "position": "捕手",
+    "name": "森昌彦",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1968,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1968,
+    "league": "central",
+    "position": "二塁手",
+    "name": "土井正三",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1968,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1968,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "黒江透修",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1968,
+    "league": "central",
+    "position": "外野手",
+    "name": "山内一弘",
+    "teamText": "広島"
+  },
+  {
+    "year": 1968,
+    "league": "central",
+    "position": "外野手",
+    "name": "江藤慎一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1968,
+    "league": "central",
+    "position": "外野手",
+    "name": "D.ロバーツ",
+    "teamText": "サンケイ"
+  },
+  {
+    "year": 1967,
+    "league": "central",
+    "position": "捕手",
+    "name": "森昌彦",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1967,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1967,
+    "league": "central",
+    "position": "二塁手",
+    "name": "高木守道",
+    "teamText": "中日"
+  },
+  {
+    "year": 1967,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1967,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "藤田平",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1967,
+    "league": "central",
+    "position": "外野手",
+    "name": "柴田勲",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1967,
+    "league": "central",
+    "position": "外野手",
+    "name": "中暁生",
+    "teamText": "中日"
+  },
+  {
+    "year": 1967,
+    "league": "central",
+    "position": "外野手",
+    "name": "近藤和彦",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1966,
+    "league": "central",
+    "position": "捕手",
+    "name": "森昌彦",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1966,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1966,
+    "league": "central",
+    "position": "二塁手",
+    "name": "高木守道",
+    "teamText": "中日"
+  },
+  {
+    "year": 1966,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1966,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "一枝修平",
+    "teamText": "中日"
+  },
+  {
+    "year": 1966,
+    "league": "central",
+    "position": "外野手",
+    "name": "江藤慎一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1966,
+    "league": "central",
+    "position": "外野手",
+    "name": "中暁生",
+    "teamText": "中日"
+  },
+  {
+    "year": 1966,
+    "league": "central",
+    "position": "外野手",
+    "name": "山本一義",
+    "teamText": "広島"
+  },
+  {
+    "year": 1965,
+    "league": "central",
+    "position": "捕手",
+    "name": "森昌彦",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1965,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1965,
+    "league": "central",
+    "position": "二塁手",
+    "name": "高木守道",
+    "teamText": "中日"
+  },
+  {
+    "year": 1965,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1965,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "吉田義男",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1965,
+    "league": "central",
+    "position": "外野手",
+    "name": "江藤慎一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1965,
+    "league": "central",
+    "position": "外野手",
+    "name": "中暁生",
+    "teamText": "中日"
+  },
+  {
+    "year": 1965,
+    "league": "central",
+    "position": "外野手",
+    "name": "近藤和彦",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1964,
+    "league": "central",
+    "position": "捕手",
+    "name": "森昌彦",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1964,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1964,
+    "league": "central",
+    "position": "二塁手",
+    "name": "高木守道",
+    "teamText": "中日"
+  },
+  {
+    "year": 1964,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1964,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "吉田義男",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1964,
+    "league": "central",
+    "position": "外野手",
+    "name": "江藤慎一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1964,
+    "league": "central",
+    "position": "外野手",
+    "name": "近藤和彦",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1964,
+    "league": "central",
+    "position": "外野手",
+    "name": "重松省三",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1963,
+    "league": "central",
+    "position": "捕手",
+    "name": "森昌彦",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1963,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1963,
+    "league": "central",
+    "position": "二塁手",
+    "name": "高木守道",
+    "teamText": "中日"
+  },
+  {
+    "year": 1963,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1963,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "古葉毅",
+    "teamText": "広島"
+  },
+  {
+    "year": 1963,
+    "league": "central",
+    "position": "外野手",
+    "name": "藤井栄治",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1963,
+    "league": "central",
+    "position": "外野手",
+    "name": "江藤慎一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1963,
+    "league": "central",
+    "position": "外野手",
+    "name": "近藤和彦",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1962,
+    "league": "central",
+    "position": "捕手",
+    "name": "森昌彦",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1962,
+    "league": "central",
+    "position": "一塁手",
+    "name": "王貞治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1962,
+    "league": "central",
+    "position": "二塁手",
+    "name": "小坂佳隆",
+    "teamText": "広島"
+  },
+  {
+    "year": 1962,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1962,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "吉田義男",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1962,
+    "league": "central",
+    "position": "外野手",
+    "name": "森永勝治",
+    "teamText": "広島"
+  },
+  {
+    "year": 1962,
+    "league": "central",
+    "position": "外野手",
+    "name": "並木輝男",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1962,
+    "league": "central",
+    "position": "外野手",
+    "name": "近藤和彦",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1961,
+    "league": "central",
+    "position": "捕手",
+    "name": "森昌彦",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1961,
+    "league": "central",
+    "position": "一塁手",
+    "name": "藤本勝巳",
+    "teamText": "阪神"
+  },
+  {
+    "year": 1961,
+    "league": "central",
+    "position": "二塁手",
+    "name": "土屋正孝",
+    "teamText": "国鉄"
+  },
+  {
+    "year": 1961,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1961,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "河野旭輝",
+    "teamText": "中日"
+  },
+  {
+    "year": 1961,
+    "league": "central",
+    "position": "外野手",
+    "name": "森永勝治",
+    "teamText": "広島"
+  },
+  {
+    "year": 1961,
+    "league": "central",
+    "position": "外野手",
+    "name": "江藤慎一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1961,
+    "league": "central",
+    "position": "外野手",
+    "name": "近藤和彦",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1960,
+    "league": "central",
+    "position": "捕手",
+    "name": "土井淳",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1960,
+    "league": "central",
+    "position": "一塁手",
+    "name": "近藤和彦",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1960,
+    "league": "central",
+    "position": "二塁手",
+    "name": "井上登",
+    "teamText": "中日"
+  },
+  {
+    "year": 1960,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1960,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "吉田義男",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1960,
+    "league": "central",
+    "position": "外野手",
+    "name": "並木輝男",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1960,
+    "league": "central",
+    "position": "外野手",
+    "name": "中利夫",
+    "teamText": "中日"
+  },
+  {
+    "year": 1960,
+    "league": "central",
+    "position": "外野手",
+    "name": "森徹",
+    "teamText": "中日"
+  },
+  {
+    "year": 1959,
+    "league": "central",
+    "position": "捕手",
+    "name": "藤尾茂",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1959,
+    "league": "central",
+    "position": "一塁手",
+    "name": "藤本勝巳",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1959,
+    "league": "central",
+    "position": "二塁手",
+    "name": "土屋正孝",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1959,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1959,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "吉田義男",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1959,
+    "league": "central",
+    "position": "外野手",
+    "name": "坂崎一彦",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1959,
+    "league": "central",
+    "position": "外野手",
+    "name": "森徹",
+    "teamText": "中日"
+  },
+  {
+    "year": 1959,
+    "league": "central",
+    "position": "外野手",
+    "name": "大和田明",
+    "teamText": "広島"
+  },
+  {
+    "year": 1958,
+    "league": "central",
+    "position": "捕手",
+    "name": "藤尾茂",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1958,
+    "league": "central",
+    "position": "一塁手",
+    "name": "川上哲治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1958,
+    "league": "central",
+    "position": "二塁手",
+    "name": "井上登",
+    "teamText": "中日"
+  },
+  {
+    "year": 1958,
+    "league": "central",
+    "position": "三塁手",
+    "name": "長嶋茂雄",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1958,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "吉田義男",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1958,
+    "league": "central",
+    "position": "外野手",
+    "name": "与那嶺要",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1958,
+    "league": "central",
+    "position": "外野手",
+    "name": "田宮謙次郎",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1958,
+    "league": "central",
+    "position": "外野手",
+    "name": "森徹",
+    "teamText": "中日"
+  },
+  {
+    "year": 1957,
+    "league": "central",
+    "position": "捕手",
+    "name": "藤尾茂",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1957,
+    "league": "central",
+    "position": "一塁手",
+    "name": "川上哲治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1957,
+    "league": "central",
+    "position": "二塁手",
+    "name": "井上登",
+    "teamText": "中日"
+  },
+  {
+    "year": 1957,
+    "league": "central",
+    "position": "三塁手",
+    "name": "三宅秀史",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1957,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "吉田義男",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1957,
+    "league": "central",
+    "position": "外野手",
+    "name": "青田昇",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1957,
+    "league": "central",
+    "position": "外野手",
+    "name": "与那嶺要",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1957,
+    "league": "central",
+    "position": "外野手",
+    "name": "田宮謙次郎",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1956,
+    "league": "central",
+    "position": "捕手",
+    "name": "藤尾茂",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1956,
+    "league": "central",
+    "position": "一塁手",
+    "name": "川上哲治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1956,
+    "league": "central",
+    "position": "二塁手",
+    "name": "井上登",
+    "teamText": "中日"
+  },
+  {
+    "year": 1956,
+    "league": "central",
+    "position": "三塁手",
+    "name": "児玉利一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1956,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "吉田義男",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1956,
+    "league": "central",
+    "position": "外野手",
+    "name": "青田昇",
+    "teamText": "大洋"
+  },
+  {
+    "year": 1956,
+    "league": "central",
+    "position": "外野手",
+    "name": "与那嶺要",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1956,
+    "league": "central",
+    "position": "外野手",
+    "name": "田宮謙次郎",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1955,
+    "league": "central",
+    "position": "捕手",
+    "name": "広田順",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1955,
+    "league": "central",
+    "position": "一塁手",
+    "name": "川上哲治",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1955,
+    "league": "central",
+    "position": "二塁手",
+    "name": "井上登",
+    "teamText": "中日"
+  },
+  {
+    "year": 1955,
+    "league": "central",
+    "position": "三塁手",
+    "name": "児玉利一",
+    "teamText": "中日"
+  },
+  {
+    "year": 1955,
+    "league": "central",
+    "position": "遊撃手",
+    "name": "吉田義男",
+    "teamText": "大阪"
+  },
+  {
+    "year": 1955,
+    "league": "central",
+    "position": "外野手",
+    "name": "町田行彦",
+    "teamText": "国鉄"
+  },
+  {
+    "year": 1955,
+    "league": "central",
+    "position": "外野手",
+    "name": "与那嶺要",
+    "teamText": "巨人"
+  },
+  {
+    "year": 1955,
+    "league": "central",
+    "position": "外野手",
+    "name": "渡辺博之",
+    "teamText": "大阪"
+  },
+  {
+    "year": 2001,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "城島健司",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 2001,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "小笠原道大",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 2001,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "井口資仁",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 2001,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "中村紀洋",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 2001,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "松井稼頭央",
+    "teamText": "西武"
+  },
+  {
+    "year": 2001,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "谷佳知",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 2001,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "T.ローズ",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 2001,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "礒部公一",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 2001,
+    "league": "pacific",
+    "position": "DH",
+    "name": "F.ボーリック",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 2000,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "城島健司",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 2000,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "松中信彦",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 2000,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "大島公一",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 2000,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "中村紀洋",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 2000,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "松井稼頭央",
+    "teamText": "西武"
+  },
+  {
+    "year": 2000,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "イチロー",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 2000,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "柴原洋",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 2000,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "S.オバンドー",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 2000,
+    "league": "pacific",
+    "position": "DH",
+    "name": "N.ウィルソン",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1999,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "城島健司",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1999,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "小笠原道大",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1999,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "金子誠",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1999,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "中村紀洋",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1999,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "松井稼頭央",
+    "teamText": "西武"
+  },
+  {
+    "year": 1999,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "イチロー",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1999,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "谷佳知",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1999,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "T.ローズ",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1999,
+    "league": "pacific",
+    "position": "DH",
+    "name": "P.クラーク",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1998,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "伊東勤",
+    "teamText": "西武"
+  },
+  {
+    "year": 1998,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "P.クラーク",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1998,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "J.フランコ",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1998,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "片岡篤史",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1998,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "松井稼頭央",
+    "teamText": "西武"
+  },
+  {
+    "year": 1998,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "イチロー",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1998,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "大村直之",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1998,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "柴原洋",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1998,
+    "league": "pacific",
+    "position": "DH",
+    "name": "N.ウィルソン",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1997,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "伊東勤",
+    "teamText": "西武"
+  },
+  {
+    "year": 1997,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "P.クラーク",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1997,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "小久保裕紀",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1997,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "鈴木健",
+    "teamText": "西武"
+  },
+  {
+    "year": 1997,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "松井稼頭央",
+    "teamText": "西武"
+  },
+  {
+    "year": 1997,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "イチロー",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1997,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "T.ローズ",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1997,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "佐々木誠",
+    "teamText": "西武"
+  },
+  {
+    "year": 1997,
+    "league": "pacific",
+    "position": "DH",
+    "name": "D.マルティネス",
+    "teamText": "西武"
+  },
+  {
+    "year": 1996,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "吉永幸一郎",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1996,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "片岡篤史",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1996,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "大島公一",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1996,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "中村紀洋",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1996,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "田中幸雄",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1996,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "田口壮",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1996,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "村松有人",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1996,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "イチロー",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1996,
+    "league": "pacific",
+    "position": "DH",
+    "name": "T.ニール",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1995,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "中嶋聡",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1995,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "J.フランコ",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1995,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "小久保裕紀",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1995,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "初芝清",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1995,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "田中幸雄",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1995,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "イチロー",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1995,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "佐々木誠",
+    "teamText": "西武"
+  },
+  {
+    "year": 1995,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "D.ジャクソン",
+    "teamText": "西武"
+  },
+  {
+    "year": 1995,
+    "league": "pacific",
+    "position": "DH",
+    "name": "T.ニール",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1994,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "吉永幸一郎",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1994,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "石井浩郎",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1994,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "福良淳一",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1994,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "松永浩美",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1994,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "広瀬哲朗",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1994,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "イチロー",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1994,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "佐々木誠",
+    "teamText": "西武"
+  },
+  {
+    "year": 1994,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "K.ライマー",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1994,
+    "league": "pacific",
+    "position": "DH",
+    "name": "R.ブライアント",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1993,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "田村藤夫",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1993,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "石井浩郎",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1993,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "辻発彦",
+    "teamText": "西武"
+  },
+  {
+    "year": 1993,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "石毛宏典",
+    "teamText": "西武"
+  },
+  {
+    "year": 1993,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "広瀬哲朗",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1993,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "佐々木誠",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1993,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "藤井康雄",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1993,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "秋山幸二",
+    "teamText": "西武"
+  },
+  {
+    "year": 1993,
+    "league": "pacific",
+    "position": "DH",
+    "name": "R.ブライアント",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1992,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "伊東勤",
+    "teamText": "西武"
+  },
+  {
+    "year": 1992,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "清原和博",
+    "teamText": "西武"
+  },
+  {
+    "year": 1992,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "辻発彦",
+    "teamText": "西武"
+  },
+  {
+    "year": 1992,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "石毛宏典",
+    "teamText": "西武"
+  },
+  {
+    "year": 1992,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "田辺徳雄",
+    "teamText": "西武"
+  },
+  {
+    "year": 1992,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "佐々木誠",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1992,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "高橋智",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1992,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "秋山幸二",
+    "teamText": "西武"
+  },
+  {
+    "year": 1992,
+    "league": "pacific",
+    "position": "DH",
+    "name": "O.デストラーデ",
+    "teamText": "西武"
+  },
+  {
+    "year": 1991,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "伊東勤",
+    "teamText": "西武"
+  },
+  {
+    "year": 1991,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "J.トレーバー",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1991,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "辻発彦",
+    "teamText": "西武"
+  },
+  {
+    "year": 1991,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "松永浩美",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1991,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "小川博文",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1991,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "佐々木誠",
+    "teamText": "ダイエー"
+  },
+  {
+    "year": 1991,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "秋山幸二",
+    "teamText": "西武"
+  },
+  {
+    "year": 1991,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "平井光親",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1991,
+    "league": "pacific",
+    "position": "DH",
+    "name": "O.デストラーデ",
+    "teamText": "西武"
+  },
+  {
+    "year": 1990,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "伊東勤",
+    "teamText": "西武"
+  },
+  {
+    "year": 1990,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "清原和博",
+    "teamText": "西武"
+  },
+  {
+    "year": 1990,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "大石第二朗",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1990,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "松永浩美",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1990,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "田中幸雄",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1990,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "石嶺和彦",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1990,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "秋山幸二",
+    "teamText": "西武"
+  },
+  {
+    "year": 1990,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "西村徳文",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1990,
+    "league": "pacific",
+    "position": "DH",
+    "name": "O.デストラーデ",
+    "teamText": "西武"
+  },
+  {
+    "year": 1989,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "山下和彦",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1989,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "ブーマー",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1989,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "辻発彦",
+    "teamText": "西武"
+  },
+  {
+    "year": 1989,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "松永浩美",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1989,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "田辺徳雄",
+    "teamText": "西武"
+  },
+  {
+    "year": 1989,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "R.ブライアント",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1989,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "藤井康雄",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1989,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "秋山幸二",
+    "teamText": "西武"
+  },
+  {
+    "year": 1989,
+    "league": "pacific",
+    "position": "DH",
+    "name": "門田博光",
+    "teamText": "オリックス"
+  },
+  {
+    "year": 1988,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "伊東勤",
+    "teamText": "西武"
+  },
+  {
+    "year": 1988,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "清原和博",
+    "teamText": "西武"
+  },
+  {
+    "year": 1988,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "福良淳一",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1988,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "松永浩美",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1988,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "田中幸雄",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1988,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "平野謙",
+    "teamText": "西武"
+  },
+  {
+    "year": 1988,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "高沢秀昭",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1988,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "秋山幸二",
+    "teamText": "西武"
+  },
+  {
+    "year": 1988,
+    "league": "pacific",
+    "position": "DH",
+    "name": "門田博光",
+    "teamText": "南海"
+  },
+  {
+    "year": 1987,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "伊東勤",
+    "teamText": "西武"
+  },
+  {
+    "year": 1987,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "ブーマー",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1987,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "白井一幸",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1987,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "石毛宏典",
+    "teamText": "西武"
+  },
+  {
+    "year": 1987,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "水上善雄",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1987,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "秋山幸二",
+    "teamText": "西武"
+  },
+  {
+    "year": 1987,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "新井宏昌",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1987,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "T.ブリューワ",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1987,
+    "league": "pacific",
+    "position": "DH",
+    "name": "石嶺和彦",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1986,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "伊東勤",
+    "teamText": "西武"
+  },
+  {
+    "year": 1986,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "ブーマー",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1986,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "辻発彦",
+    "teamText": "西武"
+  },
+  {
+    "year": 1986,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "落合博満",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1986,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "石毛宏典",
+    "teamText": "西武"
+  },
+  {
+    "year": 1986,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "横田真之",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1986,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "秋山幸二",
+    "teamText": "西武"
+  },
+  {
+    "year": 1986,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "新井宏昌",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1986,
+    "league": "pacific",
+    "position": "DH",
+    "name": "石嶺和彦",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1985,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "伊東勤",
+    "teamText": "西武"
+  },
+  {
+    "year": 1985,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "R.デービス",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1985,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "西村徳文",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1985,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "落合博満",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1985,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "石毛宏典",
+    "teamText": "西武"
+  },
+  {
+    "year": 1985,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "熊野輝光",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1985,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "横田真之",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1985,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "金森永時",
+    "teamText": "西武"
+  },
+  {
+    "year": 1985,
+    "league": "pacific",
+    "position": "DH",
+    "name": "L.リー",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1984,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "藤田浩雅",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1984,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "ブーマー",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1984,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "大石大二郎",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1984,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "落合博満",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1984,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "弓岡敬二郎",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1984,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "簑田浩二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1984,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "高沢秀昭",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1984,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "T.クルーズ",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1984,
+    "league": "pacific",
+    "position": "DH",
+    "name": "L.リー",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1983,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "香川伸行",
+    "teamText": "南海"
+  },
+  {
+    "year": 1983,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "落合博満",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1983,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "大石大二郎",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1983,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "スティーブ",
+    "teamText": "西武"
+  },
+  {
+    "year": 1983,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "石毛宏典",
+    "teamText": "西武"
+  },
+  {
+    "year": 1983,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "簑田浩二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1983,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "島田誠",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1983,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "テリー",
+    "teamText": "西武"
+  },
+  {
+    "year": 1983,
+    "league": "pacific",
+    "position": "DH",
+    "name": "門田博光",
+    "teamText": "南海"
+  },
+  {
+    "year": 1982,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "中沢伸二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1982,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "柏原純一",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1982,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "落合博満",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1982,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "スティーブ",
+    "teamText": "西武"
+  },
+  {
+    "year": 1982,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "石毛宏典",
+    "teamText": "西武"
+  },
+  {
+    "year": 1982,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "福本豊",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1982,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "新井宏昌",
+    "teamText": "南海"
+  },
+  {
+    "year": 1982,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "栗橋茂",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1982,
+    "league": "pacific",
+    "position": "DH",
+    "name": "T.ソレイタ",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1981,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "梨田昌孝",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1981,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "柏原純一",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1981,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "落合博満",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1981,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "有藤道世",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1981,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "石毛宏典",
+    "teamText": "西武"
+  },
+  {
+    "year": 1981,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "福本豊",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1981,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "島田誠",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1981,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "テリー",
+    "teamText": "西武"
+  },
+  {
+    "year": 1981,
+    "league": "pacific",
+    "position": "DH",
+    "name": "門田博光",
+    "teamText": "南海"
+  },
+  {
+    "year": 1980,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "梨田昌孝",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1980,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "レオン",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1980,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "山崎裕之",
+    "teamText": "西武"
+  },
+  {
+    "year": 1980,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "有藤道世",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1980,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "高代延博",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1980,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "福本豊",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1980,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "L.リー",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1980,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "栗橋茂",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1980,
+    "league": "pacific",
+    "position": "DH",
+    "name": "C.マニエル",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1979,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "梨田昌孝",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1979,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "加藤英司",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1979,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "B.マルカーノ",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1979,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "島谷金二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1979,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "石渡茂",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1979,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "福本豊",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1979,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "新井宏昌",
+    "teamText": "南海"
+  },
+  {
+    "year": 1979,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "栗橋茂",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1979,
+    "league": "pacific",
+    "position": "DH",
+    "name": "C.マニエル",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1978,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "中沢伸二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1978,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "柏原純一",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1978,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "B.マルカーノ",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1978,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "島谷金二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1978,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "真弓明信",
+    "teamText": "クラウン"
+  },
+  {
+    "year": 1978,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "簑田浩二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1978,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "福本豊",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1978,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "佐々木恭介",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1978,
+    "league": "pacific",
+    "position": "DH",
+    "name": "土井正博",
+    "teamText": "クラウン"
+  },
+  {
+    "year": 1977,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "加藤俊夫",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1977,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "加藤秀司",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1977,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "B.マルカーノ",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1977,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "有藤道世",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1977,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "石渡茂",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1977,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "門田博光",
+    "teamText": "南海"
+  },
+  {
+    "year": 1977,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "福本豊",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1977,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "L.リー",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1977,
+    "league": "pacific",
+    "position": "DH",
+    "name": "高井保弘",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1976,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1976,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "加藤秀司",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1976,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "吉岡悟",
+    "teamText": "太平洋"
+  },
+  {
+    "year": 1976,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "藤原満",
+    "teamText": "南海"
+  },
+  {
+    "year": 1976,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "大橋穣",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1976,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "弘田澄男",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1976,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "門田博光",
+    "teamText": "南海"
+  },
+  {
+    "year": 1976,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "福本豊",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1976,
+    "league": "pacific",
+    "position": "DH",
+    "name": "大田卓司",
+    "teamText": "太平洋"
+  },
+  {
+    "year": 1975,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1975,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "加藤秀司",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1975,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "B.マルカーノ",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1975,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "有藤道世",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1975,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "大橋穣",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1975,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "弘田澄男",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1975,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "白仁天",
+    "teamText": "太平洋"
+  },
+  {
+    "year": 1975,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "佐々木恭介",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1975,
+    "league": "pacific",
+    "position": "DH",
+    "name": "長池徳二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1974,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "村上公康",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1974,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "C.ジョーンズ",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1974,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "山崎裕之",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1974,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "有藤通世",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1974,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "大橋穣",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1974,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "日本ハム"
+  },
+  {
+    "year": 1974,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "福本豊",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1974,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "D.ビュフォード",
+    "teamText": "太平洋"
+  },
+  {
+    "year": 1973,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1973,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "加藤秀司",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1973,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "桜井輝秀",
+    "teamText": "南海"
+  },
+  {
+    "year": 1973,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "有藤通世",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1973,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "大橋穣",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1973,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "日拓"
+  },
+  {
+    "year": 1973,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "長池徳二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1973,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "福本豊",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1972,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1972,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "大杉勝男",
+    "teamText": "東映"
+  },
+  {
+    "year": 1972,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "基満男",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1972,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "有藤通世",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1972,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "大橋穣",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1972,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1972,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "長池徳二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1972,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "福本豊",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1971,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1971,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "大杉勝男",
+    "teamText": "東映"
+  },
+  {
+    "year": 1971,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "山崎裕之",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1971,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "有藤通世",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1971,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "阪本敏三",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1971,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "G.アルトマン",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1971,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "門田博光",
+    "teamText": "南海"
+  },
+  {
+    "year": 1971,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "長池徳二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1970,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1970,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "大杉勝男",
+    "teamText": "東映"
+  },
+  {
+    "year": 1970,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "山崎裕之",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1970,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "有藤通世",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1970,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "阪本敏三",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1970,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1970,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "G.アルトマン",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1970,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "長池徳二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1969,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "岡村浩二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1969,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "大杉勝男",
+    "teamText": "東映"
+  },
+  {
+    "year": 1969,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "山崎裕之",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1969,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "有藤通世",
+    "teamText": "ロッテ"
+  },
+  {
+    "year": 1969,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "阪本敏三",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1969,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1969,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "長池徳二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1969,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "永淵洋三",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1968,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1968,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "榎本喜八",
+    "teamText": "東京"
+  },
+  {
+    "year": 1968,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "D.ブレイザー",
+    "teamText": "南海"
+  },
+  {
+    "year": 1968,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "国貞泰汎",
+    "teamText": "南海"
+  },
+  {
+    "year": 1968,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "阪本敏三",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1968,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1968,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "G.アルトマン",
+    "teamText": "東京"
+  },
+  {
+    "year": 1968,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "土井正博",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1967,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1967,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "大杉勝男",
+    "teamText": "東映"
+  },
+  {
+    "year": 1967,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "D.ブレイザー",
+    "teamText": "南海"
+  },
+  {
+    "year": 1967,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "森本潔",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1967,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "大下剛史",
+    "teamText": "東映"
+  },
+  {
+    "year": 1967,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1967,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "長池徳二",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1967,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "土井正博",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1966,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1966,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "榎本喜八",
+    "teamText": "東京"
+  },
+  {
+    "year": 1966,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "国貞泰汎",
+    "teamText": "南海"
+  },
+  {
+    "year": 1966,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "T.ロイ",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1966,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "小池兼司",
+    "teamText": "南海"
+  },
+  {
+    "year": 1966,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "高倉照幸",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1966,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1966,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "毒島章一",
+    "teamText": "東映"
+  },
+  {
+    "year": 1965,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1965,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "高木喬",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1965,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "D.スペンサー",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1965,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "小玉明利",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1965,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "小池兼司",
+    "teamText": "南海"
+  },
+  {
+    "year": 1965,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1965,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "堀込基明",
+    "teamText": "南海"
+  },
+  {
+    "year": 1965,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "広瀬叔功",
+    "teamText": "南海"
+  },
+  {
+    "year": 1964,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1964,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "榎本喜八",
+    "teamText": "東京"
+  },
+  {
+    "year": 1964,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "D.スペンサー",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1964,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "小玉明利",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1964,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "小池兼司",
+    "teamText": "南海"
+  },
+  {
+    "year": 1964,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "高倉照幸",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1964,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1964,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "広瀬叔功",
+    "teamText": "南海"
+  },
+  {
+    "year": 1963,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1963,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "榎本喜八",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1963,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "ブルーム",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1963,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "小玉明利",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1963,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "小池兼司",
+    "teamText": "南海"
+  },
+  {
+    "year": 1963,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1963,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "山内一弘",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1963,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "広瀬叔功",
+    "teamText": "南海"
+  },
+  {
+    "year": 1962,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1962,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "榎本喜八",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1962,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "ブルーム",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1962,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "小玉明利",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1962,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "豊田泰光",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1962,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1962,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "吉田勝豊",
+    "teamText": "東映"
+  },
+  {
+    "year": 1962,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "山内一弘",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1961,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1961,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "榎本喜八",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1961,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "森下整鎮",
+    "teamText": "南海"
+  },
+  {
+    "year": 1961,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "中西太",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1961,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "豊田泰光",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1961,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1961,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "田宮謙次郎",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1961,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "山内和弘",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1960,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1960,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "榎本喜八",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1960,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "仰木彬",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1960,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "小玉明利",
+    "teamText": "近鉄"
+  },
+  {
+    "year": 1960,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "豊田泰光",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1960,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "張本勲",
+    "teamText": "東映"
+  },
+  {
+    "year": 1960,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "田宮謙次郎",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1960,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "山内和弘",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1959,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1959,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "榎本喜八",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1959,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "岡本伊三美",
+    "teamText": "南海"
+  },
+  {
+    "year": 1959,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "葛城隆雄",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1959,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "豊田泰光",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1959,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "高倉照幸",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1959,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "山内和弘",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1959,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "杉山光平",
+    "teamText": "南海"
+  },
+  {
+    "year": 1958,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1958,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "スタンレー橋本",
+    "teamText": "東映"
+  },
+  {
+    "year": 1958,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "R.バルボン",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1958,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "中西太",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1958,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "葛城隆雄",
+    "teamText": "大毎"
+  },
+  {
+    "year": 1958,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "関口清治",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1958,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "杉山光平",
+    "teamText": "南海"
+  },
+  {
+    "year": 1958,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "毒島章一",
+    "teamText": "東映"
+  },
+  {
+    "year": 1957,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1957,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "岡本健一郎",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1957,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "岡本伊三美",
+    "teamText": "南海"
+  },
+  {
+    "year": 1957,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "中西太",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1957,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "豊田泰光",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1957,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "山内和弘",
+    "teamText": "毎日"
+  },
+  {
+    "year": 1957,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "大下弘",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1957,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "毒島章一",
+    "teamText": "東映"
+  },
+  {
+    "year": 1956,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "野村克也",
+    "teamText": "南海"
+  },
+  {
+    "year": 1956,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "榎本喜八",
+    "teamText": "毎日"
+  },
+  {
+    "year": 1956,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "佐々木信也",
+    "teamText": "高橋"
+  },
+  {
+    "year": 1956,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "中西太",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1956,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "豊田泰光",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1956,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "山内和弘",
+    "teamText": "毎日"
+  },
+  {
+    "year": 1956,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "杉山光平",
+    "teamText": "南海"
+  },
+  {
+    "year": 1956,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "戸倉勝城",
+    "teamText": "阪急"
+  },
+  {
+    "year": 1955,
+    "league": "pacific",
+    "position": "捕手",
+    "name": "C.ルイス",
+    "teamText": "毎日"
+  },
+  {
+    "year": 1955,
+    "league": "pacific",
+    "position": "一塁手",
+    "name": "杉山光平",
+    "teamText": "南海"
+  },
+  {
+    "year": 1955,
+    "league": "pacific",
+    "position": "二塁手",
+    "name": "岡本伊三美",
+    "teamText": "南海"
+  },
+  {
+    "year": 1955,
+    "league": "pacific",
+    "position": "三塁手",
+    "name": "中西太",
+    "teamText": "西鉄"
+  },
+  {
+    "year": 1955,
+    "league": "pacific",
+    "position": "遊撃手",
+    "name": "木塚忠助",
+    "teamText": "南海"
+  },
+  {
+    "year": 1955,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "山内和弘",
+    "teamText": "毎日"
+  },
+  {
+    "year": 1955,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "飯田徳治",
+    "teamText": "南海"
+  },
+  {
+    "year": 1955,
+    "league": "pacific",
+    "position": "外野手",
+    "name": "戸倉勝城",
+    "teamText": "阪急"
+  }
+]

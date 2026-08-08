@@ -28,6 +28,7 @@ const DATA_DIR = path.join(process.cwd(), "data");
 const REQUEST_DELAY_MS = 600;
 const SITE_ROOT = "https://2689web.com";
 const MAX_RETRIES = 4;
+const OFFLINE_ONLY = process.env.OFFLINE_ONLY === "1";
 
 const INDEX_PAGES = ["batter1.html", "batter2.html", "batter3.html", "batter4.html", "batter5.html", "batterp.html"];
 
@@ -44,6 +45,8 @@ async function fetchCached(url: string, cacheKey: string): Promise<string | null
   } catch {
     // no cache
   }
+
+  if (OFFLINE_ONLY) return null;
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
@@ -209,8 +212,6 @@ async function main() {
         b.position = pos;
         changed = true;
         taggedRows++;
-      } else {
-        delete b.position;
       }
     }
     if (changed) {
