@@ -17,12 +17,32 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
     ab: sum.ab + entry.ab,
     hits: sum.hits + entry.hits,
     hr: sum.hr + entry.hr,
+    doubles: sum.doubles + entry.doubles,
+    triples: sum.triples + entry.triples,
+    bb: sum.bb + entry.bb,
+    hbp: sum.hbp + entry.hbp,
+    sf: sum.sf + entry.sf,
     weightedWrc: sum.weightedWrc + entry.wrcPlus * entry.pa,
-  }), { pa: 0, ab: 0, hits: 0, hr: 0, weightedWrc: 0 });
+  }), {
+    pa: 0,
+    ab: 0,
+    hits: 0,
+    hr: 0,
+    doubles: 0,
+    triples: 0,
+    bb: 0,
+    hbp: 0,
+    sf: 0,
+    weightedWrc: 0,
+  });
   const firstYear = Math.min(...history.map((entry) => entry.year));
   const lastYear = Math.max(...history.map((entry) => entry.year));
   const careerYears = new Set(history.map((entry) => entry.year)).size;
-  const qualifiedYears = new Set(qualified.map((entry) => entry.year)).size;
+  const totalBases = total.hits + total.doubles + total.triples * 2 + total.hr * 3;
+  const careerObpDenom = total.ab + total.bb + total.hbp + total.sf;
+  const careerOps = total.ab > 0 && careerObpDenom > 0
+    ? (total.hits + total.bb + total.hbp) / careerObpDenom + totalBases / total.ab
+    : null;
   const titlesByYear = Array.from(
     history.reduce((grouped, entry) => {
       const titles = (entry.titles ?? []).filter((title) => title !== "—");
@@ -116,10 +136,10 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
         </div>
         <div className="grid grid-cols-2 gap-px bg-zinc-200">
           {[
-            { label: "通算打席", value: total.pa.toLocaleString("ja-JP"), unit: "PA" },
+            { label: "通算安打", value: total.hits.toLocaleString("ja-JP"), unit: "H" },
             { label: "通算本塁打", value: total.hr.toLocaleString("ja-JP"), unit: "HR" },
             { label: "通算打率", value: total.ab ? fmtRate(total.hits / total.ab) : "—", unit: "AVG" },
-            { label: "規定打席到達", value: qualifiedYears, unit: "SEASONS" },
+            { label: "通算OPS", value: careerOps !== null ? fmtRate(careerOps) : "—", unit: "OPS" },
           ].map((item) => (
             <div key={item.label} className="bg-white p-5 sm:p-6">
               <div className="text-[10px] font-bold tracking-wide text-zinc-400">{item.label}</div>
