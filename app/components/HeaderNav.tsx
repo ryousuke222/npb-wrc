@@ -8,7 +8,6 @@ const MORE_NAV_ITEMS = [
   { href: "/compare", label: "選手比較", matches: (pathname: string) => pathname === "/compare" },
   { href: "/titles", label: "タイトル", matches: (pathname: string) => pathname === "/titles" },
   { href: "/team-best-nine", label: "ベスト9", matches: (pathname: string) => pathname === "/team-best-nine" },
-  { href: "/records", label: "記録", matches: (pathname: string) => pathname === "/records" },
   { href: "/park-factors", label: "PF", matches: (pathname: string) => pathname === "/park-factors" },
   { href: "/about", label: "このサイト", matches: (pathname: string) => pathname === "/about" },
 ];

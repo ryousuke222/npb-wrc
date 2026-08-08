@@ -10,7 +10,6 @@ const MORE_PATHS = [
   { href: "/team-wrc", label: "チームwRC+", detail: "打線全体の得点創出力" },
   { href: "/titles", label: "打撃タイトル", detail: "年度別の受賞者" },
   { href: "/team-best-nine", label: "球団別ベスト9", detail: "歴代のベストオーダー" },
-  { href: "/records", label: "記録", detail: "単年・通算の上位記録" },
   { href: "/park-factors", label: "パークファクター", detail: "球場補正値を確認" },
 ];
 
