@@ -106,6 +106,7 @@ export default function TeamBestNineView({ batters }: { batters: BatterRanking[]
                 <Link
                   key={`${position.key}-${batter.name}-${batter.year}`}
                   href={`/year/${batter.year}/${batter.rank}?from=team-best-nine`}
+                  prefetch={false}
                   onClick={() => {
                     window.sessionStorage.setItem(`player-return:${batter.year}:${batter.rank}`, "history");
                   }}

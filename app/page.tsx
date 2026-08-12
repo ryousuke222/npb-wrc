@@ -40,6 +40,7 @@ function BatterLeaders({
             <li key={`${player.teamId}-${player.rank}`} className="border-b border-zinc-200 last:border-b-0">
               <Link
                 href={`/year/${player.year}/${player.rank}?from=home`}
+                prefetch={false}
                 style={{
                   borderLeftColor: color.bg,
                   backgroundColor: withAlpha(color.bg, 0.045),
@@ -78,6 +79,7 @@ function TeamLeader({ year, team }: { year: number; team: TeamWrc }) {
   return (
     <Link
       href={`/year/${year}/team/${team.teamId}?source=home`}
+      prefetch={false}
       style={{ borderLeftColor: color.bg }}
       className="flex min-h-14 items-center justify-between gap-3 border-l-4 px-3 py-2.5 transition-colors hover:bg-zinc-50 sm:px-4"
     >
@@ -103,17 +105,15 @@ function TextLink({
   href,
   label,
   detail,
-  prefetch,
 }: {
   href: string;
   label: string;
   detail: string;
-  prefetch?: boolean;
 }) {
   return (
     <Link
       href={href}
-      prefetch={prefetch}
+      prefetch={false}
       className="group flex min-h-14 items-center justify-between gap-4 bg-white px-4 py-3 transition-colors hover:bg-zinc-50"
     >
       <span className="min-w-0">
@@ -159,13 +159,13 @@ export default async function Home() {
           </p>
         </div>
         <nav aria-label="主要ランキング" className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold">
-          <Link href={`/year/${latestYear}`} className="text-zinc-950 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900">
+          <Link href={`/year/${latestYear}`} prefetch={false} className="text-zinc-950 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900">
             年度別ランキング
           </Link>
           <Link href="/all-time" prefetch={false} className="text-zinc-950 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900">
             歴代ランキング
           </Link>
-          <Link href="/latest" className="text-zinc-950 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900">
+          <Link href="/latest" prefetch={false} className="text-zinc-950 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900">
             最新データ
           </Link>
         </nav>
@@ -175,7 +175,7 @@ export default async function Home() {
         <section className="mt-7 sm:mt-8">
           <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
             <h2 className="text-lg font-extrabold tracking-tight text-zinc-950">現在の打者wRC+</h2>
-            <Link href={`/year/${latestYear}`} className="text-xs font-bold text-zinc-600 hover:text-zinc-950">
+            <Link href={`/year/${latestYear}`} prefetch={false} className="text-xs font-bold text-zinc-600 hover:text-zinc-950">
               全打者を見る →
             </Link>
           </div>
@@ -188,7 +188,7 @@ export default async function Home() {
             <div className="mt-5">
               <div className="mb-2 flex items-baseline justify-between gap-3">
                 <h3 className="text-sm font-bold text-zinc-900">チームwRC+首位</h3>
-                <Link href="/team-wrc" className="text-xs font-bold text-zinc-600 hover:text-zinc-950">
+                <Link href="/team-wrc" prefetch={false} className="text-xs font-bold text-zinc-600 hover:text-zinc-950">
                   全球団を見る →
                 </Link>
               </div>
@@ -217,7 +217,6 @@ export default async function Home() {
             <TextLink
               key={item.href}
               {...item}
-              prefetch={item.href === "/team-best-nine" ? false : undefined}
             />
           ))}
         </div>

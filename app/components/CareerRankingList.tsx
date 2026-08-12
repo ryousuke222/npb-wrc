@@ -34,6 +34,7 @@ export default function CareerRankingList({ careers }: { careers: CareerBatter[]
           <li key={career.id}>
             <Link
               href={`/year/${highlightSeason.year}/${highlightSeason.rank}?from=all-time`}
+              prefetch={false}
               onClick={() => {
                 window.sessionStorage.setItem(
                   `player-return:${highlightSeason.year}:${highlightSeason.rank}`,

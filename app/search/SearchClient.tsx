@@ -151,6 +151,7 @@ export default function SearchClient() {
                     role="option"
                     aria-selected={index === activeIndex}
                     href={`/year/${result.year}/${result.rank}?from=search`}
+                    prefetch={false}
                     onMouseEnter={() => setActiveIndex(index)}
                     onClick={() => {
                       window.sessionStorage.setItem(

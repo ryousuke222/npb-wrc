@@ -238,6 +238,7 @@ export default function TeamWrcView({ entries }: { entries: TeamWrcEntry[] }) {
             <li key={`${e.year}-${e.teamId}`}>
               <Link
                 href={`/year/${e.year}/team/${e.teamId}?${backQs}`}
+                prefetch={false}
                 style={{
                   borderLeftColor: color.bg,
                   backgroundColor: withAlpha(color.bg, 0.1),

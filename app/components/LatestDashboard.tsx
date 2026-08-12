@@ -31,6 +31,7 @@ function PlayerRows({ players }: { players: BatterRanking[] }) {
           <li key={`${player.teamId}-${player.rank}`}>
             <Link
               href={playerHref(player)}
+              prefetch={false}
               style={{ borderLeftColor: color.bg, backgroundColor: withAlpha(color.bg, 0.1) }}
               className="flex items-center gap-3 rounded-xl border border-l-[5px] border-zinc-200/80 px-3 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-sm"
             >
@@ -81,6 +82,7 @@ function TeamRows({ year, teams }: { year: number; teams: TeamWrc[] }) {
           <li key={team.teamId}>
             <Link
               href={`/year/${year}/team/${team.teamId}?source=latest`}
+              prefetch={false}
               style={{ borderLeftColor: color.bg, backgroundColor: withAlpha(color.bg, 0.06) }}
               className="flex items-center gap-3 rounded-xl border border-l-[5px] border-zinc-200/80 px-3 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-sm"
             >
@@ -109,6 +111,7 @@ function MvpRows({ candidates }: { candidates: MvpCandidate[] }) {
           <li key={`${player.teamId}-${player.rank}`}>
             <Link
               href={playerHref(player)}
+              prefetch={false}
               style={{ borderLeftColor: color.bg, backgroundColor: withAlpha(color.bg, 0.07) }}
               className="flex items-center gap-3 rounded-xl border border-l-[5px] border-zinc-200/80 px-3 py-2.5 transition-transform hover:-translate-y-0.5 hover:shadow-sm"
             >
@@ -165,6 +168,7 @@ function FocusGroup({ label, values, format }: FocusGroupProps) {
             <li key={`${label}-${batter.teamId}-${batter.rank}`}>
               <Link
                 href={playerHref(batter)}
+                prefetch={false}
                 style={{
                   borderLeftColor: color.bg,
                   backgroundColor: withAlpha(color.bg, 0.08),
@@ -214,7 +218,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
             { href: "#mvp", label: "MVP候補" },
           ].map((item) => <a key={item.href} href={item.href} className="rounded-full px-3 py-1.5 text-xs font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950">{item.label}</a>)}
           <span className="mx-1 h-5 w-px bg-zinc-200" />
-          <Link href={`/year/${year}`} className="rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-700">全打者を絞り込む →</Link>
+          <Link href={`/year/${year}`} prefetch={false} className="rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-700">全打者を絞り込む →</Link>
         </div>
       </nav>
 
@@ -229,7 +233,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
             </div>
             <p className="mt-1 text-xs text-zinc-600">数字が動いた打者を4つの切り口で表示</p>
           </div>
-          <Link href="/monthly" className="shrink-0 text-xs font-bold text-zinc-600 hover:text-zinc-950">月間ランキング →</Link>
+          <Link href="/monthly" prefetch={false} className="shrink-0 text-xs font-bold text-zinc-600 hover:text-zinc-950">月間ランキング →</Link>
         </div>
         {weeklyMovement && hasMovement ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -176,6 +176,7 @@ export default function TitleRankingView({
                       <Link
                         key={`${position}-${b.name}-${b.teamId}`}
                         href={`/year/${b.year}/${b.rank}?from=titles`}
+                        prefetch={false}
                         onClick={() => {
                           window.sessionStorage.setItem(
                             `player-return:${b.year}:${b.rank}`,

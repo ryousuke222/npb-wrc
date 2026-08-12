@@ -18,10 +18,6 @@ function linkClass(active: boolean): string {
     : "text-zinc-600 hover:text-zinc-900";
 }
 
-function shouldDisablePrefetch(href: string): boolean {
-  return href === "/all-time" || href === "/team-best-nine";
-}
-
 export default function HeaderNav({ latestYear }: { latestYear: number }) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -67,7 +63,7 @@ export default function HeaderNav({ latestYear }: { latestYear: number }) {
             <Link
               key={item.href}
               href={item.href}
-              prefetch={shouldDisablePrefetch(item.href) ? false : undefined}
+              prefetch={false}
               aria-current={active ? "page" : undefined}
               className={`border-b-2 py-1 transition-colors ${
                 active ? "border-zinc-900" : "border-transparent"
@@ -86,7 +82,7 @@ export default function HeaderNav({ latestYear }: { latestYear: number }) {
               <Link
                 key={item.href}
                 href={item.href}
-                prefetch={shouldDisablePrefetch(item.href) ? false : undefined}
+                prefetch={false}
                 onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}
                 className={`rounded-lg px-3 py-2 text-sm ${item.matches(pathname) ? "bg-zinc-100 font-bold text-zinc-950" : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900"}`}
               >
@@ -107,7 +103,7 @@ export default function HeaderNav({ latestYear }: { latestYear: number }) {
                 <div className="grid grid-cols-2 gap-1">
                   {[...primaryNavItems.filter((item) => !mobileNavItems.some((mobile) => mobile.href === item.href)), ...MORE_NAV_ITEMS].map((item) => {
                     const active = item.matches(pathname);
-                    return <Link key={item.href} href={item.href} prefetch={shouldDisablePrefetch(item.href) ? false : undefined} onClick={() => setIsOpen(false)} aria-current={active ? "page" : undefined} className={`rounded-xl px-3 py-3 text-sm ${active ? "bg-zinc-100 font-bold text-zinc-950" : "font-medium text-zinc-600 hover:bg-zinc-50"}`}>{item.label}</Link>;
+                    return <Link key={item.href} href={item.href} prefetch={false} onClick={() => setIsOpen(false)} aria-current={active ? "page" : undefined} className={`rounded-xl px-3 py-3 text-sm ${active ? "bg-zinc-100 font-bold text-zinc-950" : "font-medium text-zinc-600 hover:bg-zinc-50"}`}>{item.label}</Link>;
                   })}
                 </div>
               </nav>
@@ -117,7 +113,7 @@ export default function HeaderNav({ latestYear }: { latestYear: number }) {
         <nav className="fixed inset-x-0 bottom-0 z-[60] grid grid-cols-5 border-t border-zinc-200 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_rgba(0,0,0,0.06)] backdrop-blur-md" aria-label="スマートフォン用メニュー">
           {mobileNavItems.map((item) => {
             const active = item.matches(pathname);
-            return <Link key={item.href} href={item.href} prefetch={shouldDisablePrefetch(item.href) ? false : undefined} onClick={() => setIsOpen(false)} aria-current={active ? "page" : undefined} className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-bold ${active ? "text-zinc-950" : "text-zinc-600"}`}><span aria-hidden="true" className={`text-base leading-none ${active ? "text-sky-700" : "text-zinc-500"}`}>{item.symbol}</span>{item.label}</Link>;
+            return <Link key={item.href} href={item.href} prefetch={false} onClick={() => setIsOpen(false)} aria-current={active ? "page" : undefined} className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-bold ${active ? "text-zinc-950" : "text-zinc-600"}`}><span aria-hidden="true" className={`text-base leading-none ${active ? "text-sky-700" : "text-zinc-500"}`}>{item.symbol}</span>{item.label}</Link>;
           })}
           <button type="button" onClick={() => setIsOpen((open) => !open)} aria-expanded={isOpen} aria-controls="mobile-main-menu" className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-bold ${isOpen || mobileMoreIsActive ? "text-zinc-950" : "text-zinc-600"}`}><span aria-hidden="true" className={`text-lg leading-none ${isOpen || mobileMoreIsActive ? "text-sky-700" : "text-zinc-500"}`}>…</span>もっと</button>
         </nav>

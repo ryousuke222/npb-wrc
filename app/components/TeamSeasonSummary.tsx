@@ -57,7 +57,7 @@ export default function TeamSeasonSummary({
             <ol className="mt-2 space-y-1.5">
               {leaders.map((batter, index) => (
                 <li key={batter.rank}>
-                  <Link href={playerLink(batter)} className="flex items-center gap-2 rounded-md bg-white/70 px-2 py-1.5 hover:bg-white">
+                  <Link href={playerLink(batter)} prefetch={false} className="flex items-center gap-2 rounded-md bg-white/70 px-2 py-1.5 hover:bg-white">
                     <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{leaderRanks[index]}</span>
                     <span className="min-w-0 flex-1 truncate text-xs font-semibold text-zinc-800">{batter.name}</span>
                     <span className={`text-sm font-extrabold tabular-nums ${wrcPlusTextColor(batter.wrcPlus)}`}>{fmtWrcPlus(batter.wrcPlus)}</span>
@@ -72,7 +72,7 @@ export default function TeamSeasonSummary({
               <ol className="mt-2 space-y-1.5">
                 {weeklyRisers.map(({ batter, difference }, index) => (
                   <li key={batter.rank}>
-                    <Link href={playerLink(batter)} className="flex items-center gap-2 rounded-md bg-white/70 px-2 py-1.5 hover:bg-white">
+                    <Link href={playerLink(batter)} prefetch={false} className="flex items-center gap-2 rounded-md bg-white/70 px-2 py-1.5 hover:bg-white">
                       <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{riserRanks[index]}</span>
                       <span className="min-w-0 flex-1 truncate text-xs font-semibold text-zinc-800">{batter.name}</span>
                       <span className="text-sm font-extrabold tabular-nums text-emerald-600">+{fmtWrcPlus(difference)}</span>

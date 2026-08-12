@@ -102,6 +102,7 @@ export default function CareerHistory({
             <Link
               key={`${h.year}-${h.teamId}-${h.rank}`}
               href={`/year/${h.year}/${h.rank}`}
+              prefetch={false}
               style={isCurrent ? { backgroundColor: withAlpha(color.bg, 0.1), borderColor: withAlpha(color.bg, 0.25) } : undefined}
               className="flex flex-col gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-3 transition hover:-translate-y-px"
             >
@@ -173,6 +174,7 @@ export default function CareerHistory({
                   <td className="py-2.5 px-2 text-center font-bold">
                     <Link
                       href={`/year/${h.year}/${h.rank}`}
+                      prefetch={false}
                       className="hover:underline"
                     >
                       {h.year}

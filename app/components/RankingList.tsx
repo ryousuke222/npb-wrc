@@ -133,6 +133,7 @@ export default function RankingList({
             <li key={`${b.year}-${b.league}-${b.name}-${b.teamId}-${b.rank}`}>
               <Link
                 href={`/year/${b.year}/${b.rank}${backQuery ? `?${backQuery}` : ""}`}
+                prefetch={false}
                 onClick={() => {
                   // 詳細ページの「戻る」は履歴を使うことで、一覧の絞り込み状態と
                   // スクロール位置をブラウザに復元させる。直接アクセス時はマーカーが
