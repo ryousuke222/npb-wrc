@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { CareerBatter } from "@/lib/career";
 import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
+import { competitionRanks } from "@/lib/ranking";
 import TeamBadge from "./TeamBadge";
 
 export default function CareerRankingList({ careers }: { careers: CareerBatter[] }) {
@@ -15,10 +16,14 @@ export default function CareerRankingList({ careers }: { careers: CareerBatter[]
     );
   }
 
+  const displayRanks = competitionRanks(careers, (career) =>
+    fmtWrcPlus(career.wrcPlus)
+  );
+
   return (
     <ol className="flex flex-col gap-2.5">
       {careers.map((career, index) => {
-        const displayPos = index + 1;
+        const displayPos = displayRanks[index];
         const best = career.bestQualifiedSeason;
         // 通算の球団表記・チームカラーは、カードに表示するキャリアハイの年で統一する。
         // 規定到達年がない場合だけ、最後の出場シーズンへフォールバックする。

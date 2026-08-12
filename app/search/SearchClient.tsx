@@ -95,6 +95,11 @@ export default function SearchClient() {
             onKeyDown={onKeyDown}
             placeholder="選手名を入力（例：村上、大谷、矢野輝弘）"
             className="min-w-0 flex-1 bg-transparent py-2 text-base font-medium outline-none placeholder:font-normal placeholder:text-zinc-400 sm:text-lg"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-haspopup="listbox"
+            aria-expanded={results.length > 0}
+            aria-busy={entries === null}
             aria-controls="search-results"
             aria-activedescendant={activeIndex >= 0 ? `search-result-${activeIndex}` : undefined}
           />
@@ -135,14 +140,24 @@ export default function SearchClient() {
             <p className="font-bold text-zinc-700">検索結果 <span className="tabular-nums text-zinc-400">{allResults.length}件</span></p>
             {allResults.length > MAX_RESULTS && <p className="text-xs text-zinc-400">上位{MAX_RESULTS}件を表示</p>}
           </div>
-          <ul id="search-results" className="flex flex-col gap-2">
+          <ul id="search-results" role="listbox" aria-label="選手の検索結果" className="flex flex-col gap-2">
             {results.map((result, index) => {
               const queryKey = normalize(query);
               const matchedAlias = (result.aliases ?? []).find((alias) => normalize(alias).includes(queryKey));
               return (
-                <li key={result.id} id={`search-result-${index}`}>
+                <li key={result.id} role="none">
                   <Link
+                    id={`search-result-${index}`}
+                    role="option"
+                    aria-selected={index === activeIndex}
                     href={`/year/${result.year}/${result.rank}?from=search`}
+                    onMouseEnter={() => setActiveIndex(index)}
+                    onClick={() => {
+                      window.sessionStorage.setItem(
+                        `player-return:${result.year}:${result.rank}`,
+                        "history"
+                      );
+                    }}
                     className={`flex items-center justify-between gap-3 rounded-xl border bg-white px-4 py-3.5 transition ${
                       index === activeIndex
                         ? "border-zinc-900 ring-2 ring-zinc-200"

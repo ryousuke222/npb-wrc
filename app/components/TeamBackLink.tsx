@@ -12,14 +12,27 @@ import { useSearchParams } from "next/navigation";
  */
 export default function TeamBackLink() {
   const searchParams = useSearchParams();
-  const qs = searchParams.toString();
+  const source = searchParams.get("source");
+  const teamWrcParams = new URLSearchParams(searchParams.toString());
+  teamWrcParams.delete("source");
+
+  let href = teamWrcParams.size > 0 ? `/team-wrc?${teamWrcParams}` : "/team-wrc";
+  let label = "← チームwRC+一覧に戻る";
+
+  if (source === "home") {
+    href = "/";
+    label = "← ホームに戻る";
+  } else if (source === "latest") {
+    href = "/latest";
+    label = "← 最新ランキングに戻る";
+  }
 
   return (
     <Link
-      href={qs ? `/team-wrc?${qs}` : "/team-wrc"}
+      href={href}
       className="text-sm text-zinc-500 hover:text-zinc-800"
     >
-      ← チームwRC+一覧に戻る
+      {label}
     </Link>
   );
 }

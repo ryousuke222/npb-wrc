@@ -42,8 +42,9 @@ export default async function YearPage({
   const generatedAt = isLatestYear ? formatGeneratedAtJa(data.generatedAt) : null;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:py-10">
+    <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-7 lg:py-8">
       <PageIntro
+        compact
         title={`${year}年 NPB最強打者ランキング`}
         description="wRC+順。打席数やリーグ・球団で絞り込めます。"
         meta={

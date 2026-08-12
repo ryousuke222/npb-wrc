@@ -31,8 +31,7 @@ function fmtRate(n: number): string {
 function wrcTextColor(v: number): string {
   if (v >= 160) return "#dc2626";
   if (v >= 130) return "#ea580c";
-  if (v >= 100) return "#18181b";
-  return "#71717a";
+  return "#18181b";
 }
 
 export default async function Image({

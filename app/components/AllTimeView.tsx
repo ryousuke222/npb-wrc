@@ -3,12 +3,18 @@
 import { useMemo, useState } from "react";
 import { aggregateCareerBatters } from "@/lib/career";
 import type { BatterRanking } from "@/lib/types";
-import { ALL_TEAM_IDS, TEAM_ID_DEFAULT_NAME, type TeamId } from "@/lib/teams";
+import {
+  ALL_TEAM_IDS,
+  HISTORICAL_ONLY_TEAM_IDS,
+  TEAM_ID_DEFAULT_NAME,
+  type TeamId,
+} from "@/lib/teams";
 import { STAT_OPTIONS, getStatOption, type StatKey } from "@/lib/statOptions";
 import RankingList from "./RankingList";
 import CareerRankingList from "./CareerRankingList";
 import YearRangeSlider from "./YearRangeSlider";
 import RandomSeasonButton from "./RandomSeasonButton";
+import FilterStatusBar from "./FilterStatusBar";
 
 type Scope = "all" | "central" | "pacific" | `team:${TeamId}`;
 type AgeMode = "eq" | "gte" | "lte";
@@ -20,6 +26,7 @@ const LEAGUE_TEAMS: { league: "central" | "pacific"; label: string }[] = [
 ];
 
 const PAGE_SIZE = 100;
+const DISPLAY_TEAM_IDS: TeamId[] = [...ALL_TEAM_IDS, ...HISTORICAL_ONLY_TEAM_IDS];
 
 const POSITION_ORDER = ["投手", "捕手", "一塁手", "二塁手", "三塁手", "遊撃手", "内野手", "外野手"];
 
@@ -86,6 +93,20 @@ export default function AllTimeView({
     ageFilterInput !== "" ||
     batsFilter !== "" ||
     positionFilter !== "";
+  const customFilterCount = [
+    scope !== "all",
+    fromYear !== oldestYear || toYear !== newestYear,
+    rankingMode === "season" ? includeUnqualified || statKey !== "wrcPlus" : minimumCareerPa !== 3000,
+    activeOnly,
+    ageFilterInput !== "",
+    batsFilter !== "",
+    positionFilter !== "",
+  ].filter(Boolean).length;
+
+  const teamsInData = useMemo(() => {
+    const present = new Set(batters.map((batter) => batter.teamId));
+    return DISPLAY_TEAM_IDS.filter((teamId) => present.has(teamId));
+  }, [batters]);
 
   const positionsInScope = useMemo(() => {
     const present = new Set(batters.map((b) => b.position).filter((p): p is string => !!p));
@@ -177,6 +198,27 @@ export default function AllTimeView({
     setShowAdvanced(true);
   };
 
+  const scopeLabel =
+    scope === "all"
+      ? "総合"
+      : scope === "central"
+        ? "セ・リーグ"
+        : scope === "pacific"
+          ? "パ・リーグ"
+          : TEAM_ID_DEFAULT_NAME[scope.slice("team:".length) as TeamId];
+  const ageModeLabel = ageMode === "eq" ? "" : ageMode === "gte" ? "以上" : "以下";
+  const conditionLabels = [
+    rankingMode === "career" ? "通算wRC+" : "シーズン単位",
+    scopeLabel,
+    `${fromYear}〜${toYear}年`,
+    rankingMode === "season" ? `${stat.label}順` : `${minimumCareerPa.toLocaleString()}打席以上`,
+    ...(includeUnqualified && rankingMode === "season" ? ["規定未満を含む"] : []),
+    ...(activeOnly ? ["現役のみ"] : []),
+    ...(ageFilterInput ? [`${ageFilterInput}歳${ageModeLabel}`] : []),
+    ...(batsFilter ? [`${batsFilter}打ち`] : []),
+    ...(positionFilter ? [positionFilter] : []),
+  ];
+
   return (
     <div>
       <div className="mb-4 flex rounded-xl border border-zinc-200 bg-zinc-50 p-1">
@@ -186,6 +228,7 @@ export default function AllTimeView({
             setRankingMode("season");
             setVisibleCount(PAGE_SIZE);
           }}
+          aria-pressed={rankingMode === "season"}
           className={`flex-1 rounded-lg px-3 py-2 text-sm font-bold transition-colors ${
             rankingMode === "season" ? "bg-white text-sky-700 shadow-sm" : "text-zinc-500 hover:text-zinc-800"
           }`}
@@ -198,6 +241,7 @@ export default function AllTimeView({
             setRankingMode("career");
             setVisibleCount(PAGE_SIZE);
           }}
+          aria-pressed={rankingMode === "career"}
           className={`flex-1 rounded-lg px-3 py-2 text-sm font-bold transition-colors ${
             rankingMode === "career" ? "bg-white text-sky-700 shadow-sm" : "text-zinc-500 hover:text-zinc-800"
           }`}
@@ -212,15 +256,17 @@ export default function AllTimeView({
             type="button"
             onClick={() => setShowMobileFilters((show) => !show)}
             aria-expanded={showMobileFilters}
+            aria-controls="all-time-ranking-filters"
             className="flex w-full items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-bold text-zinc-700 lg:hidden"
           >
             <span>絞り込み・並び替え</span>
-            <span className="text-xs font-medium text-zinc-400">
-              {hasCustomFilters ? "条件を変更中" : showMobileFilters ? "閉じる" : "開く"}
+            <span className="flex items-center gap-1.5 text-xs font-medium text-zinc-500">
+              {totalCount}件{customFilterCount > 0 ? `・${customFilterCount}条件` : ""}
+              <span aria-hidden="true">{showMobileFilters ? "▲" : "▼"}</span>
             </span>
           </button>
 
-          <div className={`${showMobileFilters ? "mt-2 block" : "hidden"} rounded-xl border border-zinc-200 bg-white p-3 sm:p-4 lg:mt-0 lg:block`}>
+          <div id="all-time-ranking-filters" className={`${showMobileFilters ? "mt-2 block" : "hidden"} rounded-xl border border-zinc-200 bg-white p-3 sm:p-4 lg:mt-0 lg:block`}>
             <div className="mb-3 hidden items-center justify-between border-b border-zinc-100 pb-3 lg:flex">
               <h2 className="text-sm font-bold text-zinc-900">表示条件</h2>
               <span className="text-[10px] text-zinc-400">歴代データを絞り込む</span>
@@ -244,7 +290,7 @@ export default function AllTimeView({
                     ))}
                   </optgroup>
                   <optgroup label="球団">
-                    {ALL_TEAM_IDS.map((id) => (
+                    {teamsInData.map((id) => (
                       <option key={id} value={`team:${id}`}>{TEAM_ID_DEFAULT_NAME[id]}</option>
                     ))}
                   </optgroup>
@@ -445,16 +491,24 @@ export default function AllTimeView({
                 年度別wRC+を打席数で加重平均
               </p>
             )}
+            <button
+              type="button"
+              onClick={() => setShowMobileFilters(false)}
+              className="mt-3 w-full rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-bold text-white lg:hidden"
+            >
+              この条件でランキングを見る（{totalCount}件）
+            </button>
           </div>
         </div>
 
         <div className="min-w-0">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <p className="text-xs font-medium text-zinc-500">
-              {rankingMode === "career" ? `${totalCount}人中` : `${totalCount}シーズン中`} 上位{visibleCountForMode}件を表示中
-            </p>
-            <RandomSeasonButton batters={batters} />
-          </div>
+          <FilterStatusBar
+            resultLabel={`${rankingMode === "career" ? `${totalCount}人中` : `${totalCount}シーズン中`} 上位${visibleCountForMode}件を表示中`}
+            conditions={conditionLabels}
+            canReset={hasCustomFilters}
+            onReset={resetFilters}
+            action={<RandomSeasonButton batters={batters} />}
+          />
 
           {rankingMode === "career" ? (
             <CareerRankingList careers={visibleCareers} />

@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { BatterRanking, YearData } from "@/lib/types";
 import type { TeamId } from "@/lib/teams";
 import { teamColor, withAlpha } from "@/lib/teamColors";
-import { calcTeamWrc, fmtWrcPlus } from "@/lib/wrc";
+import { calcTeamWrc, fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
+import { competitionRanks } from "@/lib/ranking";
 import type { BatterChange } from "@/lib/latest";
 
 export default function TeamSeasonSummary({
@@ -21,11 +22,17 @@ export default function TeamSeasonSummary({
     .map((id) => calcTeamWrc(data, id))
     .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
     .sort((a, b) => b.wrcPlus - a.wrcPlus);
-  const teamRank = allTeams.findIndex((entry) => entry.teamId === teamId) + 1;
+  const allTeamRanks = competitionRanks(allTeams, (entry) => fmtWrcPlus(entry.wrcPlus));
+  const teamIndex = allTeams.findIndex((entry) => entry.teamId === teamId);
+  const teamRank = allTeamRanks[teamIndex] ?? teamIndex + 1;
   const leaders = data.batters
     .filter((batter) => batter.teamId === teamId && batter.qualified)
     .sort((a, b) => b.wrcPlus - a.wrcPlus)
     .slice(0, 5);
+  const leaderRanks = competitionRanks(leaders, (batter) => fmtWrcPlus(batter.wrcPlus));
+  const riserRanks = competitionRanks(weeklyRisers ?? [], ({ difference }) =>
+    fmtWrcPlus(difference)
+  );
 
   const playerLink = (batter: BatterRanking) => `/year/${batter.year}/${batter.rank}?from=team&teamId=${teamId}`;
 
@@ -37,7 +44,7 @@ export default function TeamSeasonSummary({
       <div className="grid gap-4 sm:grid-cols-[150px_1fr]">
         <div>
           <p className="text-xs font-bold text-zinc-500">チーム打線</p>
-          <p className="mt-1 text-4xl font-extrabold tabular-nums text-zinc-950">{fmtWrcPlus(team.wrcPlus)}</p>
+          <p className={`mt-1 text-4xl font-extrabold tabular-nums ${wrcPlusTextColor(team.wrcPlus)}`}>{fmtWrcPlus(team.wrcPlus)}</p>
           <p className="text-[11px] text-zinc-500">リーグ平均100・全体{teamRank}位</p>
           <p className="mt-2 text-xs font-semibold text-zinc-600">
             平均比 {team.wrcPlus >= 100 ? "+" : ""}{Math.round(team.wrcPlus - 100)}
@@ -51,9 +58,9 @@ export default function TeamSeasonSummary({
               {leaders.map((batter, index) => (
                 <li key={batter.rank}>
                   <Link href={playerLink(batter)} className="flex items-center gap-2 rounded-md bg-white/70 px-2 py-1.5 hover:bg-white">
-                    <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{index + 1}</span>
+                    <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{leaderRanks[index]}</span>
                     <span className="min-w-0 flex-1 truncate text-xs font-semibold text-zinc-800">{batter.name}</span>
-                    <span className="text-sm font-extrabold tabular-nums">{fmtWrcPlus(batter.wrcPlus)}</span>
+                    <span className={`text-sm font-extrabold tabular-nums ${wrcPlusTextColor(batter.wrcPlus)}`}>{fmtWrcPlus(batter.wrcPlus)}</span>
                   </Link>
                 </li>
               ))}
@@ -66,7 +73,7 @@ export default function TeamSeasonSummary({
                 {weeklyRisers.map(({ batter, difference }, index) => (
                   <li key={batter.rank}>
                     <Link href={playerLink(batter)} className="flex items-center gap-2 rounded-md bg-white/70 px-2 py-1.5 hover:bg-white">
-                      <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{index + 1}</span>
+                      <span className="w-4 text-center text-[10px] font-bold text-zinc-400">{riserRanks[index]}</span>
                       <span className="min-w-0 flex-1 truncate text-xs font-semibold text-zinc-800">{batter.name}</span>
                       <span className="text-sm font-extrabold tabular-nums text-emerald-600">+{fmtWrcPlus(difference)}</span>
                     </Link>

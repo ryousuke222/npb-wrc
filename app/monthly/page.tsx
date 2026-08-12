@@ -3,10 +3,13 @@ import PageIntro from "@/app/components/PageIntro";
 import TeamBadge from "@/app/components/TeamBadge";
 import { getMonthlyRanking, type MonthlyBatter } from "@/lib/monthly";
 import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
+import { competitionRanks } from "@/lib/ranking";
 
 function fmtRate(value: number) { return value.toFixed(3).replace(/^0\./, "."); }
 
 function Rows({ rows }: { rows: MonthlyBatter[] }) {
+  const displayRanks = competitionRanks(rows, (row) => fmtRate(row.ops));
+
   return (
     <ol className="space-y-2">
       {rows.map((row, index) => {
@@ -29,7 +32,7 @@ function Rows({ rows }: { rows: MonthlyBatter[] }) {
                 }}
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-extrabold tabular-nums sm:h-11 sm:w-11 sm:text-lg"
               >
-                {index + 1}
+                {displayRanks[index]}
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-base font-bold tracking-tight text-zinc-950 sm:text-lg">

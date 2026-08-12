@@ -12,6 +12,7 @@ import {
 } from "@/lib/teams";
 import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
+import { competitionRanks } from "@/lib/ranking";
 import { fmtRate } from "@/lib/statOptions";
 import YearRangeSlider from "./YearRangeSlider";
 
@@ -145,6 +146,9 @@ export default function TeamWrcView({ entries }: { entries: TeamWrcEntry[] }) {
   }, [entries, scope, fromYear, toYear, stat]);
 
   const visible = scoped.slice(0, visibleCount);
+  const displayRanks = competitionRanks(visible, (entry) =>
+    stat.formatValue(stat.getValue(entry))
+  );
 
   return (
     <div>
@@ -223,7 +227,7 @@ export default function TeamWrcView({ entries }: { entries: TeamWrcEntry[] }) {
 
       <ol className="flex flex-col gap-2.5">
         {visible.map((e, i) => {
-          const displayPos = i + 1;
+          const displayPos = displayRanks[i];
           const color = teamColor(e.teamId);
           const backQs = new URLSearchParams({
             scope,

@@ -34,7 +34,7 @@ export default async function RootLayout({
 
   return (
     <html lang="ja" className="h-full antialiased" data-scroll-behavior="smooth">
-      <body className="flex min-h-full flex-col overflow-x-hidden bg-zinc-50 pb-16 text-zinc-900 lg:pb-0">
+      <body className="flex min-h-full flex-col overflow-x-hidden bg-zinc-50 pb-[calc(3.5rem+env(safe-area-inset-bottom))] text-zinc-900 lg:pb-0">
         <Suspense fallback={null}>
           <ScrollRestoration />
         </Suspense>

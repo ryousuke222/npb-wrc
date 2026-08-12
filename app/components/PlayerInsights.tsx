@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { BatterRanking } from "@/lib/types";
 import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
-import { fmtWrcPlus } from "@/lib/wrc";
+import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
 
 function fmtRate(value: number) { return value.toFixed(3).replace(/^0\./, "."); }
 function href(batter: BatterRanking) { return `/year/${batter.year}/${batter.rank}`; }
@@ -128,7 +128,7 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
           <p className="mt-1 text-xs text-zinc-500">{firstYear}–{lastYear}・{careerYears}シーズン</p>
           <div className="mt-6">
             <div className="text-[11px] font-bold text-zinc-500">通算 wRC+</div>
-            <div style={{ color: accent }} className="mt-1 text-5xl font-black tabular-nums tracking-tight">
+            <div className={`mt-1 text-5xl font-black tabular-nums tracking-tight ${wrcPlusTextColor(total.pa ? total.weightedWrc / total.pa : 100)}`}>
               {total.pa ? fmtWrcPlus(total.weightedWrc / total.pa) : "—"}
             </div>
             <div className="mt-1 text-[11px] text-zinc-500">年度別wRC+を打席数で加重平均</div>

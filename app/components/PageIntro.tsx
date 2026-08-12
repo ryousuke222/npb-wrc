@@ -8,6 +8,7 @@ type PageIntroProps = {
   backLabel?: string;
   meta?: ReactNode;
   actions?: ReactNode;
+  compact?: boolean;
 };
 
 export default function PageIntro({
@@ -17,9 +18,16 @@ export default function PageIntro({
   backLabel,
   meta,
   actions,
+  compact = false,
 }: PageIntroProps) {
   return (
-    <div className="mb-5 border-b border-zinc-200 pb-5 sm:mb-6 lg:mb-8 lg:pb-6">
+    <div
+      className={`border-b border-zinc-200 ${
+        compact
+          ? "mb-4 pb-4 sm:mb-5 sm:pb-5 lg:mb-6"
+          : "mb-5 pb-5 sm:mb-6 lg:mb-8 lg:pb-6"
+      }`}
+    >
       {backHref && backLabel && (
         <Link
           href={backHref}
@@ -28,15 +36,29 @@ export default function PageIntro({
           ← {backLabel}
         </Link>
       )}
-      <div className={`flex flex-wrap items-start justify-between gap-4 ${backHref ? "mt-2" : ""}`}>
+      <div className={`flex flex-wrap justify-between gap-4 ${compact ? "items-center" : "items-start"} ${backHref ? "mt-2" : ""}`}>
         <div className="min-w-0">
-          <h1 className="text-2xl font-extrabold tracking-tight text-zinc-950 sm:text-3xl lg:text-4xl">
+          <h1
+            className={`font-extrabold tracking-tight text-zinc-950 ${
+              compact ? "text-2xl sm:text-3xl" : "text-2xl sm:text-3xl lg:text-4xl"
+            }`}
+          >
             {title}
           </h1>
-          {description && (
-            <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">{description}</p>
+          {(description || meta) && (
+            <div className={`${compact ? "mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1" : ""}`}>
+              {description && (
+                <p className={`${compact ? "" : "mt-1.5"} text-sm leading-relaxed text-zinc-600`}>
+                  {description}
+                </p>
+              )}
+              {meta && (
+                <div className={`${compact ? "" : "mt-1.5"} text-xs font-medium text-zinc-500`}>
+                  {meta}
+                </div>
+              )}
+            </div>
           )}
-          {meta && <div className="mt-1.5 text-xs font-medium text-zinc-500">{meta}</div>}
         </div>
         {actions && <div className="shrink-0">{actions}</div>}
       </div>

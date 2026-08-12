@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const MORE_NAV_ITEMS = [
   { href: "/compare", label: "選手比較", matches: (pathname: string) => pathname === "/compare" },
@@ -16,6 +16,10 @@ function linkClass(active: boolean): string {
   return active
     ? "font-bold text-zinc-950"
     : "text-zinc-600 hover:text-zinc-900";
+}
+
+function shouldDisablePrefetch(href: string): boolean {
+  return href === "/all-time" || href === "/team-best-nine";
 }
 
 export default function HeaderNav({ latestYear }: { latestYear: number }) {
@@ -38,6 +42,22 @@ export default function HeaderNav({ latestYear }: { latestYear: number }) {
   const moreIsActive = MORE_NAV_ITEMS.some((item) => item.matches(pathname));
   const mobileMoreIsActive = !mobileNavItems.some((item) => item.matches(pathname));
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isOpen]);
+
   return (
     <>
       <nav className="hidden items-center gap-4 text-sm lg:flex" aria-label="メインメニュー">
@@ -47,6 +67,7 @@ export default function HeaderNav({ latestYear }: { latestYear: number }) {
             <Link
               key={item.href}
               href={item.href}
+              prefetch={shouldDisablePrefetch(item.href) ? false : undefined}
               aria-current={active ? "page" : undefined}
               className={`border-b-2 py-1 transition-colors ${
                 active ? "border-zinc-900" : "border-transparent"
@@ -65,6 +86,7 @@ export default function HeaderNav({ latestYear }: { latestYear: number }) {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={shouldDisablePrefetch(item.href) ? false : undefined}
                 onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}
                 className={`rounded-lg px-3 py-2 text-sm ${item.matches(pathname) ? "bg-zinc-100 font-bold text-zinc-950" : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900"}`}
               >
@@ -79,21 +101,23 @@ export default function HeaderNav({ latestYear }: { latestYear: number }) {
         {isOpen && (
           <>
             <button type="button" aria-label="メニューを閉じる" onClick={() => setIsOpen(false)} className="fixed inset-0 z-40 bg-zinc-950/20" />
-            <nav id="mobile-main-menu" aria-label="その他のメニュー" className="fixed inset-x-3 bottom-[4.5rem] z-50 rounded-2xl border border-zinc-200 bg-white p-3 shadow-2xl">
-              <p className="px-2 pb-2 text-xs font-bold text-zinc-500">そのほかのページ</p>
-              <div className="grid grid-cols-2 gap-1">
-                {[...primaryNavItems.filter((item) => !mobileNavItems.some((mobile) => mobile.href === item.href)), ...MORE_NAV_ITEMS].map((item) => {
-                  const active = item.matches(pathname);
-                  return <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)} aria-current={active ? "page" : undefined} className={`rounded-xl px-3 py-3 text-sm ${active ? "bg-zinc-100 font-bold text-zinc-950" : "font-medium text-zinc-600 hover:bg-zinc-50"}`}>{item.label}</Link>;
-                })}
-              </div>
-            </nav>
+            <div id="mobile-main-menu" role="dialog" aria-modal="true" aria-label="その他のメニュー" className="fixed inset-x-3 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-50 rounded-2xl border border-zinc-200 bg-white p-3 shadow-2xl">
+              <nav aria-label="その他のページ">
+                <p className="px-2 pb-2 text-xs font-bold text-zinc-500">そのほかのページ</p>
+                <div className="grid grid-cols-2 gap-1">
+                  {[...primaryNavItems.filter((item) => !mobileNavItems.some((mobile) => mobile.href === item.href)), ...MORE_NAV_ITEMS].map((item) => {
+                    const active = item.matches(pathname);
+                    return <Link key={item.href} href={item.href} prefetch={shouldDisablePrefetch(item.href) ? false : undefined} onClick={() => setIsOpen(false)} aria-current={active ? "page" : undefined} className={`rounded-xl px-3 py-3 text-sm ${active ? "bg-zinc-100 font-bold text-zinc-950" : "font-medium text-zinc-600 hover:bg-zinc-50"}`}>{item.label}</Link>;
+                  })}
+                </div>
+              </nav>
+            </div>
           </>
         )}
         <nav className="fixed inset-x-0 bottom-0 z-[60] grid grid-cols-5 border-t border-zinc-200 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_rgba(0,0,0,0.06)] backdrop-blur-md" aria-label="スマートフォン用メニュー">
           {mobileNavItems.map((item) => {
             const active = item.matches(pathname);
-            return <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-bold ${active ? "text-zinc-950" : "text-zinc-600"}`}><span aria-hidden="true" className={`text-base leading-none ${active ? "text-sky-700" : "text-zinc-500"}`}>{item.symbol}</span>{item.label}</Link>;
+            return <Link key={item.href} href={item.href} prefetch={shouldDisablePrefetch(item.href) ? false : undefined} onClick={() => setIsOpen(false)} aria-current={active ? "page" : undefined} className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-bold ${active ? "text-zinc-950" : "text-zinc-600"}`}><span aria-hidden="true" className={`text-base leading-none ${active ? "text-sky-700" : "text-zinc-500"}`}>{item.symbol}</span>{item.label}</Link>;
           })}
           <button type="button" onClick={() => setIsOpen((open) => !open)} aria-expanded={isOpen} aria-controls="mobile-main-menu" className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-[10px] font-bold ${isOpen || mobileMoreIsActive ? "text-zinc-950" : "text-zinc-600"}`}><span aria-hidden="true" className={`text-lg leading-none ${isOpen || mobileMoreIsActive ? "text-sky-700" : "text-zinc-500"}`}>…</span>もっと</button>
         </nav>
