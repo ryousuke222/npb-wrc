@@ -6,14 +6,15 @@ import {
   type TeamId,
 } from "@/lib/teams";
 import { teamColor } from "@/lib/teamColors";
+import PageIntro from "@/app/components/PageIntro";
 
 // 現行12球団に加え、近鉄・大映のように現在は消滅している歴史上のみの球団も表示する
 const DISPLAY_TEAM_IDS: TeamId[] = [...ALL_TEAM_IDS, ...HISTORICAL_ONLY_TEAM_IDS];
 
 export const metadata = {
-  title: "パークファクター一覧（診断用） | NPB最強打者ランキング",
+  title: "パークファクター一覧 | NPB最強打者ランキング",
   description:
-    "年度・球団別のパークファクター算出値を一覧表示する診断用ページ。異常値の確認に使用します。",
+    "年度・球団別のパークファクター算出値を一覧で比較できます。",
 };
 
 function cellBg(raw: number): string {
@@ -49,19 +50,20 @@ export default async function ParkFactorsPage() {
   const OUTLIER_THRESHOLD = 0.15;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-bold tracking-tight">
-        パークファクター一覧（診断用）
-      </h1>
-      <p className="mt-1 text-sm text-zinc-500">
-        年度・球団ごとの素のパークファクター（球団ごとに最大5年を加重プール＋サンプル年数に応じた信頼度で1.0側へ回帰。
-        本拠地移転・球場改修があった球団は変化年からの前方窓に切り替え）。
-        セルにマウスを乗せると本拠地/ビジターの試合数・サンプル年数・信頼度を確認できます。
-        <span className="ml-1 font-bold text-amber-600">黄色の枠</span>
-        は、その球団の全年度平均から±{OUTLIER_THRESHOLD}以上ズレている値です。
-      </p>
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:py-10">
+      <PageIntro
+        title="パークファクター一覧"
+        description="1.000を基準に、球場が得点環境へ与える影響を年度・球団別に比較します。"
+      />
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-zinc-200">
+      <div className="rounded-xl border border-zinc-200 bg-white px-4 py-3 text-xs leading-6 text-zinc-600">
+        最大5年を加重プールし、サンプル年数に応じて1.000側へ回帰した値です。
+        セルにマウスを乗せると試合数・サンプル年数・信頼度を確認できます。
+        <span className="ml-1 font-bold text-amber-700">黄色の枠</span>
+        は、その球団の全年度平均から±{OUTLIER_THRESHOLD}以上離れた年度です。
+      </div>
+
+      <div className="mt-5 overflow-x-auto rounded-xl border border-zinc-200">
         <table className="w-full min-w-[900px] border-collapse text-sm">
           <thead>
             <tr>

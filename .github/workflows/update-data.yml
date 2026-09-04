@@ -62,6 +62,9 @@ jobs:
           # 補完済みデータで当日分を上書きし、日次・月間比較の照合キーをそろえる。
           npx tsx scripts/snapshot-current-season.ts
 
+      - name: Validate generated data
+        run: npm run validate-data
+
       - name: Save scrape cache
         if: always()
         uses: actions/cache/save@v4

@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // ローカル検証・別プロジェクトの生成物は本体のlint対象外。
+    "batter-stats-site/**",
+    "output/**",
+    "tmp/**",
   ]),
 ]);
 

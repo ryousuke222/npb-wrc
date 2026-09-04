@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { SameAgeComparison } from "@/lib/playerInsights";
 import type { BatterRanking } from "@/lib/types";
 import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
@@ -6,7 +7,7 @@ import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
 function fmtRate(value: number) { return value.toFixed(3).replace(/^0\./, "."); }
 function href(batter: BatterRanking) { return `/year/${batter.year}/${batter.rank}`; }
 
-export default function PlayerInsights({ batter, history, similar, teamRank, leagueRank }: { batter: BatterRanking; history: BatterRanking[]; similar: BatterRanking[]; teamRank: number | null; leagueRank: number | null }) {
+export default function PlayerInsights({ batter, history, similar, sameAge, teamRank, leagueRank }: { batter: BatterRanking; history: BatterRanking[]; similar: BatterRanking[]; sameAge: SameAgeComparison | null; teamRank: number | null; leagueRank: number | null }) {
   const qualified = history.filter((entry) => entry.qualified);
   const bestWrc = qualified.reduce((best, entry) => !best || entry.wrcPlus > best.wrcPlus ? entry : best, null as BatterRanking | null);
   const bestOps = qualified.reduce((best, entry) => !best || entry.ops > best.ops ? entry : best, null as BatterRanking | null);
@@ -113,6 +114,77 @@ export default function PlayerInsights({ batter, history, similar, teamRank, lea
         ))}
       </div>
     </section>
+
+    {sameAge && (
+      <section
+        id="same-age"
+        style={{
+          borderLeftColor: color.bg,
+          backgroundImage: `linear-gradient(135deg, ${withAlpha(color.bg, 0.1)}, white 50%)`,
+        }}
+        className="scroll-mt-20 overflow-hidden rounded-2xl border border-l-[6px] border-zinc-200 bg-white p-5 sm:p-6"
+      >
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="text-[10px] font-bold tracking-[0.14em] text-zinc-400">歴代の同年齢シーズン</p>
+            <h2 className="mt-1 text-lg font-extrabold tracking-tight">{sameAge.age}歳で比べる</h2>
+            <p className="mt-1 text-[11px] text-zinc-500">1955年以降・規定打席到達者をwRC+で比較</p>
+          </div>
+          <div
+            style={{ backgroundColor: withAlpha(color.bg, 0.13), color: accent }}
+            className="rounded-xl px-3 py-2 text-right"
+          >
+            <span className="block text-[10px] font-bold opacity-70">歴代順位</span>
+            <span className="text-2xl font-black tabular-nums">{sameAge.rank}</span>
+            <span className="ml-1 text-xs font-bold opacity-70">位 / {sameAge.total}人</span>
+          </div>
+        </div>
+        <ol className="mt-5 overflow-hidden rounded-xl border border-zinc-200 bg-white">
+          {sameAge.leaders.map((entry, index) => {
+            const entryColor = teamColor(entry.teamId);
+            const isCurrent = entry.year === batter.year && entry.rank === batter.rank;
+            const displayRank =
+              sameAge.leaders
+                .slice(0, index)
+                .filter((candidate) => candidate.wrcPlus > entry.wrcPlus).length + 1;
+            const actualRank =
+              isCurrent && sameAge.rank > 5 ? sameAge.rank : displayRank;
+            return (
+              <li
+                key={`${entry.year}-${entry.rank}`}
+                className={`${index > 0 ? "border-t border-zinc-200" : ""} ${
+                  isCurrent && index >= 5 ? "mt-2 border-t-2 border-dashed" : ""
+                }`}
+              >
+                <Link
+                  href={href(entry)}
+                  aria-current={isCurrent ? "page" : undefined}
+                  style={{
+                    borderLeftColor: entryColor.bg,
+                    backgroundColor: isCurrent
+                      ? withAlpha(entryColor.bg, 0.12)
+                      : withAlpha(entryColor.bg, 0.035),
+                  }}
+                  className="grid grid-cols-[2rem_3.25rem_minmax(0,1fr)_auto] items-center gap-2 border-l-4 px-3 py-2.5 transition hover:bg-zinc-50 sm:grid-cols-[2.5rem_4rem_minmax(0,1fr)_auto]"
+                >
+                  <span className="text-center text-xs font-black tabular-nums text-zinc-500">{actualRank}</span>
+                  <span className="text-xs font-extrabold tabular-nums text-zinc-600">{entry.year}年</span>
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-bold text-zinc-950">{entry.name}</span>
+                    <span className="mt-0.5 block truncate text-[10px] font-semibold" style={{ color: readableOnLight(entryColor.bg) }}>
+                      {entry.teamName}{isCurrent ? "・このシーズン" : ""}
+                    </span>
+                  </span>
+                  <span className={`text-lg font-black tabular-nums ${wrcPlusTextColor(entry.wrcPlus)}`}>
+                    {fmtWrcPlus(entry.wrcPlus)}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+    )}
 
     <section
       style={{

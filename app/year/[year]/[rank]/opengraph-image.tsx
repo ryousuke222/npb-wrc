@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
-import { getAvailableYears, getYearData } from "@/lib/data";
+import { getYearData } from "@/lib/data";
 import { teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus } from "@/lib/wrc";
 
@@ -9,20 +9,9 @@ export const alt = "選手の年度別wRC+成績";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// 規定打席到達者のみビルド時に静的生成する（page.tsxのgenerateStaticParamsと同じ方針）。
-export async function generateStaticParams() {
-  const years = await getAvailableYears();
-  const params: { year: string; rank: string }[] = [];
-  for (const year of years) {
-    const data = await getYearData(year);
-    if (!data) continue;
-    for (const b of data.batters) {
-      if (!b.qualified) continue;
-      params.push({ year: String(year), rank: String(b.rank) });
-    }
-  }
-  return params;
-}
+const boldFont = readFile(
+  path.join(process.cwd(), "assets/fonts/notosans-jp-og-bold.ttf")
+);
 
 function fmtRate(n: number): string {
   return n.toFixed(3).replace(/^0\./, ".");
@@ -45,9 +34,7 @@ export default async function Image({
   const data = await getYearData(year);
   const batter = data?.batters.find((b) => b.rank === rank);
 
-  const bold = await readFile(
-    path.join(process.cwd(), "assets/fonts/notosans-jp-og-bold.ttf")
-  );
+  const bold = await boldFont;
 
   if (!batter) {
     return new ImageResponse(

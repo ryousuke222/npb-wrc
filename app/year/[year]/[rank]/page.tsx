@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getAvailableYears, getPlayerHistory, getYearData } from "@/lib/data";
-import { getSimilarSeasons } from "@/lib/playerInsights";
+import { getSameAgeComparison, getSimilarSeasons } from "@/lib/playerInsights";
 import { readableOnLight, teamColor, withAlpha } from "@/lib/teamColors";
 import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
 import CareerHistory from "@/app/components/CareerHistory";
@@ -67,9 +67,10 @@ export default async function PlayerPage({
 
   const color = teamColor(batter.teamId);
   const accent = readableOnLight(color.bg);
-  const [history, similar] = await Promise.all([
+  const [history, similar, sameAge] = await Promise.all([
     getPlayerHistory(batter.name, batter.nameKey, batter.year, batter.teamId),
     getSimilarSeasons(batter),
+    getSameAgeComparison(batter),
   ]);
 
   const lgTotals = data.leagueContext[batter.league].totals;
@@ -438,7 +439,14 @@ export default async function PlayerPage({
 
       </div>
 
-      <PlayerInsights batter={batter} history={history} similar={similar} teamRank={teamRank} leagueRank={wrcLeagueRank} />
+      <PlayerInsights
+        batter={batter}
+        history={history}
+        similar={similar}
+        sameAge={sameAge}
+        teamRank={teamRank}
+        leagueRank={wrcLeagueRank}
+      />
       <CareerHistory history={history} currentYear={year} />
     </div>
   );

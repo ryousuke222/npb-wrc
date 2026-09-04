@@ -78,6 +78,11 @@ export default function PlayerBackLink({ year, rank }: { year: number; rank: num
     label = "← 月間ランキングに戻る";
   }
 
+  if (from === "recent") {
+    href = "/recent";
+    label = "← 直近10試合ランキングに戻る";
+  }
+
   if (from === "search") {
     href = "/search";
     label = "← 選手検索に戻る";

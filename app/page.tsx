@@ -10,6 +10,7 @@ import { fmtWrcPlus, wrcPlusTextColor } from "@/lib/wrc";
 import TeamBadge from "./components/TeamBadge";
 
 const DATA_PATHS = [
+  { href: "/recent", label: "直近10試合", detail: "短期の好調打者を比較" },
   { href: "/monthly", label: "月間ランキング", detail: "月ごとの好調打者" },
   { href: "/team-wrc", label: "チームwRC+", detail: "球団別の打線評価" },
   { href: "/titles", label: "打撃タイトル", detail: "年度別タイトル・ベストナイン" },

@@ -1,15 +1,19 @@
+import PageIntro from "@/app/components/PageIntro";
+
 export const metadata = {
   title: "このサイトについて | NPB最強打者ランキング",
+  description: "NPB最強打者ランキングのデータ出典、wRC+とパークファクターの算出方法、掲載範囲を説明します。",
 };
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <h1 className="text-2xl font-bold tracking-tight">
-        このサイトについて
-      </h1>
+    <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8 lg:py-10">
+      <PageIntro
+        title="このサイトについて"
+        description="データの出典、wRC+とパークファクターの考え方、掲載範囲をまとめています。"
+      />
 
-      <section className="mt-8 space-y-3">
+      <section className="space-y-3">
         <h2 className="text-lg font-semibold">概要</h2>
         <p className="text-sm leading-relaxed text-zinc-700">
           このサイトは、NPB（日本プロ野球）の各年度における打者の成績をもとに、

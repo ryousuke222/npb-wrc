@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const MORE_NAV_ITEMS = [
+  { href: "/recent", label: "直近10試合", matches: (pathname: string) => pathname === "/recent" },
   { href: "/compare", label: "選手比較", matches: (pathname: string) => pathname === "/compare" },
   { href: "/titles", label: "タイトル", matches: (pathname: string) => pathname === "/titles" },
   { href: "/team-best-nine", label: "ベスト9", matches: (pathname: string) => pathname === "/team-best-nine" },

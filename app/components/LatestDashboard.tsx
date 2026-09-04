@@ -218,6 +218,7 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
             { href: "#mvp", label: "MVP候補" },
           ].map((item) => <a key={item.href} href={item.href} className="rounded-full px-3 py-1.5 text-xs font-bold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950">{item.label}</a>)}
           <span className="mx-1 h-5 w-px bg-zinc-200" />
+          <Link href="/recent" prefetch={false} className="rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-xs font-bold text-zinc-700 hover:border-zinc-300 hover:text-zinc-950">直近10試合 →</Link>
           <Link href={`/year/${year}`} prefetch={false} className="rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-700">全打者を絞り込む →</Link>
         </div>
       </nav>
@@ -233,7 +234,10 @@ export default function LatestDashboard({ dashboard }: { dashboard: LatestDashbo
             </div>
             <p className="mt-1 text-xs text-zinc-600">数字が動いた打者を4つの切り口で表示</p>
           </div>
-          <Link href="/monthly" prefetch={false} className="shrink-0 text-xs font-bold text-zinc-600 hover:text-zinc-950">月間ランキング →</Link>
+          <div className="flex shrink-0 gap-3 text-xs font-bold text-zinc-600">
+            <Link href="/recent" prefetch={false} className="hover:text-zinc-950">直近10試合 →</Link>
+            <Link href="/monthly" prefetch={false} className="hover:text-zinc-950">月間 →</Link>
+          </div>
         </div>
         {weeklyMovement && hasMovement ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

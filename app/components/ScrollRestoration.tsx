@@ -19,7 +19,8 @@ function replaceScrollState(route: string, scrollY: number) {
       [ROUTE_STATE]: route,
       [POSITION_STATE]: Math.max(0, Math.round(scrollY)),
     },
-    ""
+    "",
+    window.location.href
   );
 }
 
@@ -39,12 +40,13 @@ export default function ScrollRestoration() {
 
   useEffect(() => {
     const state = (window.history.state ?? {}) as ScrollHistoryState;
+    const hasAnchor = window.location.hash.length > 1;
     const savedPosition =
-      state[ROUTE_STATE] === route && Number.isFinite(state[POSITION_STATE])
+      !hasAnchor && state[ROUTE_STATE] === route && Number.isFinite(state[POSITION_STATE])
         ? Number(state[POSITION_STATE])
         : null;
 
-    if (savedPosition === null) {
+    if (savedPosition === null && !hasAnchor) {
       replaceScrollState(route, 0);
     }
 
@@ -67,6 +69,13 @@ export default function ScrollRestoration() {
       });
       restoreTimers.push(window.setTimeout(restore, 80));
       restoreTimers.push(window.setTimeout(restore, 220));
+    }
+
+    if (hasAnchor) {
+      const anchorId = decodeURIComponent(window.location.hash.slice(1));
+      restoreTimers.push(
+        window.setTimeout(() => document.getElementById(anchorId)?.scrollIntoView(), 0)
+      );
     }
 
     const save = () => replaceScrollState(route, window.scrollY);
